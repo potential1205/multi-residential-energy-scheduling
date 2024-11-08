@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository accompanies the paper **"Multi-Residential Energy Scheduling Under Time-of-Use and Demand Charge Tariffs With Federated Reinforcement Learning"**, published in IEEE Transactions on Smart Grid, a leading journal in the electrical and electronics engineering field. This study focuses on reducing energy costs for multiple residences by utilizing a novel Federated Reinforcement Learning (FRL) approach that effectively schedules energy across units with diverse energy demands and resources, considering both time-of-use (TOU) and demand charge (DC) tariffs.
+This repository accompanies the paper **"[Multi-Residential Energy Scheduling Under Time-of-Use and Demand Charge Tariffs With Federated Reinforcement Learning](https://ieeexplore.ieee.org/document/10057441)"**, published in IEEE Transactions on Smart Grid, a leading journal in the electrical and electronics engineering field. This study focuses on reducing energy costs for multiple residences by utilizing a novel Federated Reinforcement Learning (FRL) approach that effectively schedules energy across units with diverse energy demands and resources, considering both time-of-use (TOU) and demand charge (DC) tariffs.
 
 ## Abstract
 

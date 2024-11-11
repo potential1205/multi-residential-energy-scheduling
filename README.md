@@ -48,6 +48,6 @@ Simulation results demonstrate:
 Clone the repository:
 
 ```bash
-git clone <https://github.com/username/multi-residential-energy-scheduling.git>
+git clone https://github.com/username/multi-residential-energy-scheduling.git
 cd multi-residential-energy-scheduling
 ```

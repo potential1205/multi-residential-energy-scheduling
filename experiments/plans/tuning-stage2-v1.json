@@ -1,0 +1,23 @@
+{
+  "name": "tuning-stage2-v1",
+  "purpose": "Scenario 3, 6k days, 2 seeds: refinements around 24 updates/day",
+  "note": "--preset paper pins the pre-tuning defaults these runs were executed with (target 20 h, 1 update/day, cost scale 1, width 512).",
+  "runs": [
+    {"name":"s2-u12cs-seed0","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","0","--eval-every","250","--log-every","250","--updates-per-day","12","--cost-scale","100","--device","cpu"]},
+    {"name":"s2-u12cs-seed1","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","1","--eval-every","250","--log-every","250","--updates-per-day","12","--cost-scale","100","--device","cpu"]},
+    {"name":"s2-u48cs-seed0","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","0","--eval-every","250","--log-every","250","--updates-per-day","48","--cost-scale","100","--device","cpu"]},
+    {"name":"s2-u48cs-seed1","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","1","--eval-every","250","--log-every","250","--updates-per-day","48","--cost-scale","100","--device","cpu"]},
+    {"name":"s2-u24cs-tgt240-seed0","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","0","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--target-hours","240","--device","cpu"]},
+    {"name":"s2-u24cs-tgt240-seed1","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","1","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--target-hours","240","--device","cpu"]},
+    {"name":"s2-u24cs-tgt720-seed0","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","0","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--target-hours","720","--device","cpu"]},
+    {"name":"s2-u24cs-tgt720-seed1","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","1","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--target-hours","720","--device","cpu"]},
+    {"name":"s2-u24cs-mse-seed0","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","0","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--loss","mse","--device","cpu"]},
+    {"name":"s2-u24cs-mse-seed1","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","1","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--loss","mse","--device","cpu"]},
+    {"name":"s2-u24cs-b128-seed0","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","0","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--batch-size","128","--device","cpu"]},
+    {"name":"s2-u24cs-b128-seed1","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","1","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--batch-size","128","--device","cpu"]},
+    {"name":"s2-u24cs-lr3e5-seed0","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","0","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--lr","0.00003","--device","cpu"]},
+    {"name":"s2-u24cs-lr3e5-seed1","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","1","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--lr","0.00003","--device","cpu"]},
+    {"name":"s2-u24cs-w256-seed0","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","0","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--width","256","--device","cpu"]},
+    {"name":"s2-u24cs-w256-seed1","args":["--preset","paper","--scenario","3","--episodes","6000","--seed","1","--eval-every","250","--log-every","250","--updates-per-day","24","--cost-scale","100","--width","256","--device","cpu"]}
+  ]
+}

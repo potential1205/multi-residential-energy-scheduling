@@ -11,17 +11,18 @@ import math
 from tqdm import tqdm
 import os
 
-# SCENARIO 1 (Summer TOU scenario) : iteration = 5000, epsilon = 0.01, days = 30, test_days = 30
-# SCENARIO 2 (Winter TOU scenario) : iteration = 5000, epsilon = 0.01, days = 30, test_days = 30
-# SCENARIO 3 (Cooling energy-dominant scenario) : iteration = 10000, epsilon = 0.1, days = 30, test_days = 360
-# SCENARIO 4 (Heating energy-dominant scenario) : iteration = 10000, epsilon = 0.1, days = 30, test_days = 360
+# SCENARIO 1 (Summer TOU scenario) : epsilon = 0.01, days = 30, test_days = 30
+# SCENARIO 2 (Winter TOU scenario) : epsilon = 0.01, days = 30, test_days = 30
+# SCENARIO 3 (Cooling energy-dominant scenario) : epsilon = 0.1, days = 30, test_days = 365
+# SCENARIO 4 (Heating energy-dominant scenario) : epsilon = 0.1, days = 30, test_days = 365
+# Paper code budget was iteration = 5000 (scenarios 1-2) / 10000 (3-4); with the tuned schedule 200 suffices.
 
 # parameters
 SCENARIO = 4
 epsilon = 0.1
-iteration = 10000
+iteration = 200          # passes over the 30 training days (6000 days); the paper code used 10000
 days = 30
-test_days = 360
+test_days = 365
 
 # fix
 buffer_limit = 20000
@@ -32,10 +33,16 @@ batch_size = 32
 Tf= 2
 feature = 52 + 2*Tf
 battery_max = 40
-freq = 20
+freq = 240               # target network sync period in hours (paper: 20)
 epochs = days * iteration
 pD=30
 battery_rate=20
+# learning schedule. Paper settings: updates_per_day=1, cost_scale=1, freq=20, iteration=10000.
+# The tuned values reach the paper's 300k-day result in ~2-3k days (see README, "Hyperparameter study").
+updates_per_day = 24      # gradient steps after each simulated day
+cost_scale = 100          # costs are divided by this before entering the replay buffer
+epsilon_final = epsilon   # epsilon decays linearly from `epsilon` to this value ...
+epsilon_decay_days = 1    # ... over this many training days
 
 # train data load
 print("\nSCENARIO : {}".format(SCENARIO))
@@ -75,15 +82,11 @@ class ReplayBuffer():
         self.buffer.append(transition)
 
     def sample(self, n):
-        mini_batch = random.sample(self.buffer, n)
-        s_lst, a_lst, r_lst, s_prime_lst = [], [], [], []
-        for transition in mini_batch:
-            s, a, r, s_prime = transition
-            s_lst.append(s)
-            a_lst.append([a])
-            r_lst.append([r])
-            s_prime_lst.append(s_prime)
-        return (torch.from_numpy(np.asarray(s_lst, dtype=np.float32)), torch.from_numpy(np.asarray(a_lst, dtype=np.int64)), torch.from_numpy(np.asarray(r_lst, dtype=np.float32)), torch.from_numpy(np.asarray(s_prime_lst, dtype=np.float32)))
+        s, a, r, s_prime = zip(*random.sample(self.buffer, n))
+        return (torch.from_numpy(np.asarray(s, dtype=np.float32)),
+                torch.from_numpy(np.asarray(a, dtype=np.int64)).unsqueeze(1),
+                torch.from_numpy(np.asarray(r, dtype=np.float32)).unsqueeze(1),
+                torch.from_numpy(np.asarray(s_prime, dtype=np.float32)))
 
     def size(self):
         return len(self.buffer)
@@ -118,41 +121,17 @@ class Qnet(nn.Module):
         return lower + int(torch.argmin(out[lower:upper + 1]).item())
 
 
-# def train():
-#     s, a, r, s_prime = memory.sample(batch_size)
-#     q_a = q(s).gather(1,a)
-#     min_q_prime = q_target(s_prime)
-#     Q_target = list()
-#     for i in range(batch_size):
-#         battery = min(s_prime[i][0].item() - s_prime[i][50].item() + s_prime[i][51+Tf].item(), battery_max)
-#         rate = battery-s_prime[i][0].item()
-#         q_list = []
-#         for j in range(0, 21, 1):
-#             if (0<= battery + j <= battery_max) and (-battery_rate <= rate + j <= battery_rate):
-#                 q_list.append(min_q_prime[i][j].item())
-#             else:
-#                 q_list.append(np.inf)
-#         Q_target.append(min(q_list))
-#
-#     Q_target = torch.tensor((Q_target)).resize(batch_size,1)
-#     target = r + gamma * Q_target
-#     loss = F.smooth_l1_loss(q_a, target)
-#     optimizer.zero_grad(set_to_none=True)
-#     loss.backward()
-#     optimizer.step()
 def train():
     s, a, r, s_prime = memory.sample(batch_size)
     q_a = q(s).gather(1, a)
     with torch.no_grad():
         min_q_prime = q_target(s_prime)
-    battery = torch.clamp(s_prime[:, 0] - s_prime[:, 50] + s_prime[:, 51+Tf], max=battery_max)
-    rate = battery - s_prime[:, 0]
-    q_list = torch.where((0 <= battery.unsqueeze(-1) + torch.arange(21)) &
-                         ((battery.unsqueeze(-1) + torch.arange(21)) <= battery_max) &
-                         ((-battery_rate <= rate.unsqueeze(-1) + torch.arange(21)) &
-                          (rate.unsqueeze(-1) + torch.arange(21) <= battery_rate)),
-                         min_q_prime, torch.tensor(float('inf')))
-    Q_target, _ = torch.min(q_list, dim=1, keepdim=True)
+    # Only grid purchases that keep s' within battery capacity and charging rate are admissible.
+    battery = torch.clamp(s_prime[:, 0] - s_prime[:, 50] + s_prime[:, 51+Tf], max=battery_max).unsqueeze(1)
+    rate = battery - s_prime[:, :1]
+    grid = torch.arange(21)
+    admissible = (battery + grid >= 0) & (battery + grid <= battery_max) & ((rate + grid).abs() <= battery_rate)
+    Q_target = min_q_prime.masked_fill(~admissible, float('inf')).min(dim=1, keepdim=True).values
     target = r + gamma * Q_target
     loss = F.smooth_l1_loss(q_a, target)
     optimizer.zero_grad(set_to_none=True)
@@ -160,43 +139,45 @@ def train():
     optimizer.step()
 
 
+def tariff(day):
+    if SCENARIO == 1:
+        return summer_TOU
+    if SCENARIO == 2:
+        return winter_TOU
+    return summer_TOU if 90 <= day < 273 else winter_TOU  # summer tariff from April 1 to September 30
+
+# state layout: [battery, demand charge, one-hot hour (24), TOU prices from now (24), load t..t+Tf, generation t..t+Tf]
 def initialize_state():
-    TOU = summer_TOU if SCENARIO == 1 else winter_TOU
     state = np.zeros(feature)
-    state[0] = 0    # battery level
-    state[1] = 0    # demand charge
-    for i in range(24):
-        state[2 + i] = T[0][i] # time (one-hot encoding)
-        state[26 + i] = TOU[i] # TOU price
-    for i in range(Tf+1):
-        state[50+i] = load_data[0][i] # load (t~t+Tf)
-        state[51+Tf+i] = generation_data[0][i] # generation (t~t+Tf)
+    state[2:26] = T[0]
+    state[26:50] = tariff(0)
+    state[50:51+Tf] = load_data[0][:Tf+1]
+    state[51+Tf:52+2*Tf] = generation_data[0][:Tf+1]
     return state
 
 def next_state(n_epi,time,battery,charge,day_charge,TOU,load_data,generation_data,cycle):
     state_prime = np.zeros(feature)
     state_prime[0] = battery + charge
-    if time==23: state_prime[1] = 0
-    else: state_prime[1] = max(day_charge)
-    for i in range(24):
-        state_prime[2 + i] = T[(time + 1) % 24][i]
-        state_prime[26 + i] = TOU[(time+1+i)%24]
-    for i in range(Tf+1):
-        if time+1+i >= 24:
-            state_prime[50+i] = load_data[(n_epi+1)%cycle][(time+1+i)%24]
-            state_prime[51+Tf+i] = generation_data[(n_epi+1)%cycle][(time+1+i)%24]
-        else:
-            state_prime[50+i] = load_data[(n_epi)%cycle][(time+1+i)%24]
-            state_prime[51+Tf+i] = generation_data[(n_epi)%cycle][(time+1+i)%24]
-
+    state_prime[1] = 0 if time == 23 else max(day_charge)
+    state_prime[2:26] = T[(time + 1) % 24]
+    state_prime[26:50] = np.roll(TOU, -(time + 1))
+    hours = np.arange(time + 1, time + 2 + Tf)
+    day_index = (n_epi + hours // 24) % cycle
+    state_prime[50:51+Tf] = load_data[day_index, hours % 24]
+    state_prime[51+Tf:52+2*Tf] = generation_data[day_index, hours % 24]
     return state_prime
+
+def exploration(n_epi):
+    progress = min(n_epi / epsilon_decay_days, 1.0)
+    return epsilon + (epsilon_final - epsilon) * progress
 
 def update(n_epi):
     if n_epi % (epochs/10) == 0 and n_epi != 0:
         print(sum(cost_history[n_epi-days:n_epi]))
 
     if memory.size() > start_size:
-        train()
+        for _ in range(updates_per_day):
+            train()
 
 
 #initialize
@@ -208,17 +189,17 @@ optimizer = optim.Adam(q.parameters(), lr=learning_rate)
 
 # train
 state = initialize_state()
-TOU = summer_TOU if SCENARIO == 1 else winter_TOU
+TOU = tariff(0)  # training always replays the first `days` days with a fixed tariff
 for n_epi in tqdm(range(epochs)):
     costs, actions = 0, []
     for time in range(24):
         battery = min(state[0] - state[50] + state[51+Tf],battery_max)
-        action = q.sample_action(torch.from_numpy(state).float(), epsilon, battery,battery-state[0])
+        action = q.sample_action(torch.from_numpy(state).float(), exploration(n_epi), battery,battery-state[0])
         actions.append(action)
         cost = action * TOU[time] + (pD * max(actions) if time == 23 else 0)
         costs += cost
         state_prime = next_state(n_epi,time,battery,action,actions,TOU,load_data,generation_data,days)
-        memory.put((state, action, cost, state_prime))
+        memory.put((state, action, cost / cost_scale, state_prime))
         state = state_prime
         if (n_epi * 24 + time) % freq == 0:
             q_target.load_state_dict(q.state_dict())
@@ -233,9 +214,7 @@ block_costs = np.asarray(cost_history[:completed_blocks * days]).reshape(complet
 check_dqn = np.cumsum(block_costs) / np.arange(1, completed_blocks + 1)
 
 plt.figure(figsize=(15,10))
-x = range(completed_blocks)
-y1 = [check_dqn[v] for v in x]
-plt.plot(x,y1,label='DQL time avgerage cost', color='r')
+plt.plot(range(completed_blocks), check_dqn, label='DQL time avgerage cost', color='r')
 plt.xlabel('Epochs',fontsize=22)
 plt.ylabel('Cost(won)',fontsize=22)
 plt.legend()
@@ -246,15 +225,7 @@ plt.show()
 state = initialize_state()
 state[0] = 15
 for n_epi in tqdm(range(test_days)):
-    if SCENARIO == 1:
-        TOU = summer_TOU
-    elif SCENARIO == 2:
-        TOU = winter_TOU
-    elif 90 <= n_epi < 270:
-        TOU = summer_TOU
-    else:
-        TOU = winter_TOU
-
+    TOU = tariff(n_epi)
     costs, actions, batterys = 0, [], []
     for time in range(24):
         battery = min(state[0] - state[50] + state[51+Tf], battery_max)
@@ -273,56 +244,24 @@ print(sum(result_cost_history))
 print(result_cost_history)
 print(result_action_history)
 
-TOU_cost = 0
-DC_cost = 0
-temp_action = []
-for day in range(test_days):
-    if SCENARIO == 1:
-        TOU = summer_TOU
-    elif SCENARIO == 2:
-        TOU = winter_TOU
-    elif 90 <= day < 270:
-        TOU = summer_TOU
-    else:
-        TOU = winter_TOU
-
-    day_action = []
-    for t in range(24):
-        action = result_action_history[day][t]
-        day_action.append(action)
-        TOU_cost += TOU[t] * action
-    DC_cost += max(day_action) * pD
-    temp_action.append(day_action)
+test_actions = np.asarray(result_action_history)
+TOU_cost = int((np.array([tariff(day) for day in range(test_days)]) * test_actions).sum())
+DC_cost = int(test_actions.max(axis=1).sum() * pD)
 
 print("Total_Cost : {}, 평균 : {}".format(TOU_cost+DC_cost,(TOU_cost+DC_cost)//(test_days//30)))
 print("TOU_Cost : {}, 평균 : {}".format(TOU_cost,TOU_cost//(test_days//30)))
 print("DC_Cost : {}, 평균 : {}".format(DC_cost,DC_cost//(test_days//30)))
 
-# scheduling result
-for i in range(1):
-    if SCENARIO == 1:
-        TOU = summer_TOU
-    elif SCENARIO == 2:
-        TOU = winter_TOU
-    elif 90 <= n_epi < 270:
-        TOU = summer_TOU
-    else:
-        TOU = winter_TOU
-
-    x = range(0, 24)
-    y1 = [v for v in load_data[i]]
-    y2 = [v for v in result_action_history[i]]
-    y3 = [v for v in TOU[0:24]]
-    y4 = [v for v in result_battery_history[i]]
-    y5 = [v for v in generation_data[i]]
-
-    plt.plot(x, y3, label='TOU', color='gray')
-    plt.fill_between(x[0:24], y3[0:24], color='lightgray')
-    plt.plot(x, y4, linewidth=3, label='HM_charge', color='Red')
-    plt.plot(x, y2, linewidth=3 ,label='DQL', color='Orange')
-    plt.plot(x, y5, '--',label='Generation',color='gray')
-    plt.plot(x, y1,'-', label='Load', color='black')
-    plt.xticks(np.arange(0, 24))
-    plt.yticks([0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40])
-    plt.grid(True)
-    plt.show()
+# scheduling result (first test day)
+x = range(24)
+TOU = tariff(0)
+plt.plot(x, TOU, label='TOU', color='gray')
+plt.fill_between(x, TOU, color='lightgray')
+plt.plot(x, result_battery_history[0], linewidth=3, label='HM_charge', color='Red')
+plt.plot(x, result_action_history[0], linewidth=3, label='DQL', color='Orange')
+plt.plot(x, generation_data[0], '--', label='Generation', color='gray')
+plt.plot(x, load_data[0], '-', label='Load', color='black')
+plt.xticks(np.arange(0, 24))
+plt.yticks(np.arange(0, 41, 2))
+plt.grid(True)
+plt.show()

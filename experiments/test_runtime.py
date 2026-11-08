@@ -80,4 +80,43 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(read_events(path),[{'x':1},{'x':2}])
         with self.assertRaises(KeyError):run_detail('../.venv')
 
+    def test_status_lifecycle_detects_dead_and_silent_runs(self):
+        import os,socket,subprocess,sys,time
+        from . import status
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp);status.start(path,day=0,epochs=10)
+            self.assertEqual(status.effective(status.read(path))['status'],'running')
+            status.write(path,'running',day=5)
+            record=status.read(path);self.assertEqual((record['day'],record['epochs'],record['pid']),(5,10,os.getpid()))
+            self.assertEqual(status.effective(record,now=time.time()+status.STALL_SECONDS+1)['status'],'stalled')
+            child=subprocess.Popen([sys.executable,'-c','pass']);child.wait()
+            status.write(path,'running',pid=child.pid,host=socket.gethostname())
+            self.assertEqual(status.effective(status.read(path))['status'],'interrupted')
+            status.write(path,'stopped',reason='SIGTERM')
+            self.assertEqual(status.effective(status.read(path))['status'],'stopped')
+            with self.assertRaises(ValueError):status.write(path,'done')
+
+    def test_dashboard_lists_queued_runs_once(self):
+        from . import dashboard_server as server
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);(root/'_suites'/'p').mkdir(parents=True);(root/'_suites'/'p'/'plan.json').write_text('{}')
+            (root/'_suites'/'p'/'status.json').write_text(json.dumps({
+                'a':dict(status='queued',run='a',args=['--scenario','3','--episodes','600','--seed','2']),
+                'b':dict(status='running',run='b',args=[]),'c':dict(status='completed',run='c',args=[])}))
+            (root/'b').mkdir();(root/'b'/'config.json').write_text('{}')
+            old=server.RESULTS;server.RESULTS=root
+            try:rows=server.queued_runs({'b'})
+            finally:server.RESULTS=old
+        self.assertEqual([r['id'] for r in rows],['queued:a'])
+        self.assertEqual((rows[0]['config']['seed'],rows[0]['config']['training_episodes']),(2,600))
+
+    def test_dashboard_bins_long_cost_histories(self):
+        from .dashboard_server import compact_events,MAX_COST_POINTS
+        events=[dict(type='cost',day=d+1,clients=[dict(client=0,cost=float(d))]) for d in range(5000)]
+        events+=[dict(type='train',day=10,schedule={'0':[1]}),dict(type='train',day=20,schedule={'0':[2]})]
+        out=compact_events(events);costs=[e for e in out if e['type']=='cost'];trains=[e for e in out if e['type']=='train']
+        self.assertLessEqual(len(costs),MAX_COST_POINTS);self.assertEqual(costs[0]['span'],3)
+        self.assertEqual(costs[0]['clients'][0]['cost'],1.0);self.assertEqual(costs[-1]['day'],5000)
+        self.assertNotIn('schedule',trains[0]);self.assertEqual(trains[1]['schedule'],{'0':[2]})
+
 if __name__=='__main__':unittest.main()

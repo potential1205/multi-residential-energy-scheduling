@@ -4,7 +4,7 @@ import random
 from types import SimpleNamespace
 import unittest
 import numpy as np
-from .core import Config, ROOT, feasible, step, state, tariff, toy_oracle, load_data
+from .core import Config, ROOT, evaluate, feasible, step, state, tariff, toy_oracle, load_data
 
 class SchedulingTests(unittest.TestCase):
     def test_mpc_discretization_respects_charging_rate_and_numpy_scalars(self):
@@ -142,6 +142,32 @@ class SchedulingTests(unittest.TestCase):
             result=env['next_state'](0,hour,base,a,[a],tariff(0,1),load,gen,30)
             self.assertEqual(result[0],step(15,4,1,a,cfg))
             self.assertEqual(result[1],0 if hour==23 else a)
+
+    def test_exploration_schedule_is_linear_then_constant(self):
+        for name in ('TDAS.py','Co-TDAS.py'):
+            tree=ast.parse((ROOT/name).read_text(encoding='utf-8-sig'))
+            node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='exploration')
+            env=dict(epsilon=1.0,epsilon_final=0.1,epsilon_decay_days=100)
+            exec(compile(ast.Module(body=[node],type_ignores=[]),'<exploration>','exec'),env)
+            np.testing.assert_allclose([env['exploration'](d) for d in (0,50,100,500)],[1.0,0.55,0.1,0.1])
+            env.update(epsilon=0.1,epsilon_final=0.1,epsilon_decay_days=1)
+            self.assertEqual(env['exploration'](0),0.1)
+
+    def test_convergence_day_requires_staying_in_band(self):
+        from .report import convergence,first_reach
+        days=[1,2,3,4,5,6,7,8]
+        # Trailing 3-point smoothing: (6,5,5) is still 6.7% above the plateau, so day 6 is first.
+        self.assertEqual(convergence(days,[10,8,6,5,5,5,5,5],.05),6)
+        # A later noisy spike does not move the first-reach day.
+        self.assertEqual(convergence(days,[10,8,6,5,5,5,9,5],.05),6)
+        self.assertIsNone(convergence(days[:2],[1,1],.05))
+        self.assertEqual(first_reach(days,[10,8,6,5,5,5,5,5],6),3)
+
+    def test_trace_matches_totals(self):
+        load,gen,_=load_data(3,'table1_load.npy')
+        r=evaluate(lambda obs,allowed:int(allowed[0]),load,gen,Config(),3,start=0,stop=40,trace=True)
+        self.assertAlmostEqual(sum(d['tou']+d['dc'] for d in r['trace']),r['total'])
+        self.assertTrue(all(len(d['actions'])==24 for d in r['trace']))
 
 if __name__=='__main__':
     unittest.main()

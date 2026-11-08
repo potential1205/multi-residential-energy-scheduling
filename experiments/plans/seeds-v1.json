@@ -1,10 +1,10 @@
 {
-  "name":"seeds-v1",
-  "purpose":"Equal 10000-day budgets, three seeds for real-data upstream/fixed comparison",
-  "runs":[
+  "name": "seeds-v1",
+  "purpose": "Equal 10000-day budgets, three seeds for real-data upstream/fixed comparison",
+  "runs": [
     {"name":"cool-upstream-1","args":["--scenario","3","--episodes","10000","--source","upstream","--seed","1","--device","cpu","--eval-every","1000"]},
-    {"name":"cool-fixed-1","args":["--scenario","3","--episodes","10000","--source","fixed","--seed","1","--device","cpu","--eval-every","1000"]},
+    {"name":"cool-fixed-1","args":["--preset","paper","--scenario","3","--episodes","10000","--source","fixed","--seed","1","--device","cpu","--eval-every","1000"]},
     {"name":"cool-upstream-2","args":["--scenario","3","--episodes","10000","--source","upstream","--seed","2","--device","cpu","--eval-every","1000"]},
-    {"name":"cool-fixed-2","args":["--scenario","3","--episodes","10000","--source","fixed","--seed","2","--device","cpu","--eval-every","1000"]}
+    {"name":"cool-fixed-2","args":["--preset","paper","--scenario","3","--episodes","10000","--source","fixed","--seed","2","--device","cpu","--eval-every","1000"]}
   ]
 }

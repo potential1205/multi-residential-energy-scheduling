@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import threading
 from urllib.parse import urlparse,parse_qs
+from . import status as run_status
 
 ROOT=Path(__file__).resolve().parents[1]
 RESULTS=ROOT/'results'
@@ -39,6 +40,54 @@ def read_events(path):
 def run_paths():
     return {p.parent.relative_to(RESULTS).as_posix():p.parent for p in RESULTS.rglob('config.json')}
 
+MAX_COST_POINTS=2000
+
+def compact_events(events):
+    """Shrink a run's events for the browser: bin daily costs, keep the hourly schedule only on the last train event."""
+    costs=[e for e in events if e.get('type')=='cost']
+    other=[e for e in events if e.get('type')!='cost']
+    trains=[i for i,e in enumerate(other) if e.get('type')=='train']
+    other=[e if e.get('type')!='train' or i==trains[-1] else {k:v for k,v in e.items() if k!='schedule'}
+           for i,e in enumerate(other)]
+    if len(costs)>MAX_COST_POINTS:
+        span=-(-len(costs)//MAX_COST_POINTS);binned=[]
+        for start in range(0,len(costs),span):
+            chunk=costs[start:start+span];clients={}
+            for e in chunk:
+                for c in e.get('clients',[]):
+                    row=clients.setdefault(c['client'],{})
+                    for k,v in c.items():
+                        if k!='client' and isinstance(v,(int,float)):row.setdefault(k,[]).append(v)
+            binned.append(dict(type='cost',day=chunk[-1]['day'],span=span,elapsed=chunk[-1].get('elapsed'),
+                               clients=[dict(client=n,**{k:sum(v)/len(v) for k,v in row.items()}) for n,row in sorted(clients.items())]))
+        costs=binned
+    return other+costs
+
+def live_status(path):
+    return run_status.effective(read_json(path/'status.json',{'status':'unknown'}))
+
+def planned_args(args):
+    def value(flag,default=None):
+        return args[args.index(flag)+1] if flag in args and args.index(flag)+1<len(args) else default
+    episodes=value('--episodes')
+    return dict(algorithm=value('--algorithm','TDAS'),source=value('--source','fixed'),seed=int(value('--seed',0)),
+                scenario=int(value('--scenario',1)),training_episodes=int(episodes) if episodes else 30*int(value('--iterations',100)),
+                args=args)
+
+def queued_runs(existing):
+    """Runs a suite has planned but not started; started runs are reported from their own folders."""
+    rows=[]
+    for plan_path in RESULTS.rglob('plan.json'):
+        statuses=read_json(plan_path.parent/'status.json',{}) or {}
+        for name,entry in statuses.items():
+            if not isinstance(entry,dict) or entry.get('status') not in ('queued','running'):continue
+            run=(RESULTS/entry['run']) if entry.get('run') else None
+            if run is not None and run.relative_to(RESULTS).as_posix() in existing:continue
+            rows.append(dict(id=f'queued:{name}',queued=True,suite=plan_path.parent.name,config=planned_args(entry.get('args',[])),
+                             status=dict(status='queued',queued=entry.get('queued')),latest=None,best_validation=None,
+                             modified=entry.get('queued',0)))
+    return rows
+
 def run_detail(run_id):
     paths=run_paths()
     if run_id not in paths:raise KeyError('Unknown run')
@@ -50,19 +99,22 @@ def run_detail(run_id):
         if costs.ndim==1:costs=costs[None,:]
         events=[dict(type='cost',day=i+1,clients=[dict(client=j,cost=float(costs[j,i]))
                  for j in range(len(costs))]) for i in range(costs.shape[1])]
-    return dict(id=run_id,config=config,status=read_json(path/'status.json',{'status':'unknown'}),events=events,
+    return dict(id=run_id,config=config,status=live_status(path),events=compact_events(events),
                 best_validation=read_json(artifact(path,'evaluation/best-validation.json','best-validation.json')))
 
 def summaries():
     rows=[]
-    for run_id,path in run_paths().items():
+    paths=run_paths()
+    for run_id,path in paths.items():
         events=read_events(artifact(path,'metrics/events.jsonl','metrics.jsonl'))
         latest=next((r for r in reversed(events) if r.get('type')=='train'),None)
         config=read_json(path/'config.json',{})
-        rows.append(dict(id=run_id,config=config,status=read_json(path/'status.json',{'status':'unknown'}),
+        rows.append(dict(id=run_id,config=config,status=live_status(path),
                          latest=latest,best_validation=read_json(artifact(path,'evaluation/best-validation.json','best-validation.json')),
                          modified=path.stat().st_mtime))
-    return sorted(rows,key=lambda r:r['modified'],reverse=True)
+    rows+=queued_runs(set(paths))
+    order={s:i for i,s in enumerate(('running','stalled','queued','interrupted','failed','stopped','completed'))}
+    return sorted(rows,key=lambda r:(order.get(r['status']['status'],9),-r['modified']))
 
 class Handler(BaseHTTPRequestHandler):
     def log_message(self,*args):pass
@@ -92,8 +144,11 @@ class Handler(BaseHTTPRequestHandler):
         except (ValueError,OSError) as exc:return self.reply(dict(error=str(exc)),500)
 
 def main():
+    global RESULTS
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--port',type=int,default=8765)
-    args=parser.parse_args();server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
+    parser.add_argument('--results',type=Path,default=RESULTS,help='Directory searched for run folders (default: results/)')
+    args=parser.parse_args()
+    RESULTS=args.results.resolve();server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
     print(f'Energy Scheduling Lab: http://127.0.0.1:{args.port}',flush=True)
     try:server.serve_forever()
     except KeyboardInterrupt:pass

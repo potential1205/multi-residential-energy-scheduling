@@ -25,15 +25,37 @@ DATA_ORDER=['table1_load.npy','USA_CA_Oakland.Intl.AP.724930_TMY3_BASE.csv.npy',
             'USA_CA_Santa.Maria.Public.AP.723940_TMY3_BASE.csv.npy',
             'USA_CA_Visalia.Muni.AWOS.723896_TMY3_BASE.csv.npy']
 
+# Named settings; explicit command-line flags always win. 'paper' reproduces the published code budget.
+PRESETS={
+    'tuned':dict(iterations=200,target_hours=240,updates_per_day=24,cost_scale=100,width=512),
+    'fast':dict(iterations=200,target_hours=240,updates_per_day=12,cost_scale=100,width=256),
+    'paper':dict(iterations=None,target_hours=20,updates_per_day=1,cost_scale=1,width=512),
+}
+
+def apply_preset(args):
+    """Fill unset options from the preset; scenario-dependent paper values for epsilon and budget."""
+    preset=args.preset or ('paper' if args.source=='upstream' else 'tuned')
+    args.preset=preset
+    toy=args.algorithm=='TDAS' and args.scenario in (1,2)
+    for key,value in PRESETS[preset].items():
+        if getattr(args,key) is None:
+            setattr(args,key,value)
+    if args.iterations is None:
+        args.iterations=5000 if toy else 10000
+    if args.epsilon is None:
+        args.epsilon=0.01 if toy else 0.1
+    return args
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--algorithm',choices=['TDAS','Co-TDAS'],default='TDAS')
     parser.add_argument('--source',choices=['upstream','fixed'],default='fixed')
     parser.add_argument('--seed',type=int,default=0)
     parser.add_argument('--scenario',type=int,choices=[1,2,3,4],default=1)
-    parser.add_argument('--iterations',type=int,default=100)
+    parser.add_argument('--preset',choices=sorted(PRESETS),help='tuned (default), fast, or paper (default for --source upstream)')
+    parser.add_argument('--iterations',type=int,help='30-day passes; preset default')
     parser.add_argument('--episodes',type=int,help='Exact number of training days; overrides iterations*30')
-    parser.add_argument('--epsilon',type=float,default=0.1)
+    parser.add_argument('--epsilon',type=float,help='Default 0.01 for TDAS scenarios 1-2, otherwise 0.1 (paper)')
     parser.add_argument('--lr',type=float)
     parser.add_argument('--gamma',type=float,default=0.98)
     parser.add_argument('--forecast',type=int,choices=range(0,24),default=2)
@@ -42,14 +64,20 @@ def main():
     parser.add_argument('--new-clients',type=int,choices=[0,2],default=0)
     parser.add_argument('--log-every',type=int,default=25)
     parser.add_argument('--eval-every',type=int,default=500)
-    parser.add_argument('--target-hours',type=int,default=20)
+    parser.add_argument('--target-hours',type=int,help='Target sync period in hours; preset default')
     parser.add_argument('--device',choices=['auto','cpu','cuda'],default='auto')
     parser.add_argument('--threads',type=int,default=1)
     parser.add_argument('--batch-size',type=int,default=32)
-    parser.add_argument('--width',type=int,default=512)
+    parser.add_argument('--width',type=int,help='Hidden layer width; preset default')
     parser.add_argument('--loss',choices=['huber','mse'],default='huber')
+    parser.add_argument('--updates-per-day',type=int,help='Gradient steps per simulated day (paper: 1)')
+    parser.add_argument('--cost-scale',type=float,help='Divide replayed costs by this value (paper: 1)')
+    parser.add_argument('--start-size',type=int,help='Replay size before learning starts (paper code: 5000)')
+    parser.add_argument('--buffer-limit',type=int,help='Replay capacity (paper code: 20000)')
+    parser.add_argument('--epsilon-final',type=float,help='Linearly decay epsilon to this value')
+    parser.add_argument('--epsilon-decay-days',type=int,help='Training days over which epsilon decays')
     parser.add_argument('--output',type=Path)
-    args=parser.parse_args()
+    args=apply_preset(parser.parse_args())
     if args.iterations<=0 or not 0<=args.epsilon<=1 or not 0<=args.gamma<1 or (args.lr is not None and args.lr<=0):
         parser.error('Require iterations>0, lr>0, epsilon in [0,1], gamma in [0,1)')
     if (args.episodes is not None and args.episodes<30) or args.log_every<1 or args.eval_every<0 or args.target_hours<1:
@@ -85,7 +113,7 @@ def main():
     source=source.replace("'log/' + directory", "str(_artifact_root / 'logs' / 'legacy')")
     overrides=dict(SCENARIO=args.scenario,iteration=args.iterations,epsilon=args.epsilon,
                    gamma=args.gamma,Tf=args.forecast,days=30,
-                   test_days=30 if args.scenario in (1,2) else 360,
+                   test_days=30 if args.scenario in (1,2) else 365,
                    N=args.clients,N_new=args.clients,NEW=args.new_clients,CO=args.co,
                    freq=args.target_hours,
                    batch_size=args.batch_size,
@@ -94,6 +122,9 @@ def main():
         overrides.update(epochs=args.episodes,iteration=args.episodes//30)
     if args.lr is not None:
         overrides['learning_rate']=args.lr
+    for key in ('updates_per_day','cost_scale','start_size','buffer_limit','epsilon_final','epsilon_decay_days'):
+        if getattr(args,key) is not None:
+            overrides[key]=getattr(args,key)
     class Settings(ast.NodeTransformer):
         def visit_Assign(self,node):
             # Only module-level assignments are fed to this transformer.
@@ -185,32 +216,44 @@ def main():
     from .telemetry import Observer
     observer=Observer(output,namespace,config,args.log_every,args.eval_every)
     namespace['_observer']=observer
-    (output/'status.json').write_text(json.dumps(dict(status='running',pid=os.getpid(),started=time.time())),encoding='utf-8')
+    from . import status as run_status
+    run_status.start(output,day=0,epochs=config['training_episodes'])
+    run_status.install_stop_handlers()
     start=time.perf_counter()
     previous=os.getcwd()
-    try:
-        os.chdir(ROOT)
-        # Upstream Co-TDAS writes log/; retain its behavior inside this worktree.
-        with (output/'logs'/'stdout.log').open('w',encoding='utf-8') as log, contextlib.redirect_stdout(log):
-            exec(compile(tree,str(source_path),'exec'),namespace)
+
+    def save_outputs(prefix):
         for key in ('cost_history','result_cost_history','result_action_history','action_history'):
             if key in namespace:
                 try:np.save(output/'history'/f'{key}.npy',np.asarray(namespace[key]))
                 except ValueError:
                     for client,history in enumerate(namespace[key]):np.save(output/'history'/f'{key}-{client}.npy',np.asarray(history))
-        models=namespace['q'] if isinstance(namespace['q'],list) else [namespace['q']]
-        for i,model in enumerate(models):
-            torch.save(model.state_dict(),output/'checkpoints'/f'last-model-{i}.pt')
+        models=namespace.get('q',[])
+        for i,model in enumerate(models if isinstance(models,list) else [models]):
+            torch.save(model.state_dict(),output/'checkpoints'/f'{prefix}-model-{i}.pt')
         optimizers=namespace.get('optimizers',[namespace.get('optimizer')])
         for i,optimizer in enumerate(optimizers):
-            if optimizer is not None:torch.save(optimizer.state_dict(),output/'checkpoints'/f'last-optimizer-{i}.pt')
-        (output/'status.json').write_text(json.dumps(dict(status='completed',seconds=time.perf_counter()-start)),encoding='utf-8')
-        observer.finish('completed')
-        manifest(output,'completed',config)
+            if optimizer is not None:torch.save(optimizer.state_dict(),output/'checkpoints'/f'{prefix}-optimizer-{i}.pt')
+
+    def finish(state,**fields):
+        run_status.write(output,state,seconds=time.perf_counter()-start,**fields)
+        observer.finish(state,fields.get('error'))
+        manifest(output,state,config)
+    try:
+        os.chdir(ROOT)
+        # Upstream Co-TDAS writes log/; retain its behavior inside this worktree.
+        with (output/'logs'/'stdout.log').open('w',encoding='utf-8') as log, contextlib.redirect_stdout(log):
+            exec(compile(tree,str(source_path),'exec'),namespace)
+        save_outputs('last')
+        finish('completed')
+    except (run_status.RunStopped,KeyboardInterrupt) as exc:
+        # Partial models/histories are kept under a distinct name so they are never mistaken for finished ones.
+        save_outputs('stopped')
+        finish('stopped',reason=str(exc) or 'KeyboardInterrupt')
+        print(f'Stopped: {output}',flush=True)
+        raise SystemExit(130)
     except Exception as exc:
-        (output/'status.json').write_text(json.dumps(dict(status='failed',error=repr(exc))),encoding='utf-8')
-        observer.finish('failed',repr(exc))
-        manifest(output,'failed',config)
+        finish('failed',error=repr(exc))
         raise
     finally:
         os.chdir(previous)

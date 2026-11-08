@@ -29,7 +29,7 @@ def main():
     source=source.replace('int(t_now)','int(np.asarray(t_now).item())')
     if args.source=='upstream':source=source.replace('def cont2disc(u0, x0, L, G, sigma):','def cont2disc(u0, x0, L, G, sigma):\n    L, G, sigma = (float(np.asarray(v).item()) for v in (L, G, sigma))')
     source=source.replace('for k in trange(total_iter):','for k in trange(total_iter_nopadding):')
-    source=source.replace('90 <= day < 270','90 <= day + _start_day < 270')
+    source=source.replace('90 <= day < 273','90 <= day + _start_day < 273')
     tree=ast.parse(source)
     overrides=dict(SCENARIO=args.scenario,n_horizon=args.horizon,noise_max=args.noise*100,
                    load_file_list=DATA_ORDER,generation_file_list=['generation.npy'])
@@ -86,8 +86,10 @@ def main():
             for event in (dict(type='cost',clients=[row]),dict(type='train',epochs=namespace['days'],clients=[row],
                 schedule={'0':recent},eta_seconds=(time.perf_counter()-start)/day*(namespace['days']-day),days_per_second=day/max(time.perf_counter()-start,1e-9))):
                 stream.write(json.dumps(dict(**event,**common))+'\n')
+            run_status.write(output,'running',day=day,epochs=namespace['days'])
     namespace['_observe']=observe
-    (output/'status.json').write_text(json.dumps(dict(status='running')),encoding='utf-8')
+    from . import status as run_status
+    run_status.start(output,day=0,epochs=namespace.get('days'));run_status.install_stop_handlers()
     previous=os.getcwd()
     try:
         os.chdir(ROOT)
@@ -96,9 +98,11 @@ def main():
         summary=dict(violations=violations,days=namespace['days'],horizon=args.horizon,noise=args.noise,
                      total_usd=sum(t['action']*t['price'] for t in trace)*.001+sum(30*max(t['action'] for t in trace[d:d+24]) for d in range(0,len(trace),24))*.001)
         (output/'evaluation'/'controller.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
-        (output/'status.json').write_text(json.dumps(dict(status='completed',seconds=time.perf_counter()-start)),encoding='utf-8')
+        run_status.write(output,'completed',seconds=time.perf_counter()-start)
+    except (run_status.RunStopped,KeyboardInterrupt) as exc:
+        run_status.write(output,'stopped',seconds=time.perf_counter()-start,reason=str(exc) or 'KeyboardInterrupt');raise SystemExit(130)
     except Exception as exc:
-        (output/'status.json').write_text(json.dumps(dict(status='failed',error=repr(exc))),encoding='utf-8');raise
+        run_status.write(output,'failed',seconds=time.perf_counter()-start,error=repr(exc));raise
     finally:
         stream.close();os.chdir(previous);manifest(output,json.loads((output/'status.json').read_text())['status'],config)
     print(json.dumps(summary),flush=True)

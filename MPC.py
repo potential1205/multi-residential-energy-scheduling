@@ -53,7 +53,7 @@ else:
         n = 2
     print(load_file_list[n])
     days = 365
-    test_days = 360
+    test_days = 365
     load = (np.load(f"data/load/{load_file_list[n]}")[0:days]).tolist()
     demand_energy_data.append(load)
     generation = (np.load(f"data/generation/{generation_file_list[0]}")[0:days]).tolist()
@@ -75,7 +75,7 @@ action_set = np.arange(0,51)/10 * scaling_factor
 
 L_data, G_data, p_tou_ = [], [], []
 for day in range(days + days_padding):
-    TOU = summer_TOU if SCENARIO == 1 or 90 <= day < 270 else winter_TOU
+    TOU = summer_TOU if SCENARIO == 1 or 90 <= day < 273 else winter_TOU
     p_tou_ += TOU
     for hour in range(24):
         L_data.append([demand_energy_data[0][day%days][hour]*10])
@@ -255,7 +255,7 @@ TOU_cost = 0
 DC_cost = 0
 temp_action = []
 for day in range(test_days):
-    TOU = summer_TOU if SCENARIO == 1 or 90 <= day < 270 else winter_TOU
+    TOU = summer_TOU if SCENARIO == 1 or 90 <= day < 273 else winter_TOU
     day_action = []
     for t in range(24):
         action = actions[day][t]

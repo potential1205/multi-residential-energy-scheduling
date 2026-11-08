@@ -24,7 +24,7 @@ NEW = 0
 CO = 1
 
 epsilon = 0.1
-iteration = 10000
+iteration = 200          # passes over the 30 training days (6000 days); the paper code used 10000
 learning_rate = 0.00001
 days = 30
 start_size = 5000
@@ -34,10 +34,16 @@ batch_size = 32
 Tf= 2
 feature = 52 + 2*Tf +1
 battery_max = 40
-freq = 20
+freq = 240               # target network sync period in hours (paper: 20)
 epochs = days * iteration
 pD=30
 battery_rate=20
+# learning schedule. Paper settings: updates_per_day=1, cost_scale=1, freq=20, iteration=10000.
+# The tuned values reach the paper's 300k-day result in ~2-3k days (see README, "Hyperparameter study").
+updates_per_day = 24      # gradient steps after each simulated day
+cost_scale = 100          # costs are divided by this before entering the replay buffer
+epsilon_final = epsilon   # epsilon decays linearly from `epsilon` to this value ...
+epsilon_decay_days = 1    # ... over this many training days
 
 T = np.eye(24)
 w= [5,5,5, 5,5,5, 5,15,15, 15,25,10, 10,10,10, 10,10,15, 15,5,5, 5,5,5]  # 겨울
@@ -70,15 +76,11 @@ class ReplayBuffer():
         self.buffer.append(transition)
 
     def sample(self, n):
-        mini_batch = random.sample(self.buffer, n)
-        s_lst, a_lst, r_lst, s_prime_lst = [], [], [], []
-        for transition in mini_batch:
-            s, a, r, s_prime = transition
-            s_lst.append(s)
-            a_lst.append([a])
-            r_lst.append([r])
-            s_prime_lst.append(s_prime)
-        return (torch.from_numpy(np.asarray(s_lst, dtype=np.float32)), torch.from_numpy(np.asarray(a_lst, dtype=np.int64)), torch.from_numpy(np.asarray(r_lst, dtype=np.float32)), torch.from_numpy(np.asarray(s_prime_lst, dtype=np.float32)))
+        s, a, r, s_prime = zip(*random.sample(self.buffer, n))
+        return (torch.from_numpy(np.asarray(s, dtype=np.float32)),
+                torch.from_numpy(np.asarray(a, dtype=np.int64)).unsqueeze(1),
+                torch.from_numpy(np.asarray(r, dtype=np.float32)).unsqueeze(1),
+                torch.from_numpy(np.asarray(s_prime, dtype=np.float32)))
 
     def size(self):
         return len(self.buffer)
@@ -117,15 +119,12 @@ def train(n):
     q_a = q[n](s).gather(1, a)
     with torch.no_grad():
         min_q_prime = q_target[n](s_prime)
-    battery = torch.clamp(s_prime[:, 0] - s_prime[:, 50] + s_prime[:, 51+Tf], max=battery_max)
-    rate = battery - s_prime[:, 0]
-    q_list = torch.where((0 <= battery.unsqueeze(-1) + torch.arange(21)) &
-                         ((battery.unsqueeze(-1) + torch.arange(21)) <= battery_max) &
-                         ((-battery_rate <= rate.unsqueeze(-1) + torch.arange(21)) &
-                          (rate.unsqueeze(-1) + torch.arange(21) <= battery_rate)),
-                         min_q_prime, torch.tensor(float('inf')))
-
-    Q_target, _ = torch.min(q_list, dim=1, keepdim=True)
+    # Only grid purchases that keep s' within battery capacity and charging rate are admissible.
+    battery = torch.clamp(s_prime[:, 0] - s_prime[:, 50] + s_prime[:, 51+Tf], max=battery_max).unsqueeze(1)
+    rate = battery - s_prime[:, :1]
+    grid = torch.arange(21)
+    admissible = (battery + grid >= 0) & (battery + grid <= battery_max) & ((rate + grid).abs() <= battery_rate)
+    Q_target = min_q_prime.masked_fill(~admissible, float('inf')).min(dim=1, keepdim=True).values
     target = r + gamma * Q_target
     loss = F.smooth_l1_loss(q_a, target)
     optimizer = optimizers[n]
@@ -133,69 +132,32 @@ def train(n):
     loss.backward()
     optimizer.step()
 
-# def train(n):
-#     s, a, r, s_prime = memory[n].sample(batch_size)
-#     q_a = q[n](s).gather(1,a)
-#     min_q_prime = q_target[n](s_prime)
-#     Q_target = list()
-#     for i in range(batch_size):
-#         battery = min(s_prime[i][0].item() - s_prime[i][50].item() + s_prime[i][51+Tf].item(),battery_max)
-#         rate = battery-s_prime[i][0].item()
-#         q_list = []
-#         for j in range(0, 21, 1):
-#             if (0<= battery + j <= battery_max) and (-battery_rate <= rate + j <= battery_rate):
-#                 q_list.append(min_q_prime[i][j].item())
-#             else:
-#                 q_list.append(np.inf)
-#         Q_target.append(min(q_list))
-#
-#     optimizer = optim.Adam(q[n].parameters(), lr=learning_rate)
-#     Q_target = torch.tensor((Q_target)).resize(batch_size,1)
-#     target = r + gamma * Q_target
-#     loss = F.smooth_l1_loss(q_a, target)
-#     optimizer.zero_grad(set_to_none=True)
-#     loss.backward()
-#     optimizer.step()
-
+# state layout: [battery, demand charge, one-hot hour (24), TOU prices from now (24),
+#                load t..t+Tf, generation t..t+Tf, client demand-charge price]
 def initialize_state(n):
     state = np.zeros(feature)
-    state[0] = 0    # battery level
-    state[1] = 0    # demand charge
-    for i in range(24):
-        state[2 + i] = T[0][i] # time (one-hot encoding)
-        state[26 + i] = TOUs[n][i] # TOU price
-    for i in range(Tf+1):
-        state[50+i] = load_datas[n][0][i] # load (t~t+Tf)
-        state[51+Tf+i] = generation_datas[n][0][i] # generation (t~t+Tf)
-    state[51+Tf+i+1] = DCs[n]
-
+    state[2:26] = T[0]
+    state[26:50] = TOUs[n]
+    state[50:51+Tf] = load_datas[n][0][:Tf+1]
+    state[51+Tf:52+2*Tf] = generation_datas[n][0][:Tf+1]
+    state[-1] = DCs[n]
     return state
 
-def next_state(n,n_epi,time,battery,charge,day_charge,TOU,load_datas,generation_datas):
+def next_state(n,n_epi,time,battery,charge,day_charge):
     state_prime = np.zeros(feature)
     state_prime[0] = battery + charge
-    if time==23: state_prime[1] = 0
-    else: state_prime[1] = max(day_charge)
-    for i in range(24):
-        state_prime[2 + i] = T[(time + 1) % 24][i]
-        state_prime[26 + i] = TOUs[n][(time+1+i)%24]
-    for i in range(Tf+1):
-        if time+1+i >= 24:
-            state_prime[50+i] = load_datas[n][(n_epi+1)%days][(time+1+i)%24]
-            state_prime[51+Tf+i] = generation_datas[n][(n_epi+1)%days][(time+1+i)%24]
-        else:
-            state_prime[50+i] = load_datas[n][(n_epi)%days][(time+1+i)%24]
-            state_prime[51+Tf+i] = generation_datas[n][(n_epi)%days][(time+1+i)%24]
-
-    state_prime[51+Tf+i+1] = DCs[n]
-
+    state_prime[1] = 0 if time == 23 else max(day_charge)
+    state_prime[2:26] = T[(time + 1) % 24]
+    state_prime[26:50] = np.roll(TOUs[n], -(time + 1))
+    hours = np.arange(time + 1, time + 2 + Tf)
+    day_index = (n_epi + hours // 24) % days
+    state_prime[50:51+Tf] = load_datas[n][day_index, hours % 24]
+    state_prime[51+Tf:52+2*Tf] = generation_datas[n][day_index, hours % 24]
+    state_prime[-1] = DCs[n]
     return state_prime
 
 def get_grad(before_q,after_q):
-    output = copy.deepcopy(after_q)
-    for key in output.keys():
-        output[key] = (after_q[key]-before_q[key])
-    return output
+    return {key: after_q[key] - before_q[key] for key in after_q}
 
 def agg_grad(global_q,grads,weights=None):
     if not grads:
@@ -211,28 +173,31 @@ def agg_grad(global_q,grads,weights=None):
     return w_avg
 
 def federated_learning():
-    grads = []
-    for i in range(N_new):
-        grads.append(get_grad(q_before[i].state_dict(), q[i].state_dict()))
+    grads = [get_grad(q_before[i].state_dict(), q[i].state_dict()) for i in range(N_new)]
     agg_model = agg_grad(q_global.state_dict(), grads, experience_counts[:N_new])
     q_global.load_state_dict(agg_model)
     for i in range(N_new):
         q[i].load_state_dict(agg_model)
         q_target[i].load_state_dict(agg_model)
 
+def exploration(n_epi):
+    progress = min(n_epi / epsilon_decay_days, 1.0)
+    return epsilon + (epsilon_final - epsilon) * progress
+
 def update(n_epi,n):
     if n_epi % (epochs/10) == 0:
-        leng = len(cost_history[n])
-        print(sum(cost_history[n][leng-days:leng]))
+        print(sum(cost_history[n][-days:]))
 
     if memory[n].size() > start_size:
-        train(n)
+        for _ in range(updates_per_day):
+            train(n)
 
-cost_history,action_history,battery_history=[],[],[]
-q, q_target, memory, q_before, q_global = [], [], [], [], Qnet()
-optimizers = []
-experience_counts = [0 for _ in range(N+NEW)]
+cost_history = [[] for _ in range(N+NEW)]
+action_history = [[] for _ in range(N+NEW)]
+experience_counts = [0] * (N+NEW)
+q, q_target, memory, q_before, optimizers, q_global = [], [], [], [], [], Qnet()
 
+# Every client starts from the global model. Construction order is kept so the RNG stream is unchanged.
 for n in range(N+NEW):
     q.append(Qnet())
     optimizers.append(optim.Adam(q[n].parameters(), lr=learning_rate))
@@ -241,8 +206,6 @@ for n in range(N+NEW):
     q[n].load_state_dict(q_global.state_dict())
     q_target[n].load_state_dict(q_global.state_dict())
     q_before.append(Qnet())
-    cost_history.append([])
-    action_history.append([])
 
 
 # train
@@ -260,12 +223,12 @@ for n_epi in tqdm(range(epochs)):
         q_before[n].load_state_dict(q[n].state_dict())
         for time in range(24):
             battery = min(state[n][0] - state[n][50] + state[n][51+Tf],battery_max)
-            action = q[n].sample_action(torch.from_numpy(state[n]).float(), epsilon, battery,battery-state[n][0])
+            action = q[n].sample_action(torch.from_numpy(state[n]).float(), exploration(n_epi), battery,battery-state[n][0])
             actions.append(action)
             cost = action * TOUs[n][time] + (DCs[n] * max(actions) if time == 23 else 0)
             costs += cost
-            state_prime = next_state(n,n_epi,time,battery,action,actions,TOUs[n],load_datas,generation_datas)
-            memory[n].put((state[n], action, cost, state_prime))
+            state_prime = next_state(n,n_epi,time,battery,action,actions)
+            memory[n].put((state[n], action, cost / cost_scale, state_prime))
             experience_counts[n] += 1
             state[n] = state_prime
             if (n_epi * 24 + time) % freq == 0:
@@ -285,11 +248,8 @@ for n in range(N+NEW):
     usable = np.asarray(cost_history[n][:completed_blocks * days])
     block_costs = usable.reshape(completed_blocks, days).sum(axis=1)
     check_dqn = np.cumsum(block_costs) / np.arange(1, completed_blocks + 1)
-    x = range(completed_blocks)
-
     plt.figure(figsize=(15,10))
-    y1 = [check_dqn[v] for v in x]
-    plt.plot(x,y1,label='DQL time avgerage cost', color='r')
+    plt.plot(range(completed_blocks), check_dqn, label='DQL time avgerage cost', color='r')
     plt.xlabel('Epochs',fontsize=22)
     plt.ylabel('Cost(won)',fontsize=22)
     plt.legend()
@@ -297,69 +257,28 @@ for n in range(N+NEW):
 
 
 def save_data():
-    directory = str(datetime.now().strftime("%Y.%m.%d %H-%M-%S"))
+    directory = datetime.now().strftime("%Y.%m.%d %H-%M-%S")
     path = 'log/' + directory
-    try:
-        if not os.path.exists(path):
-            os.makedirs(path)
-    except OSError:
-        print("Error: Failed to create the directory.")
+    os.makedirs(path + '/models', exist_ok=True)
 
-    info = dict()
-    info['N'] = N
-    info['Tf'] = Tf
-    info['gamma'] = gamma
-    info['T_target'] = 20
-    info['T_FRL'] = 1
-    info['learning_rate'] = learning_rate
-    info['batch_size'] = batch_size
-    info['start_size'] = start_size
-    info['buffer_limit'] = buffer_limit
-    info['episodes'] = iteration
-    info['number_of_action'] = 21
-    info['epsilon'] = epsilon
-    info['NEW'] = NEW
-    info['feature_size'] = feature
-    info['train_days'] = days
-    info['battery_max'] = battery_max
-    info['battery_rate'] = battery_rate
-    info['summer_TOU'] = s
-    info['winter_TOU'] = w
-    info['TOUs'] = TOUs
-    info['DCs'] = DCs
-
-    info['hidden_layer'] = 3
-    info['number_of_node'] = 512
-    info['activation_function'] = "relu"
-
+    info = dict(N=N, Tf=Tf, gamma=gamma, T_target=freq, T_FRL=1, learning_rate=learning_rate,
+                batch_size=batch_size, start_size=start_size, buffer_limit=buffer_limit, episodes=iteration,
+                number_of_action=21, epsilon=epsilon, NEW=NEW, feature_size=feature, train_days=days,
+                battery_max=battery_max, battery_rate=battery_rate, summer_TOU=s, winter_TOU=w,
+                TOUs=TOUs, DCs=DCs, hidden_layer=3, number_of_node=512, activation_function="relu")
     with open(path + '/_parameters.txt', 'w', encoding='UTF-8') as f:
         for code, name in info.items():
             f.write(f'{code} : {name}\n')
 
-    new_train_cost_history = []
-    new_train_action_history = []
-
-    for n in range(NEW):
-        new_train_cost_history.append(cost_history[N+n])
-        new_train_action_history.append(action_history[N+n])
-
-    np.save(path + f'/train_cost_historys.txt', cost_history[0:N])
-    np.save(path + f'/train_action_historys.txt', action_history[0:N])
-
+    np.save(path + '/train_cost_historys.txt', cost_history[0:N])
+    np.save(path + '/train_action_historys.txt', action_history[0:N])
     if NEW != 0:
-        np.save(path + f'/new_train_cost_history.txt', cost_history[N:])
-        np.save(path + f'/new_train_action_history.txt', action_history[N:])
-
-    path = 'log/' + directory + '/models'
-    try:
-        if not os.path.exists(path):
-            os.makedirs(path)
-    except OSError:
-        print("Error: Failed to create the models directory.")
+        np.save(path + '/new_train_cost_history.txt', cost_history[N:])
+        np.save(path + '/new_train_action_history.txt', action_history[N:])
 
     for n in range(N+NEW):
-        torch.save(q[n].state_dict(),path + f'/local{n+1}.pt')
+        torch.save(q[n].state_dict(), path + f'/models/local{n+1}.pt')
     if CO == 1:
-        torch.save(q_global.state_dict(), path + f'/global.pt')
+        torch.save(q_global.state_dict(), path + '/models/global.pt')
 
 save_data()

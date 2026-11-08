@@ -2,13 +2,13 @@
   "name": "audit-v1",
   "purpose": "Preliminary validation-only comparisons; not a full paper reproduction",
   "runs": [
-    {"name":"cool-small-lr1-seed0","args":["--scenario","3","--episodes","5000","--source","fixed","--seed","0","--device","cpu","--width","128","--lr","0.0001","--eval-every","1000"]},
-    {"name":"cool-small-lr1-seed1","args":["--scenario","3","--episodes","5000","--source","fixed","--seed","1","--device","cpu","--width","128","--lr","0.0001","--eval-every","1000"]},
-    {"name":"cool-small-lr3-seed0","args":["--scenario","3","--episodes","5000","--source","fixed","--seed","0","--device","cpu","--width","128","--lr","0.0003","--eval-every","1000"]},
-    {"name":"cool-small-lr3-seed1","args":["--scenario","3","--episodes","5000","--source","fixed","--seed","1","--device","cpu","--width","128","--lr","0.0003","--eval-every","1000"]},
-    {"name":"cool-gpu-b128-seed0","args":["--scenario","3","--episodes","5000","--source","fixed","--seed","0","--device","cuda","--batch-size","128","--eval-every","1000"]},
-    {"name":"co-fixed-seed0","args":["--algorithm","Co-TDAS","--episodes","3000","--source","fixed","--seed","0","--device","cpu","--eval-every","1000"]},
+    {"name":"cool-small-lr1-seed0","args":["--preset","paper","--scenario","3","--episodes","5000","--source","fixed","--seed","0","--device","cpu","--width","128","--lr","0.0001","--eval-every","1000"]},
+    {"name":"cool-small-lr1-seed1","args":["--preset","paper","--scenario","3","--episodes","5000","--source","fixed","--seed","1","--device","cpu","--width","128","--lr","0.0001","--eval-every","1000"]},
+    {"name":"cool-small-lr3-seed0","args":["--preset","paper","--scenario","3","--episodes","5000","--source","fixed","--seed","0","--device","cpu","--width","128","--lr","0.0003","--eval-every","1000"]},
+    {"name":"cool-small-lr3-seed1","args":["--preset","paper","--scenario","3","--episodes","5000","--source","fixed","--seed","1","--device","cpu","--width","128","--lr","0.0003","--eval-every","1000"]},
+    {"name":"cool-gpu-b128-seed0","args":["--preset","paper","--scenario","3","--episodes","5000","--source","fixed","--seed","0","--device","cuda","--batch-size","128","--eval-every","1000"]},
+    {"name":"co-fixed-seed0","args":["--preset","paper","--algorithm","Co-TDAS","--episodes","3000","--source","fixed","--seed","0","--device","cpu","--eval-every","1000"]},
     {"name":"co-upstream-seed0","args":["--algorithm","Co-TDAS","--episodes","3000","--source","upstream","--seed","0","--device","cpu","--eval-every","1000"]},
-    {"name":"co-new-clients-seed0","args":["--algorithm","Co-TDAS","--episodes","1000","--source","fixed","--seed","0","--device","cpu","--new-clients","2","--eval-every","500"]}
+    {"name":"co-new-clients-seed0","args":["--preset","paper","--algorithm","Co-TDAS","--episodes","1000","--source","fixed","--seed","0","--device","cpu","--new-clients","2","--eval-every","500"]}
   ]
 }

@@ -1,9 +1,79 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Energy Scheduling Lab</title><link rel="stylesheet" href="/style.css"></head>
-<body><aside><div class="mark">E<span>↗</span></div><div class="side-name">ENERGY<br>SCHEDULING<br><b>LAB</b></div><nav><a href="#overview">◈<span>Overview</span></a><a href="#learning">⌁<span>Learning</span></a><a href="#schedules">▥<span>Schedules</span></a><a href="#experiments">☷<span>Runs</span></a></nav><div class="side-foot">RESEARCH WORKSPACE<br>LOCAL · PRIVATE</div></aside>
-<main><header><div><div class="eyebrow"><span class="live-dot"></span> EXPERIMENT OBSERVATORY <span class="divider">/</span> TDAS & CO-TDAS</div><h1>Energy Scheduling Lab<span>.</span></h1><p>학습의 변화부터 실제 전력 스케줄까지, 한눈에 확인하세요.</p></div><div class="header-right"><span id="connection" class="badge">Connecting</span><button id="pause">Ⅱ Pause live</button><small id="updated">2초마다 업데이트</small></div></header>
-<section class="toolbar" aria-label="실험 필터"><label>Algorithm<select id="algorithm"><option value="">All algorithms</option><option>TDAS</option><option>Co-TDAS</option></select></label><label>Source<select id="source"><option value="">All sources</option><option value="fixed">Fixed</option><option value="upstream">Upstream</option></select></label><label>Smoothing<select id="smooth"><option value="30">30 days</option><option value="100" selected>100 days</option><option value="300">300 days</option><option value="1">Raw</option></select></label><label>Horizontal axis<select id="axis"><option value="day">Training day</option><option value="elapsed">Wall time (s)</option></select></label><div class="toolbar-note"><span class="color-dot"></span> Live local telemetry · CPU</div></section>
-<section id="overview"><div class="section-title"><h2>Training overview</h2><span id="run-count">Loading experiments…</span></div><div class="kpis"><article><div class="metric-label">TRAINING PROGRESS <span>01</span></div><strong id="progress">—</strong><div class="progress-track"><div id="progress-bar"></div></div><small id="progress-caption">학습 일수 / 목표 일수</small></article><article><div class="metric-label">VALIDATION COST <span>02</span></div><strong id="validation">—</strong><small id="validation-caption">미학습 구간 · USD / day · 낮을수록 좋음</small></article><article><div class="metric-label">ROLLING TRAIN COST <span>03</span></div><strong id="train-cost">—</strong><small id="train-caption">탐험을 포함한 학습 비용</small></article><article><div class="metric-label">CONSTRAINT VIOLATIONS <span>04</span></div><strong id="violations">—</strong><small id="violation-caption">배터리 용량 · 충방전율</small></article></div><div id="notice" class="notice">실제 학습 데이터를 불러오고 있습니다.</div></section>
-<section id="learning"><div class="section-title"><h2>Learning dynamics</h2><div class="legend-note">선택한 실행을 비교합니다. 회색 띠는 같은 설정의 seed 간 표준편차입니다.</div></div><div class="chart-grid"><article class="chart-card wide"><div class="chart-head"><div><h3>Training cost</h3><p>이동평균 · USD / day · 탐험 포함</p></div><span id="convergence" class="badge">Observing</span></div><div id="cost-chart" class="chart"></div></article><article class="chart-card"><div class="chart-head"><div><h3>Validation performance</h3><p>학습에 쓰지 않은 day 30–59 · greedy policy</p></div><span class="chip">LOWER IS BETTER</span></div><div id="val-chart" class="chart"></div></article><article class="chart-card"><div class="chart-head"><div><h3>TD loss</h3><p>샘플링된 batch loss · 원래 학습 단위</p></div><label class="check"><input id="log-loss" type="checkbox" checked> log scale</label></div><div id="loss-chart" class="chart"></div></article><article class="chart-card"><div class="chart-head"><div><h3>Q-value & Bellman target</h3><p>활성 실행의 평균값 · 원래 학습 단위</p></div></div><div id="q-chart" class="chart"></div></article><article class="chart-card"><div class="chart-head"><div><h3>Gradient health</h3><p>Main / target gradient norm · target은 0이 정상</p></div></div><div id="grad-chart" class="chart"></div></article><article class="chart-card"><div class="chart-head"><div><h3>Cost composition</h3><p>활성 실행의 TOU / DC 이동평균 · USD / day</p></div></div><div id="composition-chart" class="chart"></div></article><article class="chart-card"><div class="chart-head"><div><h3>Replay & updates</h3><p>replay buffer 경험 수 / optimizer step</p></div></div><div id="buffer-chart" class="chart"></div></article><article class="chart-card"><div class="chart-head"><div><h3>Process memory</h3><p>실제 프로세스 resident memory · MiB</p></div><span id="throughput" class="chip">— days/s</span></div><div id="resource-chart" class="chart"></div></article></div></section>
-<section id="schedules"><div class="section-title"><h2>Inside the schedule</h2><label class="inline-label">Client<select id="client"><option value="0">EMS 1</option></select></label></div><div class="schedule-grid"><article class="chart-card"><div class="chart-head"><div><h3>Last observed training day</h3><p id="schedule-caption">배터리 / 전력 구매 / 수요 / 재생에너지 · kWh</p></div></div><div id="schedule-chart" class="chart"></div></article><article class="schedule-stats"><div class="eyebrow">OPERATIONAL SNAPSHOT</div><div><span>Daily peak grid purchase</span><b id="peak">—</b></div><div><span>End-of-day battery</span><b id="battery">—</b></div><div><span>Cost accounting mismatch</span><b id="accounting">—</b></div><div><span>Elapsed / remaining</span><b id="eta">—</b></div><div><span>CPU / memory</span><b id="resources">—</b></div><small>위반 수는 실행 중 배터리 용량과 충방전율을 검사합니다. 정체 판정은 통계적 관찰이며 최적 수렴의 증명이 아닙니다.</small></article></div></section>
-<section id="experiments"><div class="section-title"><h2>Experiment registry</h2><span>체크박스로 비교 · 실행 이름으로 활성 실행 선택</span></div><div class="table-wrap"><table><thead><tr><th></th><th>Experiment</th><th>Status</th><th>Algorithm / source</th><th>Seed</th><th>Progress</th><th>Best val $/day</th><th>Time</th></tr></thead><tbody id="runs"></tbody></table></div><details class="config-card"><summary>Active run configuration <span id="active-name"></span></summary><pre id="config"></pre></details></section><footer><span>Energy Scheduling Lab · FRL research</span><span>Cost = internal units × 0.001 USD · Energy = internal units × 0.1 kWh</span><span id="footer-status">Local telemetry only</span></footer></main><div id="tooltip" role="status"></div><script src="/app.js"></script></body></html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energy Scheduling Lab</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>Energy Scheduling Lab</h1>
+  <div class="topbar-right">
+    <span id="updated" class="muted"></span>
+    <span id="connection" class="badge">연결 중</span>
+    <button id="pause" type="button">일시정지</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="runs-pane">
+    <div class="filters">
+      <input id="search" type="search" placeholder="실행 이름 검색" aria-label="실행 이름 검색">
+      <div class="filter-row">
+        <select id="status" aria-label="상태"><option value="">모든 상태</option><option value="running">실행 중</option><option value="queued">대기</option><option value="completed">완료</option><option value="stopped">중단</option><option value="failed">실패</option><option value="interrupted">비정상 종료</option><option value="stalled">응답 없음</option></select>
+        <select id="algorithm" aria-label="알고리즘"><option value="">모든 알고리즘</option><option>TDAS</option><option>Co-TDAS</option><option>MPC</option></select>
+      </div>
+      <div id="run-count" class="muted small">불러오는 중…</div>
+    </div>
+    <ul id="runs" class="run-list"></ul>
+    <p class="muted small hint">이름을 누르면 상세 보기, 체크하면 최대 6개까지 겹쳐서 비교합니다.</p>
+  </aside>
+
+  <main>
+    <section class="run-head">
+      <div>
+        <div class="run-title"><h2 id="active-name">—</h2><span id="active-status"></span></div>
+        <div id="active-meta" class="muted small"></div>
+      </div>
+      <div class="controls">
+        <label>평활 <select id="smooth"><option value="1">없음</option><option value="30">30일</option><option value="100" selected>100일</option><option value="300">300일</option></select></label>
+        <label>가로축 <select id="axis"><option value="day">학습일</option><option value="elapsed">경과 시간(초)</option></select></label>
+      </div>
+    </section>
+
+    <section class="kpis">
+      <article><span class="label">진행</span><strong id="progress">—</strong><div class="track"><div id="progress-bar"></div></div><small id="progress-caption"></small></article>
+      <article><span class="label">검증 비용 · $/일</span><strong id="validation">—</strong><small id="validation-caption"></small></article>
+      <article><span class="label">학습 비용 · $/일</span><strong id="train-cost">—</strong><small id="train-caption"></small></article>
+      <article><span class="label">제약 위반</span><strong id="violations">—</strong><small>배터리 용량 · 충방전율</small></article>
+    </section>
+
+    <section class="charts">
+      <article class="card wide"><h3>학습 비용 <small>$/일 · 탐험 포함 · 음영은 같은 설정의 seed 간 표준편차</small></h3><div id="cost-chart" class="chart"></div></article>
+      <article class="card"><h3>검증 비용 <small>day 30–59 · greedy 정책 · 낮을수록 좋음</small></h3><div id="val-chart" class="chart"></div></article>
+      <article class="card"><h3>비용 구성 <small>TOU / DC · $/일</small></h3><div id="composition-chart" class="chart"></div></article>
+      <article class="card"><h3>TD loss <small>학습 단위 · <label class="check"><input id="log-loss" type="checkbox" checked> 로그 스케일</label></small></h3><div id="loss-chart" class="chart"></div></article>
+      <article class="card"><h3>Q값과 Bellman target <small>학습 단위</small></h3><div id="q-chart" class="chart"></div></article>
+      <article class="card wide schedule">
+        <h3>마지막 학습일 스케줄 <small id="schedule-caption">kWh</small> <select id="client" aria-label="가구"><option value="0">EMS 1</option></select></h3>
+        <div class="schedule-body">
+          <div id="schedule-chart" class="chart"></div>
+          <dl class="facts">
+            <div><dt>하루 최대 구매량</dt><dd id="peak">—</dd></div>
+            <div><dt>하루 끝 배터리</dt><dd id="battery">—</dd></div>
+            <div><dt>경과 / 남은 시간</dt><dd id="eta">—</dd></div>
+            <div><dt>처리 속도</dt><dd id="throughput">—</dd></div>
+          </dl>
+        </div>
+      </article>
+    </section>
+
+    <details class="config"><summary>실행 설정 전체</summary><pre id="config"></pre></details>
+    <footer class="muted small">비용 = 내부 단위 × 0.001 USD · 에너지 = 내부 단위 × 0.1 kWh · 로컬 전용</footer>
+  </main>
+</div>
+<div id="tooltip" role="status"></div>
+<script src="/app.js"></script>
+</body>
+</html>

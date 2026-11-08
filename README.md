@@ -31,23 +31,63 @@ Simulation results demonstrate:
 
 ## Repository Structure
 
-- Root Directory: Contains core algorithm files for energy scheduling and federated learning models.
-- `data/`: Contains datasets and configurations used for training and validation.
-    - `load/`: Power demand data.
-    - `generation/`: Renewable energy generation data.
+- `TDAS.py`, `Co-TDAS.py`: single-EMS and federated (Co-TDAS) training scripts. They run standalone and use the tuned defaults below.
+- `MPC.py`: the MPC baseline (needs `requirements-mpc.txt`).
+- `experiments/`: seeded runner, live telemetry, reports, suites and tests.
+  - `run_original.py`: runs a training script headless with a seed, a preset and per-run artifacts.
+  - `suite.py` + `plans/*.json`: parallel experiment plans; every study in `docs/` is one plan file.
+  - `report.py`: per-run figures and metrics, seed-group summaries and configuration comparisons.
+  - `dashboard_server.py` + `dashboard/`: local live dashboard.
+  - `status.py`: run lifecycle (queued, running, stalled, completed, stopped, failed, interrupted).
+- `data/`: `load/` demand profiles and `generation/` PV generation (365 x 24, 0.1 kWh units).
+- `docs/hyperparameter-study.md`: convergence measurements, tuning results and the paper cross-check.
 
 ## Getting Started
 
-### Prerequisites
-
-- Python: 3.9.6
-- Required libraries: `numpy`, `pandas`, `torch` (for deep learning models)
-
-### Installation
-
-Clone the repository:
+Python 3.12 or newer.
 
 ```bash
-git clone https://github.com/username/multi-residential-energy-scheduling.git
-cd multi-residential-energy-scheduling
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+```
+
+### Train
+
+```bash
+# Tuned defaults: 6000 training days, about 10 minutes on one CPU thread
+.venv/bin/python -m experiments.run_original --scenario 3 --seed 0 --eval-every 250
+# Exact paper settings (bit-identical to the original code for the same seed)
+.venv/bin/python -m experiments.run_original --preset paper --scenario 3 --seed 0 --eval-every 5000
+# Federated Co-TDAS with 4 EMSs
+.venv/bin/python -m experiments.run_original --algorithm Co-TDAS --clients 4 --seed 0
+```
+
+Each run writes `results/runs/<run>/` with the config, the executed source, metrics (`metrics/events.jsonl`), checkpoints (`best-validation-*.pt` is selected on days 30-59, never on test days), status and a SHA-256 manifest. `Ctrl-C` or `SIGTERM` stops a run cleanly and saves partial results as `stopped-*`.
+
+| preset | updates per day | target sync | cost scale | width | training days |
+|---|---|---|---|---|---|
+| `tuned` (default) | 24 | 240 h | 1/100 | 512 | 6000 |
+| `fast` | 12 | 240 h | 1/100 | 256 | 6000 |
+| `paper` | 1 | 20 h | 1 | 512 | 150k (toy) / 300k |
+
+`tuned` reaches the paper settings' 300k-day result in about 2-3k days. See [docs/hyperparameter-study.md](docs/hyperparameter-study.md).
+
+### Monitor and analyse
+
+```bash
+# Live dashboard at http://127.0.0.1:8765
+.venv/bin/python -m experiments.dashboard_server
+# Figures and metrics for one run, a seed group, or several configurations
+.venv/bin/python -m experiments.report results/runs/<run>
+.venv/bin/python -m experiments.report --group my-config results/runs/<prefix>-seed*
+.venv/bin/python -m experiments.report --compare --out compare.png "paper=results/runs/a-*" "tuned=results/runs/b-*"
+# Run a whole plan in parallel
+.venv/bin/python -m experiments.suite --plan experiments/plans/tuning-stage3-v1.json --workers 6
+```
+
+### Tests
+
+```bash
+.venv/bin/python -m unittest experiments.test_core experiments.test_runtime
+node experiments/test_dashboard.mjs
 ```

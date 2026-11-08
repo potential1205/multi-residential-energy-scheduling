@@ -1,0 +1,19 @@
+{
+  "name": "convergence-paper-defaults-v1",
+  "purpose": "Paper defaults, full code budget; measures days needed to converge (toy runs were stopped at 40k days)",
+  "note": "--preset paper pins the pre-tuning defaults these runs were executed with (target 20 h, 1 update/day, cost scale 1, width 512).",
+  "runs": [
+    {"name":"base-s1-seed0","args":["--preset","paper","--scenario","1","--episodes","150000","--epsilon","0.01","--seed","0","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s1-seed1","args":["--preset","paper","--scenario","1","--episodes","150000","--epsilon","0.01","--seed","1","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s1-seed2","args":["--preset","paper","--scenario","1","--episodes","150000","--epsilon","0.01","--seed","2","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s2-seed0","args":["--preset","paper","--scenario","2","--episodes","150000","--epsilon","0.01","--seed","0","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s2-seed1","args":["--preset","paper","--scenario","2","--episodes","150000","--epsilon","0.01","--seed","1","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s2-seed2","args":["--preset","paper","--scenario","2","--episodes","150000","--epsilon","0.01","--seed","2","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s3-seed0","args":["--preset","paper","--scenario","3","--episodes","300000","--epsilon","0.1","--seed","0","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s3-seed1","args":["--preset","paper","--scenario","3","--episodes","300000","--epsilon","0.1","--seed","1","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s3-seed2","args":["--preset","paper","--scenario","3","--episodes","300000","--epsilon","0.1","--seed","2","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s4-seed0","args":["--preset","paper","--scenario","4","--episodes","300000","--epsilon","0.1","--seed","0","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s4-seed1","args":["--preset","paper","--scenario","4","--episodes","300000","--epsilon","0.1","--seed","1","--eval-every","5000","--log-every","1000","--device","cpu"]},
+    {"name":"base-s4-seed2","args":["--preset","paper","--scenario","4","--episodes","300000","--epsilon","0.1","--seed","2","--eval-every","5000","--log-every","1000","--device","cpu"]}
+  ]
+}

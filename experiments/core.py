@@ -15,7 +15,7 @@ def tariff(day, scenario):
         return SUMMER
     if scenario == 2:
         return WINTER
-    return SUMMER if 90 <= day < 270 else WINTER
+    return SUMMER if 90 <= day < 273 else WINTER
 
 @dataclass(frozen=True)
 class Config:
@@ -67,22 +67,32 @@ def load_data(scenario, file=None):
             raise ValueError('Expected finite nonnegative data with shape (365,24)')
     return load, generation, name
 
-def evaluate(policy, load, generation, cfg, scenario, start=60, stop=365, initial=15):
+def evaluate(policy, load, generation, cfg, scenario, start=60, stop=365, initial=15, trace=False):
+    """Greedy rollout. With trace=True, also return per-day TOU/DC costs and hourly actions/battery."""
     battery, tou_cost, dc_cost, peaks = min(initial,cfg.capacity), 0., 0., []
+    days = []
     for day in range(start, stop):
-        peak = 0
+        peak, day_tou, actions, levels = 0, 0., [], []
         for hour in range(24):
             allowed, base = feasible(battery, load[day,hour], generation[day,hour], cfg)
             obs = state(battery, peak, hour, day, load, generation, cfg, scenario)
             action = int(policy(obs, allowed))
+            levels.append(float(battery))
             battery = step(battery, load[day,hour], generation[day,hour], action, cfg)
             peak = max(peak, action)
-            tou_cost += action * tariff(day,scenario)[hour]
+            day_tou += action * tariff(day,scenario)[hour]
+            actions.append(action)
+        tou_cost += day_tou
         dc_cost += cfg.dc * peak
         peaks.append(peak)
-    return dict(total=tou_cost+dc_cost, tou=tou_cost, dc=dc_cost,
-                daily=(tou_cost+dc_cost)/(stop-start), mean_peak=float(np.mean(peaks)),
-                final_battery=battery, days=stop-start, violations=0)
+        if trace:
+            days.append(dict(day=day, tou=day_tou, dc=cfg.dc*peak, peak=peak, actions=actions, battery=levels))
+    result = dict(total=tou_cost+dc_cost, tou=tou_cost, dc=dc_cost,
+                  daily=(tou_cost+dc_cost)/(stop-start), mean_peak=float(np.mean(peaks)),
+                  final_battery=battery, days=stop-start, violations=0)
+    if trace:
+        result['trace'] = days
+    return result
 
 def toy_oracle(cfg, scenario=1, days=30, initial=15):
     """Exact finite-horizon integer DP with cyclic terminal battery = initial.

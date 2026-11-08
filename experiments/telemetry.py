@@ -120,7 +120,8 @@ class Observer:
         ns=self.ns;co=self.config['algorithm']=='Co-TDAS';completed=day+1
         if completed==1:
             self.config['resolved']={k:ns[k] for k in ('learning_rate','gamma','epsilon','batch_size','buffer_limit','start_size',
-                 'Tf','feature','battery_max','battery_rate','freq','epochs','days','pD','DCs','TOUs','CO','N','NEW') if k in ns}
+                 'Tf','feature','battery_max','battery_rate','freq','epochs','days','pD','DCs','TOUs','CO','N','NEW',
+                 'updates_per_day','cost_scale','epsilon_final','epsilon_decay_days') if k in ns}
             (self.output/'config.json').write_text(json.dumps(self.config,indent=2),encoding='utf-8')
         clients=[]
         for client,trace in self.transitions.items():
@@ -147,6 +148,8 @@ class Observer:
                     self.gpu_sample={k:float(v.strip()) for k,v in zip(('gpu_util_percent','gpu_memory_util_percent','gpu_total_used_mb','gpu_power_w'),values)}
                 except (OSError,ValueError,subprocess.SubprocessError):self.gpu_sample={}
                 self.gpu_sample_time=elapsed
+            from .status import write as write_status
+            write_status(self.output,'running',day=completed,epochs=ns['epochs'])
             # The logger is called after all active clients have advanced one day.
             per_client_steps=completed*24
             self.emit(dict(type='train',day=completed,epochs=ns['epochs'],step=per_client_steps,

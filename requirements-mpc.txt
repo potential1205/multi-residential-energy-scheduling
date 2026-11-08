@@ -1,0 +1,4 @@
+-r requirements.txt
+casadi>=3.6.7,<4
+do-mpc>=5.1,<6
+scipy>=1.13,<2

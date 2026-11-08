@@ -1,5 +1,4 @@
 # $ pip install -r requirements.txt
-import pandas as pd
 import numpy as np
 import torch
 import torch.nn as nn
@@ -8,6 +7,7 @@ import torch.nn.functional as F
 import collections
 import matplotlib.pyplot as plt
 import random
+import math
 from tqdm import tqdm
 import os
 
@@ -43,8 +43,8 @@ if SCENARIO == 1 or SCENARIO == 2:
     test_load_data = load_data = np.tile(np.array([4]*24), (days, 1))
     test_generation_data = generation_data = np.tile(np.array([1]*24), (days, 1))
 else:
-    load_file_list = os.listdir("data/load")
-    generation_file_list = os.listdir("data/generation")
+    load_file_list = ["table1_load.npy"] + sorted(name for name in os.listdir("data/load") if name != "table1_load.npy")
+    generation_file_list = ["generation.npy"]
     if SCENARIO == 3: n = 0
     elif SCENARIO ==  4: n = 2
     print(load_file_list[n])
@@ -59,8 +59,7 @@ print(len(generation_data),len(generation_data[0]))
 print(len(test_load_data),len(test_load_data[0]))
 print(len(test_generation_data),len(test_generation_data[0]))
 
-T = np.array(pd.get_dummies(np.array([0,1,2,3,4,5,6,7,8,9,10,11,
-                                      12,13,14,15,16,17,18,19,20,21,22,23])))
+T = np.eye(24)
 
 winter_TOU = [5,5,5, 5,5,5, 5,15,15, 15,25,10, 10,10,10, 10,10,15, 15,5,5, 5,5,5]  # 겨울
 summer_TOU = [5,5,5, 5,5,5, 5,10,10 ,10,10,15, 15,15,15, 15,15,10, 10,5,5,5,5,5]  #여름
@@ -84,7 +83,7 @@ class ReplayBuffer():
             a_lst.append([a])
             r_lst.append([r])
             s_prime_lst.append(s_prime)
-        return torch.tensor(np.array(s_lst), dtype=torch.float), torch.tensor(np.array(a_lst),dtype=torch.int64), torch.tensor(np.array(r_lst),dtype=torch.int64),torch.tensor(np.array(s_prime_lst),dtype=torch.float)
+        return (torch.from_numpy(np.asarray(s_lst, dtype=np.float32)), torch.from_numpy(np.asarray(a_lst, dtype=np.int64)), torch.from_numpy(np.asarray(r_lst, dtype=np.float32)), torch.from_numpy(np.asarray(s_prime_lst, dtype=np.float32)))
 
     def size(self):
         return len(self.buffer)
@@ -106,14 +105,18 @@ class Qnet(nn.Module):
         x = self.fc4(x)
         return x
 
+    @torch.no_grad()
     def sample_action(self, state, epsilon, battery, rate):
-        out = self.forward(state)
-        q_list = [out[action].item() if (0 <= battery + action <= battery_max) and (
-                    -battery_rate <= rate + action <= battery_rate) else np.Inf for action in range(0, 21, 1)]
+        # The admissible integer actions form one contiguous interval.
+        lower = max(0, math.ceil(-battery), math.ceil(-battery_rate - rate))
+        upper = min(20, math.floor(battery_max - battery), math.floor(battery_rate - rate))
+        if lower > upper:
+            raise ValueError(f"No feasible action: battery={battery}, rate={rate}")
         if random.random() < epsilon:
-            return random.choice([i for i in range(len(q_list)) if q_list[i] != np.Inf])
-        else:
-            return q_list.index(min(q_list))
+            return random.randint(lower, upper)
+        out = self.forward(state)
+        return lower + int(torch.argmin(out[lower:upper + 1]).item())
+
 
 # def train():
 #     s, a, r, s_prime = memory.sample(batch_size)
@@ -128,19 +131,20 @@ class Qnet(nn.Module):
 #             if (0<= battery + j <= battery_max) and (-battery_rate <= rate + j <= battery_rate):
 #                 q_list.append(min_q_prime[i][j].item())
 #             else:
-#                 q_list.append(np.Inf)
+#                 q_list.append(np.inf)
 #         Q_target.append(min(q_list))
 #
 #     Q_target = torch.tensor((Q_target)).resize(batch_size,1)
 #     target = r + gamma * Q_target
 #     loss = F.smooth_l1_loss(q_a, target)
-#     optimizer.zero_grad()
+#     optimizer.zero_grad(set_to_none=True)
 #     loss.backward()
 #     optimizer.step()
 def train():
     s, a, r, s_prime = memory.sample(batch_size)
     q_a = q(s).gather(1, a)
-    min_q_prime = q_target(s_prime)
+    with torch.no_grad():
+        min_q_prime = q_target(s_prime)
     battery = torch.clamp(s_prime[:, 0] - s_prime[:, 50] + s_prime[:, 51+Tf], max=battery_max)
     rate = battery - s_prime[:, 0]
     q_list = torch.where((0 <= battery.unsqueeze(-1) + torch.arange(21)) &
@@ -151,7 +155,7 @@ def train():
     Q_target, _ = torch.min(q_list, dim=1, keepdim=True)
     target = r + gamma * Q_target
     loss = F.smooth_l1_loss(q_a, target)
-    optimizer.zero_grad()
+    optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
 
@@ -194,8 +198,6 @@ def update(n_epi):
     if memory.size() > start_size:
         train()
 
-    if n_epi % freq == 0 and n_epi != 0:
-        q_target.load_state_dict(q.state_dict())
 
 #initialize
 q = Qnet()
@@ -218,20 +220,20 @@ for n_epi in tqdm(range(epochs)):
         state_prime = next_state(n_epi,time,battery,action,actions,TOU,load_data,generation_data,days)
         memory.put((state, action, cost, state_prime))
         state = state_prime
+        if (n_epi * 24 + time) % freq == 0:
+            q_target.load_state_dict(q.state_dict())
 
     cost_history.append(costs)
     update(n_epi)
 
 
 # train time average cost
-check_dqn, cum_cost = np.array([]), 0
-
-for i in range(iteration):
-  cum_cost += sum(cost_history[i*days : i*days+days])
-  check_dqn = np.append(check_dqn,cum_cost/(i+1))
+completed_blocks = len(cost_history) // days
+block_costs = np.asarray(cost_history[:completed_blocks * days]).reshape(completed_blocks, days).sum(axis=1)
+check_dqn = np.cumsum(block_costs) / np.arange(1, completed_blocks + 1)
 
 plt.figure(figsize=(15,10))
-x = range(0, iteration)
+x = range(completed_blocks)
 y1 = [check_dqn[v] for v in x]
 plt.plot(x,y1,label='DQL time avgerage cost', color='r')
 plt.xlabel('Epochs',fontsize=22)

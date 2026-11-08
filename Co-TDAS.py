@@ -1,5 +1,4 @@
 # $ pip install -r requirements.txt
-import pandas as pd
 import numpy as np
 import torch
 import torch.nn as nn
@@ -8,6 +7,7 @@ import torch.nn.functional as F
 import collections
 import matplotlib.pyplot as plt
 import random
+import math
 from tqdm import tqdm
 import os
 from datetime import datetime
@@ -39,8 +39,7 @@ epochs = days * iteration
 pD=30
 battery_rate=20
 
-T = np.array(pd.get_dummies(np.array([0,1,2,3,4,5,6,7,8,9,10,11,
-                                      12,13,14,15,16,17,18,19,20,21,22,23])))
+T = np.eye(24)
 w= [5,5,5, 5,5,5, 5,15,15, 15,25,10, 10,10,10, 10,10,15, 15,5,5, 5,5,5]  # 겨울
 s = [5,5,5, 5,5,5, 5,10,10 ,10,10,15, 15,15,15, 15,15,10, 10,5,5,5,5,5]  #여름
 
@@ -50,8 +49,8 @@ DCs = [20,25,30,35,20,25,30,35]
 # train data load
 load_datas, generation_datas = [], []
 
-load_file_list = os.listdir("data/load")
-generation_file_list = os.listdir("data/generation")
+load_file_list = ["table1_load.npy"] + sorted(name for name in os.listdir("data/load") if name != "table1_load.npy")
+generation_file_list = ["generation.npy"]
 
 for n in range(N+NEW):
     print(load_file_list[n])
@@ -79,7 +78,7 @@ class ReplayBuffer():
             a_lst.append([a])
             r_lst.append([r])
             s_prime_lst.append(s_prime)
-        return torch.tensor(np.array(s_lst), dtype=torch.float), torch.tensor(np.array(a_lst),dtype=torch.int64), torch.tensor(np.array(r_lst),dtype=torch.int64),torch.tensor(np.array(s_prime_lst),dtype=torch.float)
+        return (torch.from_numpy(np.asarray(s_lst, dtype=np.float32)), torch.from_numpy(np.asarray(a_lst, dtype=np.int64)), torch.from_numpy(np.asarray(r_lst, dtype=np.float32)), torch.from_numpy(np.asarray(s_prime_lst, dtype=np.float32)))
 
     def size(self):
         return len(self.buffer)
@@ -100,19 +99,24 @@ class Qnet(nn.Module):
         x = self.fc4(x)
         return x
 
+    @torch.no_grad()
     def sample_action(self, state, epsilon, battery, rate):
-        out = self.forward(state)
-        q_list = [out[action].item() if (0 <= battery + action <= battery_max) and (
-                -battery_rate <= rate + action <= battery_rate) else np.Inf for action in range(0, 21, 1)]
+        # The admissible integer actions form one contiguous interval.
+        lower = max(0, math.ceil(-battery), math.ceil(-battery_rate - rate))
+        upper = min(20, math.floor(battery_max - battery), math.floor(battery_rate - rate))
+        if lower > upper:
+            raise ValueError(f"No feasible action: battery={battery}, rate={rate}")
         if random.random() < epsilon:
-            return random.choice([i for i in range(len(q_list)) if q_list[i] != np.Inf])
-        else:
-            return q_list.index(min(q_list))
+            return random.randint(lower, upper)
+        out = self.forward(state)
+        return lower + int(torch.argmin(out[lower:upper + 1]).item())
+
 
 def train(n):
     s, a, r, s_prime = memory[n].sample(batch_size)
     q_a = q[n](s).gather(1, a)
-    min_q_prime = q_target[n](s_prime)
+    with torch.no_grad():
+        min_q_prime = q_target[n](s_prime)
     battery = torch.clamp(s_prime[:, 0] - s_prime[:, 50] + s_prime[:, 51+Tf], max=battery_max)
     rate = battery - s_prime[:, 0]
     q_list = torch.where((0 <= battery.unsqueeze(-1) + torch.arange(21)) &
@@ -124,8 +128,8 @@ def train(n):
     Q_target, _ = torch.min(q_list, dim=1, keepdim=True)
     target = r + gamma * Q_target
     loss = F.smooth_l1_loss(q_a, target)
-    optimizer = optim.Adam(q[n].parameters(), lr=learning_rate)
-    optimizer.zero_grad()
+    optimizer = optimizers[n]
+    optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
 
@@ -142,14 +146,14 @@ def train(n):
 #             if (0<= battery + j <= battery_max) and (-battery_rate <= rate + j <= battery_rate):
 #                 q_list.append(min_q_prime[i][j].item())
 #             else:
-#                 q_list.append(np.Inf)
+#                 q_list.append(np.inf)
 #         Q_target.append(min(q_list))
 #
 #     optimizer = optim.Adam(q[n].parameters(), lr=learning_rate)
 #     Q_target = torch.tensor((Q_target)).resize(batch_size,1)
 #     target = r + gamma * Q_target
 #     loss = F.smooth_l1_loss(q_a, target)
-#     optimizer.zero_grad()
+#     optimizer.zero_grad(set_to_none=True)
 #     loss.backward()
 #     optimizer.step()
 
@@ -193,21 +197,28 @@ def get_grad(before_q,after_q):
         output[key] = (after_q[key]-before_q[key])
     return output
 
-def agg_grad(global_q,grads):
+def agg_grad(global_q,grads,weights=None):
+    if not grads:
+        raise ValueError("Cannot aggregate an empty client set")
+    weights = np.ones(len(grads)) if weights is None else np.asarray(weights, dtype=float)
+    if len(weights) != len(grads) or np.any(weights < 0) or weights.sum() <= 0:
+        raise ValueError("Invalid aggregation weights")
+    weights = weights / weights.sum()
     w_avg = copy.deepcopy(global_q)
     for key in w_avg.keys():
         for i in range(len(grads)):
-            w_avg[key] += grads[i][key]
+            w_avg[key] += float(weights[i]) * grads[i][key]
     return w_avg
 
 def federated_learning():
     grads = []
-    for i in range(N):
+    for i in range(N_new):
         grads.append(get_grad(q_before[i].state_dict(), q[i].state_dict()))
-    agg_model = agg_grad(q_global.state_dict(), grads)
+    agg_model = agg_grad(q_global.state_dict(), grads, experience_counts[:N_new])
     q_global.load_state_dict(agg_model)
-    for i in range(N):
+    for i in range(N_new):
         q[i].load_state_dict(agg_model)
+        q_target[i].load_state_dict(agg_model)
 
 def update(n_epi,n):
     if n_epi % (epochs/10) == 0:
@@ -219,9 +230,12 @@ def update(n_epi,n):
 
 cost_history,action_history,battery_history=[],[],[]
 q, q_target, memory, q_before, q_global = [], [], [], [], Qnet()
+optimizers = []
+experience_counts = [0 for _ in range(N+NEW)]
 
 for n in range(N+NEW):
     q.append(Qnet())
+    optimizers.append(optim.Adam(q[n].parameters(), lr=learning_rate))
     q_target.append(Qnet())
     memory.append(ReplayBuffer())
     q[n].load_state_dict(q_global.state_dict())
@@ -248,36 +262,30 @@ for n_epi in tqdm(range(epochs)):
             battery = min(state[n][0] - state[n][50] + state[n][51+Tf],battery_max)
             action = q[n].sample_action(torch.from_numpy(state[n]).float(), epsilon, battery,battery-state[n][0])
             actions.append(action)
-            cost = action * TOUs[n][time] + (pD * max(actions) if time == 23 else 0)
+            cost = action * TOUs[n][time] + (DCs[n] * max(actions) if time == 23 else 0)
             costs += cost
             state_prime = next_state(n,n_epi,time,battery,action,actions,TOUs[n],load_datas,generation_datas)
             memory[n].put((state[n], action, cost, state_prime))
+            experience_counts[n] += 1
             state[n] = state_prime
+            if (n_epi * 24 + time) % freq == 0:
+                q_target[n].load_state_dict(q[n].state_dict())
 
         cost_history[n].append(costs)
         action_history[n].append(actions)
         update(n_epi,n)
 
-    if CO == 1: federated_learning()
-    if (n_epi+1) % freq == 0:
-        for n in range(N):
-            q_target[n].load_state_dict(q[n].state_dict())
+    if CO == 1:
+        federated_learning()
 
 
 # train time average cost
 for n in range(N+NEW):
-    check_dqn, cum_cost = np.array([]), 0
-    if n < N:
-        for i in range(iteration):
-            cum_cost += sum(cost_history[n][i*days : i*days+days])
-            check_dqn = np.append(check_dqn,cum_cost/(i+1))
-        x = range(0, iteration)
-
-    else:
-        for i in range(iteration//2):
-            cum_cost += sum(cost_history[n][i*days : i*days+days])
-            check_dqn = np.append(check_dqn,cum_cost/(i+1))
-        x = range(0, iteration//2)
+    completed_blocks = len(cost_history[n]) // days
+    usable = np.asarray(cost_history[n][:completed_blocks * days])
+    block_costs = usable.reshape(completed_blocks, days).sum(axis=1)
+    check_dqn = np.cumsum(block_costs) / np.arange(1, completed_blocks + 1)
+    x = range(completed_blocks)
 
     plt.figure(figsize=(15,10))
     y1 = [check_dqn[v] for v in x]
@@ -351,7 +359,7 @@ def save_data():
 
     for n in range(N+NEW):
         torch.save(q[n].state_dict(),path + f'/local{n+1}.pt')
-    if CO == 0:
+    if CO == 1:
         torch.save(q_global.state_dict(), path + f'/global.pt')
 
 save_data()

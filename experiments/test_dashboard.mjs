@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const prefix=readFileSync(new URL('../dashboard/app.js',import.meta.url),'utf8').split('function plot(')[0];
+const context=vm.createContext({document:{getElementById:()=>({value:'day'})}});
+vm.runInContext(prefix,context);
+const run=expression=>JSON.parse(vm.runInContext(`JSON.stringify(${expression})`,context));
+assert.deepEqual(run("curves({events:[{type:'train',day:1,clients:[{}]}]},'train','loss')"),[]);
+assert.deepEqual(run("curves({events:[{type:'train',day:1,clients:[{loss:0}]}]},'train','loss')"),[{x:1,y:0}]);
+assert.deepEqual(run("smooth([{x:1,y:2},{x:2,y:4},{x:3,y:6}],2)"),[{x:1,y:2},{x:2,y:3},{x:3,y:5}]);
+assert.equal(run("meanField({clients:[{cost:10},{cost:30}]},'cost')"),20);
+assert.equal(run("meanField({clients:[{}]},'loss')"),null);
+console.log('5 dashboard data-integrity checks passed');

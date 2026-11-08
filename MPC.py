@@ -32,8 +32,8 @@ days_padding = 2  # to avoid MPC implementation issues
 
 
 # data load
-load_file_list = os.listdir("data/load")
-generation_file_list = os.listdir("data/generation")
+load_file_list = ["table1_load.npy"] + sorted(name for name in os.listdir("data/load") if name != "table1_load.npy")
+generation_file_list = ["generation.npy"]
 demand_energy_data, renewable_energy_data = [],[]
 summer_TOU = [5,5,5, 5,5,5, 5,10,10 ,10,10,15, 15,15,15, 15,15,10, 10,5,5,5,5,5]
 winter_TOU = [5,5,5, 5,5,5, 5,15,15, 15,25,10, 10,10,10, 10,10,15, 15,5,5, 5,5,5]
@@ -88,6 +88,8 @@ print("tou size : {}".format(len(p_tou_)))
 
 
 def cont2disc(u0, x0, L, G, sigma):
+    L, G, sigma = (float(np.asarray(v).item()) for v in (L, G, sigma))
+    u0[0, 0] = np.clip(u0[0, 0], 0, C_max)
     idx = np.nonzero(action_set >= u0[0, 0])[0][0]
     if idx == 0:
         u0_disc = action_set[0]
@@ -105,7 +107,7 @@ def cont2disc(u0, x0, L, G, sigma):
     # C_d disc
     u0[1, 0] = max((1-sigma)*x0[1,0], u0_disc)
     # B disc
-    u0[2, 0] = min(B_max, x0[0,0]+G+u0_disc-L)
+    u0[2, 0] = min(B_max, x0[0,0]+min(G+u0_disc-L, B_rate))
     return u0
 
 ######## sigma (for MPC framework) preparation
@@ -157,6 +159,12 @@ mpc.set_objective(lterm=lterm, mterm=mterm)
 ## constraints (linear reformulation)
 mpc.bounds['lower','_u', 'a'] = 0
 mpc.bounds['upper','_u', 'a'] = C_max
+mpc.bounds['lower','_x', 'B'] = 0
+mpc.bounds['upper','_x', 'B'] = B_max
+mpc.bounds['lower','_u', 'v_B'] = 0
+mpc.bounds['upper','_u', 'v_B'] = B_max
+mpc.bounds['lower','_x', 'C_d'] = 0
+mpc.bounds['lower','_u', 'v_C_d'] = 0
 
 mpc.set_nl_cons('a_cons1', L-G-B-a, ub=0)
 mpc.set_nl_cons('a_cons2', -a, ub=0)
@@ -166,11 +174,13 @@ mpc.set_nl_cons('v_C_d_cons2', v_B, ub=B_max)
 
 mpc.set_nl_cons('v_B_cons1', (1-sigma)*C_d-v_C_d, ub=0)
 mpc.set_nl_cons('v_B_cons2', a-v_C_d, ub=0)
+mpc.set_nl_cons('charge_rate', v_B-B, ub=B_rate)
+mpc.set_nl_cons('discharge_rate', B-v_B, ub=B_rate)
 
 tvp_template = mpc.get_tvp_template()
 
 def tvp_fun(t_now):
-    t_now_int = int(t_now)
+    t_now_int = int(np.asarray(t_now).item())
     for k in range(n_horizon + 1):
         if t_now_int+k < total_iter:
             if noise_max > 0:
@@ -192,7 +202,7 @@ simulator = do_mpc.simulator.Simulator(model)
 tvp_template_sim = simulator.get_tvp_template()
 
 def tvp_fun_sim(t_now):
-    t_now_int = int(t_now)
+    t_now_int = int(np.asarray(t_now).item())
     tvp_template_sim['L'] = L_data[t_now_int]
     tvp_template_sim['G'] = G_data[t_now_int]
     tvp_template_sim['p_tou'] = p_tou_[t_now_int]

@@ -69,4 +69,4 @@ Co-TDAS는 EMS가 요금 목록(8개)보다 많으면 TOU·DC 패턴을 반복�
 - TMY3 부하는 시뮬레이션(EnergyPlus) 값이라 실측보다 매끄럽습니다. 실측 변동성은 Ausgrid가 대표합니다.
 - Ausgrid 표본은 Ausgrid가 밝힌 대로 대표성이 없습니다(필터링된 300가구).
 - 요금 계절(여름 4~9월)은 북반구 기준입니다. Ausgrid에도 같은 달력을 적용합니다.
-- MPC 기준선(`MPC.py`)은 아직 기존 데이터만 읽습니다.
+- MPC 기준선은 `python -m experiments.run_mpc --site <collection/site>`로 가공 데이터를 쓸 수 있습니다(`MPC.py` 자체는 기존 데이터만 읽음). 비교 결과는 [mpc-comparison.md](mpc-comparison.md)에 있습니다.

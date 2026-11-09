@@ -1,4 +1,11 @@
-"""Run the repository's actual do-mpc controller with scalar API compatibility fixes."""
+"""Run the repository's actual do-mpc controller with scalar API compatibility fixes.
+
+  python -m experiments.run_mpc --scenario 3 --horizon 24 --output runs/mpc/sc3-h24
+  python -m experiments.run_mpc --scenario 3 --horizon 24 --noise 0.6 --seed 0 --output runs/mpc/sc3-h24n
+  python -m experiments.run_mpc --scenario 3 --site tmy3/USA_TX_Dallas-Fort.Worth.Intl.AP.722590_TMY3_BASE --output ...
+
+The realized purchases are also re-costed with the TDAS year-rollout accounting (`replay`).
+"""
 import argparse
 import ast
 import contextlib
@@ -11,18 +18,40 @@ import subprocess
 import sys
 import time
 import numpy as np
-from .core import ROOT
+from .core import ROOT,Config,load_data,tariff
 from .artifacts import default_run_path,prepare,manifest,data_manifest
 from .run_original import DATA_ORDER,UPSTREAM_COMMIT
 
+def replay(actions, load, generation, scenario, cfg=Config(), initial=15, start=0):
+    """Rollout of fixed hourly purchases (0.1 kWh units, one row per day) under the TDAS transition rules."""
+    battery,tou,dc,shortfall,over_rate,waste=float(initial),0.,0.,0,0,0.
+    for offset,row in enumerate(actions):
+        day=start+offset;prices=tariff(day,scenario)
+        for hour in range(24):
+            a=row[hour];net=generation[day,hour]+a-load[day,hour]
+            shortfall+=int(battery+net< -1e-9);over_rate+=int(net>cfg.rate+1e-9)
+            after=min(cfg.capacity,battery+min(net,cfg.rate));waste+=max(battery+net-after,0.)
+            battery=max(after,0.);tou+=prices[hour]*a
+        dc+=cfg.dc*max(row)
+    return dict(tou=tou,dc=dc,total=tou+dc,daily_usd=(tou+dc)/len(actions)/1000,
+                shortfall_hours=shortfall,over_rate_hours=over_rate,wasted_kwh=waste/10)
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--scenario',type=int,choices=[1,2,3,4],default=1)
-    parser.add_argument('--horizon',type=int,choices=[6,24,30],default=24);parser.add_argument('--seed',type=int,default=0)
+    parser.add_argument('--horizon',type=int,default=24,help='paper: 24 (MPC-24/24n), 6 (MPC-6); toy uses 30');parser.add_argument('--seed',type=int,default=0)
     parser.add_argument('--source',choices=['fixed','upstream'],default='fixed');parser.add_argument('--noise',type=float,default=0)
     parser.add_argument('--start-day',type=int,default=0);parser.add_argument('--stop-day',type=int)
-    parser.add_argument('--output',type=Path);args=parser.parse_args()
+    parser.add_argument('--site',help="processed site ('collection/site', scenario 3/4 tariffs); default: MPC.py's legacy data")
+    parser.add_argument('--output','--out',type=Path);args=parser.parse_args()
     os.environ.setdefault('MPLCONFIGDIR',str(ROOT/'work'/'matplotlib'));np.random.seed(args.seed)
     if args.stop_day is not None and not(0<=args.start_day<args.stop_day<=365):parser.error('Require 0<=start<stop<=365')
+    if args.horizon<1:parser.error('--horizon must be positive')
+    if args.site and args.scenario<3:parser.error('--site needs --scenario 3 or 4')
+    site=None
+    if args.site:
+        site_load,site_generation,_=load_data(args.scenario,args.site);stop=args.stop_day or 365
+        pad=lambda x:(np.concatenate((x[args.start_day:stop],x[:2])) if args.stop_day is not None else x).tolist()
+        site=dict(load=pad(site_load),generation=pad(site_generation))
     output=prepare((args.output or default_run_path(ROOT,'MPC',args.source,args.scenario,args.seed)).resolve())
     source=(ROOT/'MPC.py').read_text(encoding='utf-8-sig') if args.source=='fixed' else subprocess.check_output(['git','show',f'{UPSTREAM_COMMIT}:MPC.py'],cwd=ROOT).decode('utf-8-sig')
     # Compatibility edits apply equally; original upstream constraints remain untouched.
@@ -30,6 +59,7 @@ def main():
     if args.source=='upstream':source=source.replace('def cont2disc(u0, x0, L, G, sigma):','def cont2disc(u0, x0, L, G, sigma):\n    L, G, sigma = (float(np.asarray(v).item()) for v in (L, G, sigma))')
     source=source.replace('for k in trange(total_iter):','for k in trange(total_iter_nopadding):')
     source=source.replace('90 <= day < 273','90 <= day + _start_day < 273')
+    source=source.replace('(test_days//30)','max(1,test_days//30)')  # MPC.py's monthly print divides by zero for windows under 30 days
     tree=ast.parse(source)
     overrides=dict(SCENARIO=args.scenario,n_horizon=args.horizon,noise_max=args.noise*100,
                    load_file_list=DATA_ORDER,generation_file_list=['generation.npy'])
@@ -39,6 +69,7 @@ def main():
             names=[t.id for t in node.targets if isinstance(t,ast.Name)]
             for name in names:
                 if name in overrides:node.value=ast.parse(repr(overrides[name]),mode='eval').body
+                if site and name in site:node.value=ast.parse(f'_site[{name!r}]',mode='eval').body
             return self.generic_visit(node)
         def visit_Subscript(self,node):
             if args.stop_day is not None and args.scenario>=3:
@@ -67,7 +98,7 @@ def main():
     (output/'config.json').write_text(json.dumps(config,indent=2),encoding='utf-8')
     (output/'environment'/'requirements.lock.txt').write_text(subprocess.check_output([sys.executable,'-m','pip','freeze'],text=True),encoding='utf-8')
     (output/'environment'/'data-manifest.json').write_text(json.dumps(data_manifest(ROOT),indent=2),encoding='utf-8')
-    start=time.perf_counter();namespace={'__name__':'__main__','_start_day':args.start_day};trace=[];violations=0;previous_battery=15
+    start=time.perf_counter();namespace={'__name__':'__main__','_start_day':args.start_day,'_site':site};trace=[];violations=0;previous_battery=15
     stream=(output/'metrics'/'events.jsonl').open('w',encoding='utf-8',buffering=1)
     def observe(k,x,u):
         nonlocal violations,previous_battery
@@ -97,6 +128,11 @@ def main():
         np.savez_compressed(output/'history'/'realized.npz',**{k:np.array([r[k] for r in trace]) for k in trace[0]})
         summary=dict(violations=violations,days=namespace['days'],horizon=args.horizon,noise=args.noise,
                      total_usd=sum(t['action']*t['price'] for t in trace)*.001+sum(30*max(t['action'] for t in trace[d:d+24]) for d in range(0,len(trace),24))*.001)
+        if args.scenario>=3:
+            load,generation,_=load_data(args.scenario,args.site or DATA_ORDER[0 if args.scenario==3 else 2])
+            purchases=np.rint(np.array([t['action'] for t in trace])).reshape(-1,24)
+            summary.update(site=args.site or DATA_ORDER[0 if args.scenario==3 else 2],
+                           replay=replay(purchases,load,generation,args.scenario,start=args.start_day))
         (output/'evaluation'/'controller.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
         run_status.write(output,'completed',seconds=time.perf_counter()-start)
     except (run_status.RunStopped,KeyboardInterrupt) as exc:

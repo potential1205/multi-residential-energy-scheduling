@@ -176,6 +176,15 @@ class SchedulingTests(unittest.TestCase):
         self.assertAlmostEqual(sum(d['tou']+d['dc'] for d in r['trace']),r['total'])
         self.assertTrue(all(len(d['actions'])==24 for d in r['trace']))
 
+    def test_mpc_replay_costs_and_checks_purchases(self):
+        from .run_mpc import replay
+        load=np.full((365,24),4.);gen=np.full((365,24),1.)
+        exact=replay(np.full((365,24),3.),load,gen,3,initial=0)  # buy exactly the net demand
+        self.assertEqual(exact['shortfall_hours'],0)
+        self.assertEqual(exact['total'],sum(3*sum(tariff(d,3))+30*3 for d in range(365)))
+        self.assertGreater(replay(np.zeros((365,24)),load,gen,3,initial=0)['shortfall_hours'],0)
+        self.assertGreater(replay(np.full((365,24),20.),load,gen,3)['wasted_kwh'],0)
+
     def test_validation_window_follows_training_window(self):
         from .core import validation_window
         self.assertEqual(validation_window(0,30),(30,60))

@@ -32,7 +32,7 @@ Simulation results demonstrate:
 ## Repository Structure
 
 - `TDAS.py`, `Co-TDAS.py`: single-EMS and federated (Co-TDAS) training scripts. They run standalone and use the tuned defaults below.
-- `MPC.py`: the MPC baseline (needs `requirements-mpc.txt`).
+- `MPC.py`: the MPC baseline (needs `requirements-mpc.txt`). `python -m experiments.run_mpc` runs it headless on any dataset; see `docs/mpc-comparison.md`.
 - `experiments/`: seeded runner, live telemetry, reports, suites and tests.
   - `run_original.py`: runs a training script headless with a seed, a preset and per-run artifacts.
   - `suite.py` + `plans/*.json`: parallel experiment plans; every study in `docs/` is one plan file.

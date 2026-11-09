@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_AK_Fairbanks.Intl.AP.702610_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_AK_Fairbanks.Intl.AP.702610_TMY3_BASE.csv",
+  "raw_sha256": "2040fe5a1b63a5d39bdf0ffae839399cb5f91d2ca7fd1ab0a04710f528456bec",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "9e3e154f052a044a13765c3589f2eefdf324073b37fc240844f632bbf9b25643"
+  },
+  "state": "AK",
+  "usaf": "702610",
+  "lat": 64.803,
+  "lon": -147.876,
+  "utc_offset": -9,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4833.499226512704,
+  "load_peak_kwh": 1.316056077905,
+  "load_mean_kwh": 0.5517693180950575,
+  "pv_kwh_year": 515.02087,
+  "pv_peak_kwh": 0.46982,
+  "hours_over_cmax": 0
+}

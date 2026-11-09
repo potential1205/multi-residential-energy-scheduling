@@ -1,0 +1,2036 @@
+{
+ "tmy3/USA_AK_Fairbanks.Intl.AP.702610_TMY3_BASE": {
+  "load_kwh_year": 4833.499226512704,
+  "load_peak_kwh": 1.316056077905,
+  "pv_kwh_year": 515.02087,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3_BASE": {
+  "load_kwh_year": 5732.407037875801,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 888.32931,
+  "load_scale": 0.44375890736961326
+ },
+ "tmy3/USA_AZ_Tucson.Intl.AP.722740_TMY3_BASE": {
+  "load_kwh_year": 5125.976504436475,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 904.6939649999999,
+  "load_scale": 0.47032491738856047
+ },
+ "tmy3/USA_CA_Oakland.Intl.AP.724930_TMY3_BASE": {
+  "load_kwh_year": 3775.989082085164,
+  "load_peak_kwh": 0.97712891824,
+  "pv_kwh_year": 842.3008150000001,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_CA_Oxnard.AP.723927_TMY3_BASE": {
+  "load_kwh_year": 3729.8480914832767,
+  "load_peak_kwh": 0.950361313885,
+  "pv_kwh_year": 887.3933199999999,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_CA_Salinas.Muni.AP.724917_TMY3_BASE": {
+  "load_kwh_year": 3785.8963766875313,
+  "load_peak_kwh": 0.95847104319,
+  "pv_kwh_year": 861.98585,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_CA_San.Diego-Lindbergh.Field.722900_TMY3_BASE": {
+  "load_kwh_year": 4109.38800005001,
+  "load_peak_kwh": 1.15254592773,
+  "pv_kwh_year": 881.862845,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_CA_San.Francisco.Intl.AP.724940_TMY3_BASE": {
+  "load_kwh_year": 3781.29539665271,
+  "load_peak_kwh": 0.979288431955,
+  "pv_kwh_year": 827.093335,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_CA_Santa.Barbara.Muni.AP.723925_TMY3_BASE": {
+  "load_kwh_year": 3746.8199664555864,
+  "load_peak_kwh": 0.974658871875,
+  "pv_kwh_year": 906.172845,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_CA_Santa.Maria.Public.AP.723940_TMY3_BASE": {
+  "load_kwh_year": 3783.5427699799548,
+  "load_peak_kwh": 0.95326422927,
+  "pv_kwh_year": 919.728265,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_CA_Visalia.Muni.AWOS.723896_TMY3_BASE": {
+  "load_kwh_year": 4519.971916172366,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 831.514005,
+  "load_scale": 0.4738606423175916
+ },
+ "tmy3/USA_CO_Denver.Intl.AP.725650_TMY3_BASE": {
+  "load_kwh_year": 4552.180487050331,
+  "load_peak_kwh": 1.204853887925,
+  "pv_kwh_year": 913.82323,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_FL_Miami.Intl.AP.722020_TMY3_BASE": {
+  "load_kwh_year": 7344.929926443659,
+  "load_peak_kwh": 1.850423922245,
+  "pv_kwh_year": 753.61612,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_FL_Tampa.Intl.AP.722110_TMY3_BASE": {
+  "load_kwh_year": 4912.1263543215,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 733.5981999999999,
+  "load_scale": 0.34455645602153123
+ },
+ "tmy3/USA_GA_Atlanta-Hartsfield-Jackson.Intl.AP.722190_TMY3_BASE": {
+  "load_kwh_year": 6161.130871679776,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 713.12869,
+  "load_scale": 0.472510101471789
+ },
+ "tmy3/USA_HI_Honolulu.Intl.AP.911820_TMY3_BASE": {
+  "load_kwh_year": 7237.30918494135,
+  "load_peak_kwh": 1.706589273795,
+  "pv_kwh_year": 887.340195,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3_BASE": {
+  "load_kwh_year": 4569.564513171859,
+  "load_peak_kwh": 1.25760946348,
+  "pv_kwh_year": 682.981315,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_KY_Louisville-Standiford.Field.724230_TMY3_BASE": {
+  "load_kwh_year": 6287.223152050647,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 683.36042,
+  "load_scale": 0.48943713552885115
+ },
+ "tmy3/USA_LA_New.Orleans.Intl.AP.722310_TMY3_BASE": {
+  "load_kwh_year": 4143.477291318548,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 711.31142,
+  "load_scale": 0.28003157580312416
+ },
+ "tmy3/USA_MA_Boston-Logan.Intl.AP.725090_TMY3_BASE": {
+  "load_kwh_year": 4505.309845138985,
+  "load_peak_kwh": 1.316699776865,
+  "pv_kwh_year": 703.005635,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3_BASE": {
+  "load_kwh_year": 6296.359486866455,
+  "load_peak_kwh": 1.88271856264,
+  "pv_kwh_year": 705.762025,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_ME_Caribou.Muni.AP.727120_TMY3_BASE": {
+  "load_kwh_year": 4644.554405204521,
+  "load_peak_kwh": 1.27567607329,
+  "pv_kwh_year": 669.0705,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_MN_Minneapolis-St.Paul.Intl.AP.726580_TMY3_BASE": {
+  "load_kwh_year": 4617.37664054336,
+  "load_peak_kwh": 1.32037542642,
+  "pv_kwh_year": 689.8023450000001,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_MO_St.Louis-Lambert.Intl.AP.724340_TMY3_BASE": {
+  "load_kwh_year": 5780.375486322436,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 678.470355,
+  "load_scale": 0.44549971979828723
+ },
+ "tmy3/USA_NC_Charlotte-Douglas.Intl.AP.723140_TMY3_BASE": {
+  "load_kwh_year": 6444.0731183007365,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 706.38852,
+  "load_scale": 0.49737323896821484
+ },
+ "tmy3/USA_ND_Bismarck.Muni.AP.727640_TMY3_BASE": {
+  "load_kwh_year": 4628.842420743571,
+  "load_peak_kwh": 1.31507475675,
+  "pv_kwh_year": 742.7747999999999,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_NV_Las.Vegas-McCarran.Intl.AP.723860_TMY3_BASE": {
+  "load_kwh_year": 5180.391156620437,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 929.859295,
+  "load_scale": 0.4630173262317714
+ },
+ "tmy3/USA_NY_New.York-J.F.Kennedy.Intl.AP.744860_TMY3_BASE": {
+  "load_kwh_year": 6219.301238785181,
+  "load_peak_kwh": 1.768975992315,
+  "pv_kwh_year": 714.765145,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_OH_Columbus-Port.Columbus.Intl.AP.724280_TMY3_BASE": {
+  "load_kwh_year": 4484.235175675762,
+  "load_peak_kwh": 1.1830382119,
+  "pv_kwh_year": 680.27377,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_OK_Oklahoma.City-Will.Rogers.World.AP.723530_TMY3_BASE": {
+  "load_kwh_year": 6218.101046925682,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 772.06081,
+  "load_scale": 0.460543930998489
+ },
+ "tmy3/USA_OR_Portland.Intl.AP.726980_TMY3_BASE": {
+  "load_kwh_year": 3876.68335218188,
+  "load_peak_kwh": 1.00737278532,
+  "pv_kwh_year": 632.565935,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_PA_Pittsburgh.Intl.AP.725200_TMY3_BASE": {
+  "load_kwh_year": 4520.229629667105,
+  "load_peak_kwh": 1.21627576923,
+  "pv_kwh_year": 648.6043199999999,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_TN_Memphis.Intl.AP.723340_TMY3_BASE": {
+  "load_kwh_year": 6175.342651948076,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 704.86421,
+  "load_scale": 0.45589257687041357
+ },
+ "tmy3/USA_TX_Dallas-Fort.Worth.Intl.AP.722590_TMY3_BASE": {
+  "load_kwh_year": 3811.833550097692,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 742.656725,
+  "load_scale": 0.23128784541245997
+ },
+ "tmy3/USA_TX_El.Paso.Intl.AP.722700_TMY3_BASE": {
+  "load_kwh_year": 4975.288983317412,
+  "load_peak_kwh": 1.84074500968,
+  "pv_kwh_year": 944.0557249999999,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3_BASE": {
+  "load_kwh_year": 4197.073996436609,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 671.7389450000001,
+  "load_scale": 0.28003759787586585
+ },
+ "tmy3/USA_VA_Richmond.Intl.AP.724010_TMY3_BASE": {
+  "load_kwh_year": 5833.44101444455,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 702.062735,
+  "load_scale": 0.45486370064188125
+ },
+ "tmy3/USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3_BASE": {
+  "load_kwh_year": 3899.618715491759,
+  "load_peak_kwh": 1.011457733215,
+  "pv_kwh_year": 598.3666599999999,
+  "load_scale": 0.5
+ },
+ "tmy3/USA_WI_Madison-Dane.County.Rgnl.AP.726410_TMY3_BASE": {
+  "load_kwh_year": 4612.899112913241,
+  "load_peak_kwh": 1.26416983959,
+  "pv_kwh_year": 670.8236749999999,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer001": {
+  "load_kwh_year": 2532.1627643876045,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 676.6146825396827,
+  "load_scale": 0.4795868175110674
+ },
+ "ausgrid/AU_NSW_customer003": {
+  "load_kwh_year": 974.1310000000001,
+  "load_peak_kwh": 1.8315000000000001,
+  "pv_kwh_year": 778.1099999999999,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer004": {
+  "load_kwh_year": 1159.0389959432048,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 663.2964999999999,
+  "load_scale": 0.3296146044624746
+ },
+ "ausgrid/AU_NSW_customer005": {
+  "load_kwh_year": 1273.8483404185745,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 631.146,
+  "load_scale": 0.31883584041857427
+ },
+ "ausgrid/AU_NSW_customer006": {
+  "load_kwh_year": 3325.0420308740977,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 289.29,
+  "load_scale": 0.3909382518043304
+ },
+ "ausgrid/AU_NSW_customer007": {
+  "load_kwh_year": 1481.519344073648,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 732.2648148148147,
+  "load_scale": 0.44879171461449946
+ },
+ "ausgrid/AU_NSW_customer008": {
+  "load_kwh_year": 1609.3204646660213,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 568.8651960784314,
+  "load_scale": 0.1887705711519845
+ },
+ "ausgrid/AU_NSW_customer009": {
+  "load_kwh_year": 1033.0353049228506,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 721.6823529411765,
+  "load_scale": 0.47759000734753854
+ },
+ "ausgrid/AU_NSW_customer010": {
+  "load_kwh_year": 1148.1260345892526,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 579.3799999999999,
+  "load_scale": 0.4014823965410747
+ },
+ "ausgrid/AU_NSW_customer011": {
+  "load_kwh_year": 2600.4258485639684,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 583.0605392156863,
+  "load_scale": 0.39164490861618795
+ },
+ "ausgrid/AU_NSW_customer012": {
+  "load_kwh_year": 2353.9564955894148,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 664.7475961538461,
+  "load_scale": 0.3909382518043304
+ },
+ "ausgrid/AU_NSW_customer013": {
+  "load_kwh_year": 1297.4793962439858,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 655.4623873873873,
+  "load_scale": 0.3026540431476021
+ },
+ "ausgrid/AU_NSW_customer014": {
+  "load_kwh_year": 1955.8111791730478,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 680.8574324324323,
+  "load_scale": 0.426602493983811
+ },
+ "ausgrid/AU_NSW_customer015": {
+  "load_kwh_year": 1036.94,
+  "load_peak_kwh": 1.146,
+  "pv_kwh_year": 585.789,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer016": {
+  "load_kwh_year": 1731.3973135827264,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 491.27972972972975,
+  "load_scale": 0.24479035902585988
+ },
+ "ausgrid/AU_NSW_customer017": {
+  "load_kwh_year": 2156.036366391852,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 543.8875675675674,
+  "load_scale": 0.23642095053346263
+ },
+ "ausgrid/AU_NSW_customer018": {
+  "load_kwh_year": 1819.1252822201313,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 665.6633757961783,
+  "load_scale": 0.4586077140169331
+ },
+ "ausgrid/AU_NSW_customer019": {
+  "load_kwh_year": 1271.9647880421467,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 742.7671428571427,
+  "load_scale": 0.47782406272972316
+ },
+ "ausgrid/AU_NSW_customer020": {
+  "load_kwh_year": 1684.6085254237287,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 726.7203821656051,
+  "load_scale": 0.22033898305084743
+ },
+ "ausgrid/AU_NSW_customer021": {
+  "load_kwh_year": 2463.4175471954363,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 467.9603333333333,
+  "load_scale": 0.26483770202363166
+ },
+ "ausgrid/AU_NSW_customer022": {
+  "load_kwh_year": 1199.7693979683297,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 543.9825,
+  "load_scale": 0.2913056468479235
+ },
+ "ausgrid/AU_NSW_customer023": {
+  "load_kwh_year": 1928.5926283680733,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 774.6803333333332,
+  "load_scale": 0.4956786985256736
+ },
+ "ausgrid/AU_NSW_customer024": {
+  "load_kwh_year": 1979.9764260768336,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 505.35432203389826,
+  "load_scale": 0.37834691501746215
+ },
+ "ausgrid/AU_NSW_customer025": {
+  "load_kwh_year": 1745.7978914074854,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 667.6735294117647,
+  "load_scale": 0.25698471270426987
+ },
+ "ausgrid/AU_NSW_customer026": {
+  "load_kwh_year": 2468.7824799643813,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 637.981862745098,
+  "load_scale": 0.2894033837934105
+ },
+ "ausgrid/AU_NSW_customer027": {
+  "load_kwh_year": 2189.961450532124,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 499.3553333333333,
+  "load_scale": 0.3843121797398502
+ },
+ "ausgrid/AU_NSW_customer028": {
+  "load_kwh_year": 1367.4783305227656,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 629.4155000000001,
+  "load_scale": 0.3653738055087128
+ },
+ "ausgrid/AU_NSW_customer029": {
+  "load_kwh_year": 2101.2771213503647,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 613.0370588235294,
+  "load_scale": 0.44479927007299264
+ },
+ "ausgrid/AU_NSW_customer030": {
+  "load_kwh_year": 1157.474,
+  "load_peak_kwh": 1.599,
+  "pv_kwh_year": 700.5352380952381,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer031": {
+  "load_kwh_year": 1344.0550089047197,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 654.6424836601308,
+  "load_scale": 0.2894033837934105
+ },
+ "ausgrid/AU_NSW_customer032": {
+  "load_kwh_year": 2054.7358548731318,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 671.75,
+  "load_scale": 0.4624140384159354
+ },
+ "ausgrid/AU_NSW_customer033": {
+  "load_kwh_year": 1641.0903106982705,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 701.2395238095237,
+  "load_scale": 0.20819987187700192
+ },
+ "ausgrid/AU_NSW_customer034": {
+  "load_kwh_year": 2187.9784633071467,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 682.1320000000001,
+  "load_scale": 0.37363479593791915
+ },
+ "ausgrid/AU_NSW_customer035": {
+  "load_kwh_year": 2208.4349175929474,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 714.5430952380952,
+  "load_scale": 0.2491376006132618
+ },
+ "ausgrid/AU_NSW_customer036": {
+  "load_kwh_year": 1671.29,
+  "load_peak_kwh": 1.5030000000000001,
+  "pv_kwh_year": 627.1785,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer037": {
+  "load_kwh_year": 1173.4583798882682,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 737.3296666666666,
+  "load_scale": 0.27932960893854747
+ },
+ "ausgrid/AU_NSW_customer038": {
+  "load_kwh_year": 1601.5058394817343,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 750.1561904761904,
+  "load_scale": 0.35090876372143237
+ },
+ "ausgrid/AU_NSW_customer039": {
+  "load_kwh_year": 1493.97498695879,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 750.5642857142857,
+  "load_scale": 0.33907146583202924
+ },
+ "ausgrid/AU_NSW_customer040": {
+  "load_kwh_year": 1688.23,
+  "load_peak_kwh": 1.4380000000000002,
+  "pv_kwh_year": 584.1579999999999,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer041": {
+  "load_kwh_year": 1712.3717514124291,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 600.0661904761905,
+  "load_scale": 0.45903954802259883
+ },
+ "ausgrid/AU_NSW_customer042": {
+  "load_kwh_year": 2139.2855859375,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 622.0058333333334,
+  "load_scale": 0.3046875
+ },
+ "ausgrid/AU_NSW_customer043": {
+  "load_kwh_year": 1362.3911619283065,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 596.4045138888889,
+  "load_scale": 0.4017305315203955
+ },
+ "ausgrid/AU_NSW_customer044": {
+  "load_kwh_year": 1565.263287804878,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 557.3754901960784,
+  "load_scale": 0.3804878048780488
+ },
+ "ausgrid/AU_NSW_customer045": {
+  "load_kwh_year": 1693.6385,
+  "load_peak_kwh": 1.665,
+  "pv_kwh_year": 502.44512195121956,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer046": {
+  "load_kwh_year": 2694.5635750853244,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 616.9786764705882,
+  "load_scale": 0.33276450511945393
+ },
+ "ausgrid/AU_NSW_customer047": {
+  "load_kwh_year": 1537.568853197238,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 689.7313725490196,
+  "load_scale": 0.2927048934253978
+ },
+ "ausgrid/AU_NSW_customer048": {
+  "load_kwh_year": 1740.24844606947,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 477.5675675675676,
+  "load_scale": 0.44561243144424134
+ },
+ "ausgrid/AU_NSW_customer049": {
+  "load_kwh_year": 1088.820843457133,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 738.3225,
+  "load_scale": 0.22561610551891703
+ },
+ "ausgrid/AU_NSW_customer050": {
+  "load_kwh_year": 1088.4994862654644,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 643.0745098039215,
+  "load_scale": 0.40889075277836023
+ },
+ "ausgrid/AU_NSW_customer051": {
+  "load_kwh_year": 2080.657680525164,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 605.959477124183,
+  "load_scale": 0.4266958424507658
+ },
+ "ausgrid/AU_NSW_customer052": {
+  "load_kwh_year": 1369.8432754880691,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 706.6495238095238,
+  "load_scale": 0.26437093275488066
+ },
+ "ausgrid/AU_NSW_customer053": {
+  "load_kwh_year": 1058.6933646959696,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 688.9462837837838,
+  "load_scale": 0.27383794410897344
+ },
+ "ausgrid/AU_NSW_customer054": {
+  "load_kwh_year": 2273.830301947472,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 666.2495098039215,
+  "load_scale": 0.3484009290691442
+ },
+ "ausgrid/AU_NSW_customer055": {
+  "load_kwh_year": 3264.298550185873,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 762.8922500000001,
+  "load_scale": 0.36245353159851296
+ },
+ "ausgrid/AU_NSW_customer056": {
+  "load_kwh_year": 2247.431197826951,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 540.4447619047619,
+  "load_scale": 0.2583808135683053
+ },
+ "ausgrid/AU_NSW_customer057": {
+  "load_kwh_year": 1465.6794405144692,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 487.08428571428567,
+  "load_scale": 0.2508038585209003
+ },
+ "ausgrid/AU_NSW_customer058": {
+  "load_kwh_year": 2663.056839225589,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 752.741,
+  "load_scale": 0.2735690235690236
+ },
+ "ausgrid/AU_NSW_customer059": {
+  "load_kwh_year": 1812.8173583077669,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 764.8214285714286,
+  "load_scale": 0.31487162925884066
+ },
+ "ausgrid/AU_NSW_customer060": {
+  "load_kwh_year": 1184.813724709256,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 1071.0525000000002,
+  "load_scale": 0.3106579576230683
+ },
+ "ausgrid/AU_NSW_customer061": {
+  "load_kwh_year": 2734.0695290858725,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 637.38875,
+  "load_scale": 0.41551246537396125
+ },
+ "ausgrid/AU_NSW_customer062": {
+  "load_kwh_year": 2009.392506043513,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 703.396,
+  "load_scale": 0.19641418211120062
+ },
+ "ausgrid/AU_NSW_customer063": {
+  "load_kwh_year": 3208.16145,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 464.851,
+  "load_scale": 0.4875
+ },
+ "ausgrid/AU_NSW_customer064": {
+  "load_kwh_year": 1748.5935,
+  "load_peak_kwh": 1.7805,
+  "pv_kwh_year": 538.4646666666666,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer065": {
+  "load_kwh_year": 1549.1197851055947,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 752.595,
+  "load_scale": 0.24082993701370878
+ },
+ "ausgrid/AU_NSW_customer066": {
+  "load_kwh_year": 1478.897,
+  "load_peak_kwh": 1.5065,
+  "pv_kwh_year": 561.2284374999999,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer067": {
+  "load_kwh_year": 3273.491185296324,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 781.3709459459459,
+  "load_scale": 0.48762190547636913
+ },
+ "ausgrid/AU_NSW_customer068": {
+  "load_kwh_year": 2891.6654999999996,
+  "load_peak_kwh": 1.7469999999999999,
+  "pv_kwh_year": 643.608445945946,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer069": {
+  "load_kwh_year": 2263.8331625564433,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 713.9053921568627,
+  "load_scale": 0.33865925668634944
+ },
+ "ausgrid/AU_NSW_customer070": {
+  "load_kwh_year": 1238.7675,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 679.5330000000001,
+  "load_scale": 0.1595744680851064
+ },
+ "ausgrid/AU_NSW_customer071": {
+  "load_kwh_year": 2218.916167805797,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 637.68,
+  "load_scale": 0.4595804855055385
+ },
+ "ausgrid/AU_NSW_customer072": {
+  "load_kwh_year": 2425.2735000000002,
+  "load_peak_kwh": 1.4655,
+  "pv_kwh_year": 590.7509803921569,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer073": {
+  "load_kwh_year": 1910.9515000000001,
+  "load_peak_kwh": 1.92,
+  "pv_kwh_year": 726.5655,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer074": {
+  "load_kwh_year": 1484.6227152841884,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 653.760396039604,
+  "load_scale": 0.25715416062244495
+ },
+ "ausgrid/AU_NSW_customer075": {
+  "load_kwh_year": 1815.5488993405738,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 753.8040000000001,
+  "load_scale": 0.189100077579519
+ },
+ "ausgrid/AU_NSW_customer076": {
+  "load_kwh_year": 1993.8603544962946,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 531.1506666666667,
+  "load_scale": 0.3905467654716603
+ },
+ "ausgrid/AU_NSW_customer077": {
+  "load_kwh_year": 1040.7676658905702,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 735.7808823529411,
+  "load_scale": 0.2837601862630966
+ },
+ "ausgrid/AU_NSW_customer078": {
+  "load_kwh_year": 2220.0008591744026,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 779.0009259259258,
+  "load_scale": 0.3851471459608928
+ },
+ "ausgrid/AU_NSW_customer079": {
+  "load_kwh_year": 1744.1075648812812,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 448.34583333333336,
+  "load_scale": 0.2691882937603534
+ },
+ "ausgrid/AU_NSW_customer080": {
+  "load_kwh_year": 2910.275652631579,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 714.123,
+  "load_scale": 0.4105263157894737
+ },
+ "ausgrid/AU_NSW_customer081": {
+  "load_kwh_year": 1479.8220000000001,
+  "load_peak_kwh": 1.8255,
+  "pv_kwh_year": 505.82552083333337,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer082": {
+  "load_kwh_year": 2140.9177733065058,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 792.475925925926,
+  "load_scale": 0.21797451374916163
+ },
+ "ausgrid/AU_NSW_customer083": {
+  "load_kwh_year": 982.7163824503311,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 606.5375816993464,
+  "load_scale": 0.3228476821192053
+ },
+ "ausgrid/AU_NSW_customer084": {
+  "load_kwh_year": 2364.994919220897,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 650.0725,
+  "load_scale": 0.29442850671900955
+ },
+ "ausgrid/AU_NSW_customer085": {
+  "load_kwh_year": 964.7147286492004,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 554.1392500000001,
+  "load_scale": 0.1658727458319156
+ },
+ "ausgrid/AU_NSW_customer086": {
+  "load_kwh_year": 1385.046096654275,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 738.6098039215686,
+  "load_scale": 0.26848409748038
+ },
+ "ausgrid/AU_NSW_customer087": {
+  "load_kwh_year": 1420.6509999999998,
+  "load_peak_kwh": 1.3025,
+  "pv_kwh_year": 716.9315,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer088": {
+  "load_kwh_year": 1344.026,
+  "load_peak_kwh": 1.1495,
+  "pv_kwh_year": 785.5066666666667,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer089": {
+  "load_kwh_year": 2605.010648452929,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 594.125,
+  "load_scale": 0.3209348255431204
+ },
+ "ausgrid/AU_NSW_customer090": {
+  "load_kwh_year": 1748.1405,
+  "load_peak_kwh": 1.232,
+  "pv_kwh_year": 657.0889999999999,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer091": {
+  "load_kwh_year": 2449.8170726991493,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 385.86366666666663,
+  "load_scale": 0.251353441608662
+ },
+ "ausgrid/AU_NSW_customer092": {
+  "load_kwh_year": 2217.71459197787,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 230.85227272727272,
+  "load_scale": 0.4495159059474412
+ },
+ "ausgrid/AU_NSW_customer093": {
+  "load_kwh_year": 1508.6130610268,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 559.6591304347827,
+  "load_scale": 0.31482079431708104
+ },
+ "ausgrid/AU_NSW_customer094": {
+  "load_kwh_year": 2910.706906877898,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 579.8303921568628,
+  "load_scale": 0.3767387944358578
+ },
+ "ausgrid/AU_NSW_customer095": {
+  "load_kwh_year": 2148.9431933548685,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 751.0808928571428,
+  "load_scale": 0.29995385325334567
+ },
+ "ausgrid/AU_NSW_customer096": {
+  "load_kwh_year": 2552.230936734239,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 567.4950000000001,
+  "load_scale": 0.21719759411895745
+ },
+ "ausgrid/AU_NSW_customer097": {
+  "load_kwh_year": 2025.5475000000001,
+  "load_peak_kwh": 1.9264999999999999,
+  "pv_kwh_year": 366.94604166666664,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer098": {
+  "load_kwh_year": 3927.8292503176626,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 615.5365,
+  "load_scale": 0.4955527318932656
+ },
+ "ausgrid/AU_NSW_customer099": {
+  "load_kwh_year": 1690.8665,
+  "load_peak_kwh": 1.5110000000000001,
+  "pv_kwh_year": 603.8675000000001,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer100": {
+  "load_kwh_year": 1346.7817698259187,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 605.2339999999999,
+  "load_scale": 0.20954223081882653
+ },
+ "ausgrid/AU_NSW_customer101": {
+  "load_kwh_year": 1761.424664310954,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 700.7980392156862,
+  "load_scale": 0.45936395759717313
+ },
+ "ausgrid/AU_NSW_customer102": {
+  "load_kwh_year": 3497.444684889901,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 501.8852499999999,
+  "load_scale": 0.49354593773728167
+ },
+ "ausgrid/AU_NSW_customer103": {
+  "load_kwh_year": 1645.3968369605311,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 599.298,
+  "load_scale": 0.35964588712652157
+ },
+ "ausgrid/AU_NSW_customer104": {
+  "load_kwh_year": 2428.7047950121105,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 697.0364864864864,
+  "load_scale": 0.174934960078945
+ },
+ "ausgrid/AU_NSW_customer105": {
+  "load_kwh_year": 2297.67812363953,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 590.1981308411214,
+  "load_scale": 0.42446669569003054
+ },
+ "ausgrid/AU_NSW_customer106": {
+  "load_kwh_year": 1523.5515491692859,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 711.9626666666667,
+  "load_scale": 0.2918724741805119
+ },
+ "ausgrid/AU_NSW_customer107": {
+  "load_kwh_year": 2269.1828269617704,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 662.8695238095238,
+  "load_scale": 0.39235412474849096
+ },
+ "ausgrid/AU_NSW_customer108": {
+  "load_kwh_year": 2029.067923850575,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 789.5855,
+  "load_scale": 0.46695402298850575
+ },
+ "ausgrid/AU_NSW_customer109": {
+  "load_kwh_year": 3775.280907172996,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 493.3860483870967,
+  "load_scale": 0.3428270042194093
+ },
+ "ausgrid/AU_NSW_customer110": {
+  "load_kwh_year": 1123.1670565302143,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 677.5407142857143,
+  "load_scale": 0.253411306042885
+ },
+ "ausgrid/AU_NSW_customer111": {
+  "load_kwh_year": 1249.3578091106292,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 595.20125,
+  "load_scale": 0.2643709327548807
+ },
+ "ausgrid/AU_NSW_customer112": {
+  "load_kwh_year": 2204.6248913718186,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 687.5523437500001,
+  "load_scale": 0.4034761018001241
+ },
+ "ausgrid/AU_NSW_customer113": {
+  "load_kwh_year": 2650.594892973476,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 679.2243333333333,
+  "load_scale": 0.45369939506747325
+ },
+ "ausgrid/AU_NSW_customer114": {
+  "load_kwh_year": 2487.172560033703,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 757.7436305732483,
+  "load_scale": 0.27383794410897344
+ },
+ "ausgrid/AU_NSW_customer115": {
+  "load_kwh_year": 1994.9015,
+  "load_peak_kwh": 1.6760000000000002,
+  "pv_kwh_year": 771.2586111111112,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer116": {
+  "load_kwh_year": 2366.636,
+  "load_peak_kwh": 1.4024999999999999,
+  "pv_kwh_year": 238.17239999999998,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer117": {
+  "load_kwh_year": 1143.4630994280685,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 662.9868181818181,
+  "load_scale": 0.42894852617685875
+ },
+ "ausgrid/AU_NSW_customer118": {
+  "load_kwh_year": 2245.848525747508,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 715.1546666666666,
+  "load_scale": 0.40490033222591365
+ },
+ "ausgrid/AU_NSW_customer119": {
+  "load_kwh_year": 1948.0230822323015,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 668.31,
+  "load_scale": 0.38453953855255374
+ },
+ "ausgrid/AU_NSW_customer120": {
+  "load_kwh_year": 592.3321748878923,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 657.3933823529412,
+  "load_scale": 0.15614990390775144
+ },
+ "ausgrid/AU_NSW_customer121": {
+  "load_kwh_year": 1466.5168281938327,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 622.5205882352941,
+  "load_scale": 0.3436123348017621
+ },
+ "ausgrid/AU_NSW_customer122": {
+  "load_kwh_year": 1517.5940217391305,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 604.2166666666667,
+  "load_scale": 0.2717391304347826
+ },
+ "ausgrid/AU_NSW_customer123": {
+  "load_kwh_year": 1604.248,
+  "load_peak_kwh": 1.574,
+  "pv_kwh_year": 693.5029411764706,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer124": {
+  "load_kwh_year": 1327.4101337657075,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 766.3479166666667,
+  "load_scale": 0.263477908390758
+ },
+ "ausgrid/AU_NSW_customer125": {
+  "load_kwh_year": 3252.1436780200934,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 715.3407500000001,
+  "load_scale": 0.47782406272972316
+ },
+ "ausgrid/AU_NSW_customer126": {
+  "load_kwh_year": 1049.34398331738,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 751.1136363636364,
+  "load_scale": 0.2666484342950909
+ },
+ "ausgrid/AU_NSW_customer127": {
+  "load_kwh_year": 2123.5104901960785,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 775.2745,
+  "load_scale": 0.42483660130718953
+ },
+ "ausgrid/AU_NSW_customer128": {
+  "load_kwh_year": 2218.4095693779905,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 588.2853333333334,
+  "load_scale": 0.37320574162679426
+ },
+ "ausgrid/AU_NSW_customer129": {
+  "load_kwh_year": 2303.773145641581,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 642.2509090909091,
+  "load_scale": 0.3519220357336221
+ },
+ "ausgrid/AU_NSW_customer130": {
+  "load_kwh_year": 1548.4327261418161,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 685.1163333333333,
+  "load_scale": 0.3465434512173449
+ },
+ "ausgrid/AU_NSW_customer131": {
+  "load_kwh_year": 2864.267035452323,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 488.2706666666666,
+  "load_scale": 0.23838630806845967
+ },
+ "ausgrid/AU_NSW_customer132": {
+  "load_kwh_year": 1784.5465,
+  "load_peak_kwh": 1.0045000000000002,
+  "pv_kwh_year": 550.7009803921568,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer133": {
+  "load_kwh_year": 1402.7305846007603,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 523.6337837837838,
+  "load_scale": 0.30893536121673004
+ },
+ "ausgrid/AU_NSW_customer134": {
+  "load_kwh_year": 2021.521306262231,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 648.0175675675675,
+  "load_scale": 0.1908023483365949
+ },
+ "ausgrid/AU_NSW_customer135": {
+  "load_kwh_year": 1769.7775000000001,
+  "load_peak_kwh": 0.904,
+  "pv_kwh_year": 657.5684210526317,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer136": {
+  "load_kwh_year": 1822.118,
+  "load_peak_kwh": 1.269,
+  "pv_kwh_year": 543.5422727272728,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer137": {
+  "load_kwh_year": 2620.8551134250647,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 701.8326315789474,
+  "load_scale": 0.36258832279657865
+ },
+ "ausgrid/AU_NSW_customer138": {
+  "load_kwh_year": 2043.564679865206,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 506.76300000000003,
+  "load_scale": 0.2737994945240101
+ },
+ "ausgrid/AU_NSW_customer139": {
+  "load_kwh_year": 2932.3288658897204,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 726.5426666666667,
+  "load_scale": 0.33918942424769527
+ },
+ "ausgrid/AU_NSW_customer140": {
+  "load_kwh_year": 823.721,
+  "load_peak_kwh": 1.73,
+  "pv_kwh_year": 714.625,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer141": {
+  "load_kwh_year": 3295.709716981132,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 726.4878333333332,
+  "load_scale": 0.2628032345013477
+ },
+ "ausgrid/AU_NSW_customer142": {
+  "load_kwh_year": 1754.128896961691,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 743.2529411764706,
+  "load_scale": 0.42932628797886396
+ },
+ "ausgrid/AU_NSW_customer143": {
+  "load_kwh_year": 1745.5589563964909,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 710.3778571428571,
+  "load_scale": 0.2553358648684038
+ },
+ "ausgrid/AU_NSW_customer144": {
+  "load_kwh_year": 2004.3106955216413,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 759.634,
+  "load_scale": 0.4878658994245684
+ },
+ "ausgrid/AU_NSW_customer145": {
+  "load_kwh_year": 2830.7899933121553,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 771.4749999999999,
+  "load_scale": 0.3260324360474837
+ },
+ "ausgrid/AU_NSW_customer146": {
+  "load_kwh_year": 615.2019598649662,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 548.7639999999999,
+  "load_scale": 0.36571642910727675
+ },
+ "ausgrid/AU_NSW_customer147": {
+  "load_kwh_year": 1990.2737361840914,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 726.9090476190477,
+  "load_scale": 0.17666243884761731
+ },
+ "ausgrid/AU_NSW_customer148": {
+  "load_kwh_year": 2494.5858092536782,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 660.2676666666666,
+  "load_scale": 0.34568338946995214
+ },
+ "ausgrid/AU_NSW_customer149": {
+  "load_kwh_year": 2673.2218744769875,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 636.2093137254901,
+  "load_scale": 0.3263598326359833
+ },
+ "ausgrid/AU_NSW_customer150": {
+  "load_kwh_year": 957.657,
+  "load_peak_kwh": 1.1035,
+  "pv_kwh_year": 732.8247549019607,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer151": {
+  "load_kwh_year": 2188.1715865055844,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 573.4843137254902,
+  "load_scale": 0.44449509915659896
+ },
+ "ausgrid/AU_NSW_customer152": {
+  "load_kwh_year": 2432.2886515601776,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 465.26392857142855,
+  "load_scale": 0.2414561664190193
+ },
+ "ausgrid/AU_NSW_customer153": {
+  "load_kwh_year": 1655.408,
+  "load_peak_kwh": 1.4834999999999998,
+  "pv_kwh_year": 760.3319047619048,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer154": {
+  "load_kwh_year": 1922.1317484662577,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 590.0125,
+  "load_scale": 0.4272567922874671
+ },
+ "ausgrid/AU_NSW_customer155": {
+  "load_kwh_year": 1237.458,
+  "load_peak_kwh": 1.091,
+  "pv_kwh_year": 676.7976666666666,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer156": {
+  "load_kwh_year": 1882.6291666666668,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 696.5226666666666,
+  "load_scale": 0.2604166666666667
+ },
+ "ausgrid/AU_NSW_customer157": {
+  "load_kwh_year": 2272.9146822498174,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 739.1745245245245,
+  "load_scale": 0.23739956172388604
+ },
+ "ausgrid/AU_NSW_customer158": {
+  "load_kwh_year": 3203.976795774648,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 510.03666666666663,
+  "load_scale": 0.45774647887323944
+ },
+ "ausgrid/AU_NSW_customer159": {
+  "load_kwh_year": 1634.2475206611573,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 725.1697727272727,
+  "load_scale": 0.20661157024793392
+ },
+ "ausgrid/AU_NSW_customer160": {
+  "load_kwh_year": 1877.625636672326,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 695.9264705882354,
+  "load_scale": 0.2546689303904924
+ },
+ "ausgrid/AU_NSW_customer161": {
+  "load_kwh_year": 1911.644376684158,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 572.12140625,
+  "load_scale": 0.27655651680612675
+ },
+ "ausgrid/AU_NSW_customer162": {
+  "load_kwh_year": 1639.2544523146978,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 668.9755,
+  "load_scale": 0.49329623071085255
+ },
+ "ausgrid/AU_NSW_customer163": {
+  "load_kwh_year": 1427.2224999999999,
+  "load_peak_kwh": 1.459,
+  "pv_kwh_year": 680.6555555555555,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer164": {
+  "load_kwh_year": 1485.5475903614458,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 636.0983333333334,
+  "load_scale": 0.41953528399311535
+ },
+ "ausgrid/AU_NSW_customer165": {
+  "load_kwh_year": 1584.772,
+  "load_peak_kwh": 1.7315,
+  "pv_kwh_year": 601.596568627451,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer166": {
+  "load_kwh_year": 2650.830633490845,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 491.5306666666666,
+  "load_scale": 0.28795038393384526
+ },
+ "ausgrid/AU_NSW_customer167": {
+  "load_kwh_year": 1802.8887435077904,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 663.6770220588235,
+  "load_scale": 0.3895325609268877
+ },
+ "ausgrid/AU_NSW_customer168": {
+  "load_kwh_year": 1596.6935,
+  "load_peak_kwh": 1.471,
+  "pv_kwh_year": 744.79,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer169": {
+  "load_kwh_year": 1615.5425,
+  "load_peak_kwh": 1.5145,
+  "pv_kwh_year": 702.3345588235294,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer170": {
+  "load_kwh_year": 2799.4785,
+  "load_peak_kwh": 1.5470000000000002,
+  "pv_kwh_year": 747.7333333333333,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer171": {
+  "load_kwh_year": 1123.8299657534244,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 630.3861904761904,
+  "load_scale": 0.4452054794520547
+ },
+ "ausgrid/AU_NSW_customer172": {
+  "load_kwh_year": 1888.7112761647536,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 657.752,
+  "load_scale": 0.43889264010803514
+ },
+ "ausgrid/AU_NSW_customer173": {
+  "load_kwh_year": 2166.72449044586,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 742.596525096525,
+  "load_scale": 0.4140127388535032
+ },
+ "ausgrid/AU_NSW_customer174": {
+  "load_kwh_year": 1737.4045,
+  "load_peak_kwh": 1.587,
+  "pv_kwh_year": 502.5622549019607,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer175": {
+  "load_kwh_year": 1835.57833594032,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 762.4573333333333,
+  "load_scale": 0.23462880519793045
+ },
+ "ausgrid/AU_NSW_customer176": {
+  "load_kwh_year": 1041.619004035745,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 751.8634285714286,
+  "load_scale": 0.281060824445085
+ },
+ "ausgrid/AU_NSW_customer177": {
+  "load_kwh_year": 1678.9830909090908,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 659.6179999999999,
+  "load_scale": 0.3939393939393939
+ },
+ "ausgrid/AU_NSW_customer178": {
+  "load_kwh_year": 1617.303599393786,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 649.8540909090909,
+  "load_scale": 0.4925486233897448
+ },
+ "ausgrid/AU_NSW_customer179": {
+  "load_kwh_year": 1929.2966395112014,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 661.172,
+  "load_scale": 0.44127630685675484
+ },
+ "ausgrid/AU_NSW_customer180": {
+  "load_kwh_year": 1497.196487006737,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 548.203125,
+  "load_scale": 0.37536092396535126
+ },
+ "ausgrid/AU_NSW_customer181": {
+  "load_kwh_year": 2611.177674654067,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 712.2683333333334,
+  "load_scale": 0.32905838677016536
+ },
+ "ausgrid/AU_NSW_customer182": {
+  "load_kwh_year": 2101.7885,
+  "load_peak_kwh": 1.5375,
+  "pv_kwh_year": 726.0143790849672,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer183": {
+  "load_kwh_year": 2334.6125,
+  "load_peak_kwh": 1.85,
+  "pv_kwh_year": 519.1796666666667,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer184": {
+  "load_kwh_year": 1492.5013885674612,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 752.2938095238095,
+  "load_scale": 0.45128442490164317
+ },
+ "ausgrid/AU_NSW_customer185": {
+  "load_kwh_year": 2561.175402360515,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 765.158,
+  "load_scale": 0.2615343347639485
+ },
+ "ausgrid/AU_NSW_customer186": {
+  "load_kwh_year": 1286.4935,
+  "load_peak_kwh": 1.4765000000000001,
+  "pv_kwh_year": 656.346568627451,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer187": {
+  "load_kwh_year": 922.8639394502229,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 488.87624999999997,
+  "load_scale": 0.36218424962852896
+ },
+ "ausgrid/AU_NSW_customer188": {
+  "load_kwh_year": 1326.3878441361371,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 725.9445945945945,
+  "load_scale": 0.21135920225449817
+ },
+ "ausgrid/AU_NSW_customer189": {
+  "load_kwh_year": 1996.2898169336386,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 704.2551470588235,
+  "load_scale": 0.3718535469107552
+ },
+ "ausgrid/AU_NSW_customer190": {
+  "load_kwh_year": 2826.592808641976,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 602.3796428571429,
+  "load_scale": 0.40123456790123463
+ },
+ "ausgrid/AU_NSW_customer191": {
+  "load_kwh_year": 2291.395792426367,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 684.3179012345679,
+  "load_scale": 0.21037868162692847
+ },
+ "ausgrid/AU_NSW_customer192": {
+  "load_kwh_year": 2577.215099892972,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 583.9338235294117,
+  "load_scale": 0.34784159828754907
+ },
+ "ausgrid/AU_NSW_customer193": {
+  "load_kwh_year": 2142.9301142546246,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 615.522125,
+  "load_scale": 0.3536452665941241
+ },
+ "ausgrid/AU_NSW_customer194": {
+  "load_kwh_year": 1633.3573905538992,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 658.972,
+  "load_scale": 0.30597834614781105
+ },
+ "ausgrid/AU_NSW_customer195": {
+  "load_kwh_year": 2341.3023008849555,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 576.95,
+  "load_scale": 0.38348082595870203
+ },
+ "ausgrid/AU_NSW_customer196": {
+  "load_kwh_year": 2290.605,
+  "load_peak_kwh": 1.613,
+  "pv_kwh_year": 476.84950000000003,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer197": {
+  "load_kwh_year": 1585.6354586857515,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 667.5163333333334,
+  "load_scale": 0.31717631750162656
+ },
+ "ausgrid/AU_NSW_customer198": {
+  "load_kwh_year": 1230.5126924031777,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 660.8185,
+  "load_scale": 0.24205561072492549
+ },
+ "ausgrid/AU_NSW_customer199": {
+  "load_kwh_year": 2120.731643153527,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 615.6176470588234,
+  "load_scale": 0.32365145228215764
+ },
+ "ausgrid/AU_NSW_customer200": {
+  "load_kwh_year": 2333.9590496492915,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 492.1585294117648,
+  "load_scale": 0.26818869481501856
+ },
+ "ausgrid/AU_NSW_customer201": {
+  "load_kwh_year": 1637.5223826020015,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 649.7405714285715,
+  "load_scale": 0.2501924557351809
+ },
+ "ausgrid/AU_NSW_customer202": {
+  "load_kwh_year": 1387.0115,
+  "load_peak_kwh": 1.5685,
+  "pv_kwh_year": 766.2647619047618,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer203": {
+  "load_kwh_year": 2082.7766539228724,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 629.1523333333333,
+  "load_scale": 0.32413563829787234
+ },
+ "ausgrid/AU_NSW_customer204": {
+  "load_kwh_year": 1592.3125402201524,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 732.1487341772151,
+  "load_scale": 0.3302286198137172
+ },
+ "ausgrid/AU_NSW_customer205": {
+  "load_kwh_year": 1097.6425074767826,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 726.0754901960784,
+  "load_scale": 0.30694160239257046
+ },
+ "ausgrid/AU_NSW_customer206": {
+  "load_kwh_year": 2145.669388595913,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 672.5610526315788,
+  "load_scale": 0.32135794330916284
+ },
+ "ausgrid/AU_NSW_customer207": {
+  "load_kwh_year": 1749.934149855908,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 625.1866666666667,
+  "load_scale": 0.21613832853025935
+ },
+ "ausgrid/AU_NSW_customer208": {
+  "load_kwh_year": 2029.857,
+  "load_peak_kwh": 1.9045,
+  "pv_kwh_year": 621.8343749999999,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer209": {
+  "load_kwh_year": 2368.2275363967246,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 647.9670000000001,
+  "load_scale": 0.44358507734303915
+ },
+ "ausgrid/AU_NSW_customer210": {
+  "load_kwh_year": 1154.5898934070271,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 695.4216494845361,
+  "load_scale": 0.2566127121989735
+ },
+ "ausgrid/AU_NSW_customer211": {
+  "load_kwh_year": 1645.8564587973276,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 541.8186666666666,
+  "load_scale": 0.39481676452723224
+ },
+ "ausgrid/AU_NSW_customer212": {
+  "load_kwh_year": 2283.420647905759,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 742.8340476190476,
+  "load_scale": 0.2552356020942408
+ },
+ "ausgrid/AU_NSW_customer213": {
+  "load_kwh_year": 1270.103765187906,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 682.9297058823529,
+  "load_scale": 0.27550155411133087
+ },
+ "ausgrid/AU_NSW_customer214": {
+  "load_kwh_year": 1725.0904594767067,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 749.3915032679738,
+  "load_scale": 0.41480536056158257
+ },
+ "ausgrid/AU_NSW_customer215": {
+  "load_kwh_year": 1683.1647409172128,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 663.126,
+  "load_scale": 0.38713519952352593
+ },
+ "ausgrid/AU_NSW_customer216": {
+  "load_kwh_year": 1758.4855,
+  "load_peak_kwh": 1.8165,
+  "pv_kwh_year": 648.2225,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer217": {
+  "load_kwh_year": 1762.9807666610989,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 646.3781818181817,
+  "load_scale": 0.32570569567396024
+ },
+ "ausgrid/AU_NSW_customer218": {
+  "load_kwh_year": 1428.3528713892706,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 767.9343137254903,
+  "load_scale": 0.3352819807427785
+ },
+ "ausgrid/AU_NSW_customer219": {
+  "load_kwh_year": 1173.4165,
+  "load_peak_kwh": 1.8405,
+  "pv_kwh_year": 617.4946078431373,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer220": {
+  "load_kwh_year": 1989.6768491834773,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 691.1009523809523,
+  "load_scale": 0.31219980787704127
+ },
+ "ausgrid/AU_NSW_customer221": {
+  "load_kwh_year": 2028.3718188765758,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 749.9666666666666,
+  "load_scale": 0.3725640045854031
+ },
+ "ausgrid/AU_NSW_customer222": {
+  "load_kwh_year": 3072.1805,
+  "load_peak_kwh": 1.9220000000000002,
+  "pv_kwh_year": 594.9480952380952,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer223": {
+  "load_kwh_year": 1202.188313750397,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 641.0303921568627,
+  "load_scale": 0.309622102254684
+ },
+ "ausgrid/AU_NSW_customer224": {
+  "load_kwh_year": 1656.379,
+  "load_peak_kwh": 1.9344999999999999,
+  "pv_kwh_year": 615.181862745098,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer225": {
+  "load_kwh_year": 2353.6045432921023,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 568.7731818181819,
+  "load_scale": 0.4638439581351093
+ },
+ "ausgrid/AU_NSW_customer226": {
+  "load_kwh_year": 2236.714547853203,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 691.0029411764706,
+  "load_scale": 0.46773806668265777
+ },
+ "ausgrid/AU_NSW_customer227": {
+  "load_kwh_year": 1187.034683374357,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 504.58899999999994,
+  "load_scale": 0.43633922577757894
+ },
+ "ausgrid/AU_NSW_customer228": {
+  "load_kwh_year": 3804.4294704099534,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 579.8581818181817,
+  "load_scale": 0.3110543946402935
+ },
+ "ausgrid/AU_NSW_customer229": {
+  "load_kwh_year": 1320.3049244911358,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 524.2607843137255,
+  "load_scale": 0.21339461588969139
+ },
+ "ausgrid/AU_NSW_customer230": {
+  "load_kwh_year": 2507.0943379957844,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 701.387,
+  "load_scale": 0.3736347959379191
+ },
+ "ausgrid/AU_NSW_customer231": {
+  "load_kwh_year": 1909.349227600412,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 670.1059523809523,
+  "load_scale": 0.33470648815653964
+ },
+ "ausgrid/AU_NSW_customer232": {
+  "load_kwh_year": 1843.3564655172415,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 471.79999999999995,
+  "load_scale": 0.3232758620689655
+ },
+ "ausgrid/AU_NSW_customer233": {
+  "load_kwh_year": 1493.032,
+  "load_peak_kwh": 1.7535,
+  "pv_kwh_year": 628.1013333333333,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer234": {
+  "load_kwh_year": 2560.026616216216,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 444.92787878787885,
+  "load_scale": 0.4216216216216216
+ },
+ "ausgrid/AU_NSW_customer235": {
+  "load_kwh_year": 1516.435,
+  "load_peak_kwh": 1.7455,
+  "pv_kwh_year": 662.2574999999999,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer236": {
+  "load_kwh_year": 2257.7056379821956,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 776.2823529411764,
+  "load_scale": 0.44510385756676557
+ },
+ "ausgrid/AU_NSW_customer237": {
+  "load_kwh_year": 1299.9003324602054,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 521.9433333333334,
+  "load_scale": 0.3929075156155551
+ },
+ "ausgrid/AU_NSW_customer238": {
+  "load_kwh_year": 2852.7095,
+  "load_peak_kwh": 1.7125,
+  "pv_kwh_year": 697.0133333333333,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer239": {
+  "load_kwh_year": 1691.7018867924526,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 734.2275,
+  "load_scale": 0.4716981132075471
+ },
+ "ausgrid/AU_NSW_customer240": {
+  "load_kwh_year": 1856.71,
+  "load_peak_kwh": 1.3905,
+  "pv_kwh_year": 675.5375,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer241": {
+  "load_kwh_year": 2290.323,
+  "load_peak_kwh": 1.768,
+  "pv_kwh_year": 794.9293333333333,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer242": {
+  "load_kwh_year": 2161.0859265734266,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 746.960648148148,
+  "load_scale": 0.26223776223776224
+ },
+ "ausgrid/AU_NSW_customer243": {
+  "load_kwh_year": 1520.6892004695446,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 591.2225806451613,
+  "load_scale": 0.25433676796661014
+ },
+ "ausgrid/AU_NSW_customer244": {
+  "load_kwh_year": 2441.165,
+  "load_peak_kwh": 1.8315000000000001,
+  "pv_kwh_year": 689.7282499999999,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer245": {
+  "load_kwh_year": 1271.7150556328234,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 736.464077669903,
+  "load_scale": 0.4520166898470097
+ },
+ "ausgrid/AU_NSW_customer246": {
+  "load_kwh_year": 2402.311258670276,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 772.2555555555555,
+  "load_scale": 0.32989341904923025
+ },
+ "ausgrid/AU_NSW_customer247": {
+  "load_kwh_year": 1802.8976219661681,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 553.2328431372548,
+  "load_scale": 0.4780583476342241
+ },
+ "ausgrid/AU_NSW_customer248": {
+  "load_kwh_year": 2552.0373889875664,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 670.2038324420678,
+  "load_scale": 0.2886323268206039
+ },
+ "ausgrid/AU_NSW_customer249": {
+  "load_kwh_year": 3458.4332249999998,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 669.8686666666666,
+  "load_scale": 0.4875
+ },
+ "ausgrid/AU_NSW_customer250": {
+  "load_kwh_year": 1308.563835751979,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 606.5834558823528,
+  "load_scale": 0.21437994722955145
+ },
+ "ausgrid/AU_NSW_customer251": {
+  "load_kwh_year": 1845.4485522296882,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 473.71833333333336,
+  "load_scale": 0.23824068417837505
+ },
+ "ausgrid/AU_NSW_customer252": {
+  "load_kwh_year": 1826.2930000000001,
+  "load_peak_kwh": 1.633,
+  "pv_kwh_year": 447.74550000000005,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer253": {
+  "load_kwh_year": 3938.3077827547586,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 694.7014285714286,
+  "load_scale": 0.36394176931690925
+ },
+ "ausgrid/AU_NSW_customer254": {
+  "load_kwh_year": 2111.726569419119,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 683.9376666666666,
+  "load_scale": 0.2539723886428757
+ },
+ "ausgrid/AU_NSW_customer255": {
+  "load_kwh_year": 3637.91559746696,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 667.5303240740741,
+  "load_scale": 0.26844713656387664
+ },
+ "ausgrid/AU_NSW_customer256": {
+  "load_kwh_year": 2177.3646929824563,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 781.6341758241758,
+  "load_scale": 0.2192982456140351
+ },
+ "ausgrid/AU_NSW_customer257": {
+  "load_kwh_year": 1777.6638674884439,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 679.2935,
+  "load_scale": 0.2731474996498109
+ },
+ "ausgrid/AU_NSW_customer258": {
+  "load_kwh_year": 2811.9356208343615,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 623.9966666666667,
+  "load_scale": 0.4813626265119723
+ },
+ "ausgrid/AU_NSW_customer259": {
+  "load_kwh_year": 1244.7134999999998,
+  "load_peak_kwh": 1.3255,
+  "pv_kwh_year": 637.3795238095238,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer260": {
+  "load_kwh_year": 985.9276997482443,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 593.537,
+  "load_scale": 0.2583808135683053
+ },
+ "ausgrid/AU_NSW_customer261": {
+  "load_kwh_year": 1706.8557220708446,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 702.7107843137255,
+  "load_scale": 0.4830319544216002
+ },
+ "ausgrid/AU_NSW_customer262": {
+  "load_kwh_year": 3290.767267861299,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 803.319,
+  "load_scale": 0.4538049802187573
+ },
+ "ausgrid/AU_NSW_customer263": {
+  "load_kwh_year": 2206.2482598898346,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 664.9064285714286,
+  "load_scale": 0.48823234852278413
+ },
+ "ausgrid/AU_NSW_customer264": {
+  "load_kwh_year": 771.0583480176213,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 739.3779411764706,
+  "load_scale": 0.42951541850220265
+ },
+ "ausgrid/AU_NSW_customer265": {
+  "load_kwh_year": 2170.6025,
+  "load_peak_kwh": 1.8315,
+  "pv_kwh_year": 741.2334459459458,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer266": {
+  "load_kwh_year": 1250.9125445026177,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 335.17794117647054,
+  "load_scale": 0.4083769633507853
+ },
+ "ausgrid/AU_NSW_customer267": {
+  "load_kwh_year": 2311.3509594047773,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 655.0725,
+  "load_scale": 0.25453596136274637
+ },
+ "ausgrid/AU_NSW_customer268": {
+  "load_kwh_year": 1018.2563676411694,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 620.8595,
+  "load_scale": 0.2603123748498198
+ },
+ "ausgrid/AU_NSW_customer269": {
+  "load_kwh_year": 1377.8982193329562,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 634.4259803921568,
+  "load_scale": 0.2755794234030525
+ },
+ "ausgrid/AU_NSW_customer270": {
+  "load_kwh_year": 2696.374532535527,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 791.808,
+  "load_scale": 0.48616305160807777
+ },
+ "ausgrid/AU_NSW_customer271": {
+  "load_kwh_year": 1864.5538585728125,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 724.3485294117647,
+  "load_scale": 0.31482079431708104
+ },
+ "ausgrid/AU_NSW_customer272": {
+  "load_kwh_year": 1690.673015021459,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 684.4107142857142,
+  "load_scale": 0.41845493562231756
+ },
+ "ausgrid/AU_NSW_customer273": {
+  "load_kwh_year": 1086.641574127075,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 797.5081944444445,
+  "load_scale": 0.22323983972524328
+ },
+ "ausgrid/AU_NSW_customer274": {
+  "load_kwh_year": 2645.9630800076375,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 624.1015,
+  "load_scale": 0.37235058239450064
+ },
+ "ausgrid/AU_NSW_customer275": {
+  "load_kwh_year": 1591.974927745665,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 513.9598039215687,
+  "load_scale": 0.2561744613767735
+ },
+ "ausgrid/AU_NSW_customer276": {
+  "load_kwh_year": 2390.8846420323325,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 710.0272500000001,
+  "load_scale": 0.26490965901372093
+ },
+ "ausgrid/AU_NSW_customer277": {
+  "load_kwh_year": 1087.5719878757263,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 755.3563725490196,
+  "load_scale": 0.24627431169487246
+ },
+ "ausgrid/AU_NSW_customer278": {
+  "load_kwh_year": 1412.989,
+  "load_peak_kwh": 1.1360000000000001,
+  "pv_kwh_year": 498.31525,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer279": {
+  "load_kwh_year": 2252.5141598533974,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 729.3856666666666,
+  "load_scale": 0.27488018043416973
+ },
+ "ausgrid/AU_NSW_customer280": {
+  "load_kwh_year": 2259.8795441030725,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 427.57366666666667,
+  "load_scale": 0.3865213082259663
+ },
+ "ausgrid/AU_NSW_customer281": {
+  "load_kwh_year": 1684.734747292419,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 603.7476666666666,
+  "load_scale": 0.27075812274368233
+ },
+ "ausgrid/AU_NSW_customer282": {
+  "load_kwh_year": 1325.340855374226,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 692.8304999999999,
+  "load_scale": 0.3657850309510411
+ },
+ "ausgrid/AU_NSW_customer283": {
+  "load_kwh_year": 1111.020546932742,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 751.7495098039215,
+  "load_scale": 0.4804138950480414
+ },
+ "ausgrid/AU_NSW_customer284": {
+  "load_kwh_year": 1498.169539191326,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 715.2206666666666,
+  "load_scale": 0.4404788796024396
+ },
+ "ausgrid/AU_NSW_customer285": {
+  "load_kwh_year": 1428.9664677619342,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 893.9235668789809,
+  "load_scale": 0.3022318660880347
+ },
+ "ausgrid/AU_NSW_customer286": {
+  "load_kwh_year": 2299.754972421862,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 760.1184999999999,
+  "load_scale": 0.32592344977436066
+ },
+ "ausgrid/AU_NSW_customer287": {
+  "load_kwh_year": 2191.397920353982,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 679.3323529411764,
+  "load_scale": 0.34513274336283184
+ },
+ "ausgrid/AU_NSW_customer288": {
+  "load_kwh_year": 1501.4622259983007,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 738.2166666666666,
+  "load_scale": 0.33135089209855567
+ },
+ "ausgrid/AU_NSW_customer289": {
+  "load_kwh_year": 2374.0420928773137,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 669.7135833333333,
+  "load_scale": 0.3059303420144336
+ },
+ "ausgrid/AU_NSW_customer290": {
+  "load_kwh_year": 1857.7085438716283,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 622.9228571428571,
+  "load_scale": 0.33287811539774664
+ },
+ "ausgrid/AU_NSW_customer291": {
+  "load_kwh_year": 2372.4754999999996,
+  "load_peak_kwh": 1.1035,
+  "pv_kwh_year": 710.376,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer292": {
+  "load_kwh_year": 758.5323898099473,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 597.7235294117647,
+  "load_scale": 0.2628386575010109
+ },
+ "ausgrid/AU_NSW_customer293": {
+  "load_kwh_year": 1858.701247896803,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 604.6557142857142,
+  "load_scale": 0.18227706113292202
+ },
+ "ausgrid/AU_NSW_customer294": {
+  "load_kwh_year": 3242.6068938193343,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 683.7736363636363,
+  "load_scale": 0.3433703116745906
+ },
+ "ausgrid/AU_NSW_customer295": {
+  "load_kwh_year": 1389.8374786142,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 635.7545,
+  "load_scale": 0.4170230966638152
+ },
+ "ausgrid/AU_NSW_customer296": {
+  "load_kwh_year": 1394.1975000000002,
+  "load_peak_kwh": 1.7065000000000001,
+  "pv_kwh_year": 669.7805555555555,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer297": {
+  "load_kwh_year": 1717.0669586473825,
+  "load_peak_kwh": 1.9500000000000002,
+  "pv_kwh_year": 665.2826666666666,
+  "load_scale": 0.3972295783255246
+ },
+ "ausgrid/AU_NSW_customer298": {
+  "load_kwh_year": 1559.9185,
+  "load_peak_kwh": 1.4695,
+  "pv_kwh_year": 691.4627450980392,
+  "load_scale": 0.5
+ },
+ "ausgrid/AU_NSW_customer299": {
+  "load_kwh_year": 2385.1354055019647,
+  "load_peak_kwh": 1.95,
+  "pv_kwh_year": 941.1735,
+  "load_scale": 0.23222579492675954
+ },
+ "ausgrid/AU_NSW_customer300": {
+  "load_kwh_year": 2334.3075449569974,
+  "load_peak_kwh": 1.9499999999999997,
+  "pv_kwh_year": 518.3294642857143,
+  "load_scale": 0.25410476935105547
+ },
+ "korea/KOR_Seoul": {
+  "load_kwh_year": 3300.1000000000004,
+  "load_peak_kwh": 1.5,
+  "pv_kwh_year": 727.2386200000001,
+  "load_scale": 1.0
+ }
+}

@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_PA_Pittsburgh.Intl.AP.725200_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_PA_Pittsburgh.Intl.AP.725200_TMY3_BASE.csv",
+  "raw_sha256": "162d579cab23da1da253d8e7fa5028ddcfcbcefc751a8936f91bbe69bc393d7e",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "195ed638719144d6c8882595dc80d9e191b41db929f93f34cf967955c967d585"
+  },
+  "state": "PA",
+  "usaf": "725200",
+  "lat": 40.485,
+  "lon": -80.214,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4520.229629667105,
+  "load_peak_kwh": 1.21627576923,
+  "load_mean_kwh": 0.5160079485921353,
+  "pv_kwh_year": 648.6043199999999,
+  "pv_peak_kwh": 0.47366,
+  "hours_over_cmax": 0
+}

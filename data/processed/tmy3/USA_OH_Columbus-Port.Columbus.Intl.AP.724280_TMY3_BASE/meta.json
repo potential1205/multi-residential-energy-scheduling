@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_OH_Columbus-Port.Columbus.Intl.AP.724280_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_OH_Columbus-Port.Columbus.Intl.AP.724280_TMY3_BASE.csv",
+  "raw_sha256": "a7da2eafc4cda99f1d173cc315cef1aa6293ffe73629c4103a3bd794351b8597",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "79320234968ddd9512bee65ad8e5a4759269da623b0b7eb5ee564affc0d201c1"
+  },
+  "state": "OH",
+  "usaf": "724280",
+  "lat": 39.991,
+  "lon": -82.877,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4484.235175675762,
+  "load_peak_kwh": 1.1830382119,
+  "load_mean_kwh": 0.5118989926570504,
+  "pv_kwh_year": 680.27377,
+  "pv_peak_kwh": 0.49444499999999997,
+  "hours_over_cmax": 0
+}

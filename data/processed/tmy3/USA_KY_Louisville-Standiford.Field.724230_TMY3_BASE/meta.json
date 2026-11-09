@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_KY_Louisville-Standiford.Field.724230_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_KY_Louisville-Standiford.Field.724230_TMY3_BASE.csv",
+  "raw_sha256": "7cd40da8384d7f782e459922c8827891e2f7523aebfacb79c78f121a7b3d30e2",
+  "load_scale": 0.48943713552885115,
+  "load_scale_reason": "peak limited to 1.95 kWh",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "6198021a3e1ae2dafff15f66e9db60267959e76af1d1a2a6273b4afc50d4ad45"
+  },
+  "state": "KY",
+  "usaf": "724230",
+  "lat": 38.177,
+  "lon": -85.731,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 6287.223152050647,
+  "load_peak_kwh": 1.95,
+  "load_mean_kwh": 0.717719537905325,
+  "pv_kwh_year": 683.36042,
+  "pv_peak_kwh": 0.48835500000000004,
+  "hours_over_cmax": 0
+}

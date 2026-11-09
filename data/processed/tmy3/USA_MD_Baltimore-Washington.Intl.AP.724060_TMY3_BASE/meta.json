@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3_BASE.csv",
+  "raw_sha256": "87378cba57c2e6548591ece3b191614332f6413b237a1cd2eeeefdc2e8e543cf",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "42436dae5237fe1040b7802b02dfa059e2c26a19f7d545407e7f3a09be8e5760"
+  },
+  "state": "MD",
+  "usaf": "724060",
+  "lat": 39.173,
+  "lon": -76.684,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 6296.359486866455,
+  "load_peak_kwh": 1.88271856264,
+  "load_mean_kwh": 0.7187624985007369,
+  "pv_kwh_year": 705.762025,
+  "pv_peak_kwh": 0.474825,
+  "hours_over_cmax": 0
+}

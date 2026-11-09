@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_FL_Tampa.Intl.AP.722110_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_FL_Tampa.Intl.AP.722110_TMY3_BASE.csv",
+  "raw_sha256": "010f4c3463812131485ff5ce0bc78a8942c85f9b2905951620d32036646148d4",
+  "load_scale": 0.34455645602153123,
+  "load_scale_reason": "peak limited to 1.95 kWh",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "3972375dfa09cd5d0926d273e5972ac4193026d79b5097a910daaa3f89d8b8a6"
+  },
+  "state": "FL",
+  "usaf": "722110",
+  "lat": 27.963,
+  "lon": -82.54,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4912.1263543215,
+  "load_peak_kwh": 1.9500000000000002,
+  "load_mean_kwh": 0.5607450176166096,
+  "pv_kwh_year": 733.5981999999999,
+  "pv_peak_kwh": 0.450095,
+  "hours_over_cmax": 0
+}

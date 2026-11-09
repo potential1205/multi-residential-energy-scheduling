@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_CA_Oakland.Intl.AP.724930_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_CA_Oakland.Intl.AP.724930_TMY3_BASE.csv",
+  "raw_sha256": "ce2064470c0c7afbae1b7d28ff6e47c96a91dc109d708a564bc232b7979192d5",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "8990fcba2640faa7bfc770b37b08b400369d30d0711c8ffd5d5bb498b866a181"
+  },
+  "state": "CA",
+  "usaf": "724930",
+  "lat": 37.718,
+  "lon": -122.233,
+  "utc_offset": -8,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 3775.989082085164,
+  "load_peak_kwh": 0.97712891824,
+  "load_mean_kwh": 0.4310489819731922,
+  "pv_kwh_year": 842.3008150000001,
+  "pv_peak_kwh": 0.441245,
+  "hours_over_cmax": 0
+}

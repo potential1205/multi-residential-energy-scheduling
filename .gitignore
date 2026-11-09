@@ -6,3 +6,5 @@ work/
 results/
 AUDIT.md
 EXPERIMENT_RULES.md
+data/raw/
+data/processed/ausgrid/

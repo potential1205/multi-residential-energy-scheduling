@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_IL_Chicago-OHare.Intl.AP.725300_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3_BASE.csv",
+  "raw_sha256": "cd20e59c127f055df6d1553e1fc6117dfb76005db7d0bfc350068d1ef1eb6bfc",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "141de1efa6136ad801c7f222791f5cb2999222cd0e083f2c424f12e439301a40"
+  },
+  "state": "IL",
+  "usaf": "725300",
+  "lat": 41.96,
+  "lon": -87.932,
+  "utc_offset": -6,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4569.564513171859,
+  "load_peak_kwh": 1.25760946348,
+  "load_mean_kwh": 0.5216397846086598,
+  "pv_kwh_year": 682.981315,
+  "pv_peak_kwh": 0.486165,
+  "hours_over_cmax": 0
+}

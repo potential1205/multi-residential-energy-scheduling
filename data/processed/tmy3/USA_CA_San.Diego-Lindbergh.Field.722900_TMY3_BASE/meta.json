@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_CA_San.Diego-Lindbergh.Field.722900_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_CA_San.Diego-Lindbergh.Field.722900_TMY3_BASE.csv",
+  "raw_sha256": "6deaa6bb76909630ea0cb3c06461663dd3eca7489c6457bb34a50f99ba2d3477",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "09ebe85200174ab65723322372dbe0571a555413af6352c6e82b358f2c6042b3"
+  },
+  "state": "CA",
+  "usaf": "722900",
+  "lat": 32.734,
+  "lon": -117.183,
+  "utc_offset": -8,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4109.38800005001,
+  "load_peak_kwh": 1.15254592773,
+  "load_mean_kwh": 0.46910821918379114,
+  "pv_kwh_year": 881.862845,
+  "pv_peak_kwh": 0.43488499999999997,
+  "hours_over_cmax": 0
+}

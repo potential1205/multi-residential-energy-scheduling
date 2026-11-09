@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_TN_Memphis.Intl.AP.723340_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_TN_Memphis.Intl.AP.723340_TMY3_BASE.csv",
+  "raw_sha256": "a82b8d878a0fbbbabbe37eabbd32bed215072273b01952cf1cb5312b11800650",
+  "load_scale": 0.45589257687041357,
+  "load_scale_reason": "peak limited to 1.95 kWh",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "3143a6f6b6d654f46af5e6f26f45fbcb3d3d5aefcc879e9c5d8f24fe7f80ad45"
+  },
+  "state": "TN",
+  "usaf": "723340",
+  "lat": 35.056,
+  "lon": -89.986,
+  "utc_offset": -6,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 6175.342651948076,
+  "load_peak_kwh": 1.95,
+  "load_mean_kwh": 0.7049477913182736,
+  "pv_kwh_year": 704.86421,
+  "pv_peak_kwh": 0.46581,
+  "hours_over_cmax": 0
+}

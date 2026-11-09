@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_HI_Honolulu.Intl.AP.911820_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_HI_Honolulu.Intl.AP.911820_TMY3_BASE.csv",
+  "raw_sha256": "26ac66806bb6c307ba0aca84e3d54ace705008cf842b324b0940615f54b719b2",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "b0847287342cea9022c71a29d81fc296f6c3d5f551678a90cd44a7314fe0bcd4"
+  },
+  "state": "HI",
+  "usaf": "911820",
+  "lat": 21.324,
+  "lon": -157.939,
+  "utc_offset": -10,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 7237.30918494135,
+  "load_peak_kwh": 1.706589273795,
+  "load_mean_kwh": 0.8261768475960446,
+  "pv_kwh_year": 887.340195,
+  "pv_peak_kwh": 0.41697,
+  "hours_over_cmax": 0
+}

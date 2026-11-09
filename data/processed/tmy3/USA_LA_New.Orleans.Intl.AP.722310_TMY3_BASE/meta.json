@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_LA_New.Orleans.Intl.AP.722310_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_LA_New.Orleans.Intl.AP.722310_TMY3_BASE.csv",
+  "raw_sha256": "966eb666ddb7bf97fb37acf0a75b27a70b164a3e84f694fb9e69d925be630fa6",
+  "load_scale": 0.28003157580312416,
+  "load_scale_reason": "peak limited to 1.95 kWh",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "b3f28ec1967b1068dc8b1793689f54ace657d3f01e6dafab35991aefabbce517"
+  },
+  "state": "LA",
+  "usaf": "722310",
+  "lat": 29.998,
+  "lon": -90.278,
+  "utc_offset": -6,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4143.477291318548,
+  "load_peak_kwh": 1.9499999999999997,
+  "load_mean_kwh": 0.4729996907897886,
+  "pv_kwh_year": 711.31142,
+  "pv_peak_kwh": 0.44779,
+  "hours_over_cmax": 0
+}

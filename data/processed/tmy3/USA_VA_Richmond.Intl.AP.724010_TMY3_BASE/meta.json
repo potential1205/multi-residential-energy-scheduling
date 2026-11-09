@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_VA_Richmond.Intl.AP.724010_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_VA_Richmond.Intl.AP.724010_TMY3_BASE.csv",
+  "raw_sha256": "cc08d04b40af2e904d2aea9e290b34fdc7dcf758a62aa6a4d8eb136ec87b7036",
+  "load_scale": 0.45486370064188125,
+  "load_scale_reason": "peak limited to 1.95 kWh",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "b2b378464f0037abd487c825606026a023de0814c1089e18cb41b72014ef4010"
+  },
+  "state": "VA",
+  "usaf": "724010",
+  "lat": 37.512,
+  "lon": -77.323,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 5833.44101444455,
+  "load_peak_kwh": 1.95,
+  "load_mean_kwh": 0.6659179240233505,
+  "pv_kwh_year": 702.062735,
+  "pv_peak_kwh": 0.466605,
+  "hours_over_cmax": 0
+}

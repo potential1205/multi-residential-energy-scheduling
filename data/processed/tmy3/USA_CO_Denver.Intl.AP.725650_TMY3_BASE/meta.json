@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_CO_Denver.Intl.AP.725650_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_CO_Denver.Intl.AP.725650_TMY3_BASE.csv",
+  "raw_sha256": "69bd0d82a64e2dcfe2b896aed8a3276b97a2d36f160e2218d6167cdd1b90f5a5",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "dce631e2a14972de4f8f361894573e2b9b54204bfbcd4cd2c41b9b26d8674983"
+  },
+  "state": "CO",
+  "usaf": "725650",
+  "lat": 39.847,
+  "lon": -104.656,
+  "utc_offset": -7,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4552.180487050331,
+  "load_peak_kwh": 1.204853887925,
+  "load_mean_kwh": 0.5196553067409053,
+  "pv_kwh_year": 913.82323,
+  "pv_peak_kwh": 0.50613,
+  "hours_over_cmax": 0
+}

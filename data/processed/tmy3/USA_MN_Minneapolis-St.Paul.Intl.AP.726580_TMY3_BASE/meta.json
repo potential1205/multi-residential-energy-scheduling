@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_MN_Minneapolis-St.Paul.Intl.AP.726580_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_MN_Minneapolis-St.Paul.Intl.AP.726580_TMY3_BASE.csv",
+  "raw_sha256": "2707d6111f3583a33e0850bcee501f02dad5b1121c39c8fb21376c454e9f0464",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "7a7a45118f19ed8e6c0e3eaf0e3e6d5c5cdd7d4b9d4f6b4f262d40358038ddec"
+  },
+  "state": "MN",
+  "usaf": "726580",
+  "lat": 44.885,
+  "lon": -93.231,
+  "utc_offset": -6,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4617.37664054336,
+  "load_peak_kwh": 1.32037542642,
+  "load_mean_kwh": 0.5270977900163653,
+  "pv_kwh_year": 689.8023450000001,
+  "pv_peak_kwh": 0.522115,
+  "hours_over_cmax": 0
+}

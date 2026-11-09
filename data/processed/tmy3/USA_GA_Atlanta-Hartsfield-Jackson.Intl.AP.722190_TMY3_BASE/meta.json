@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_GA_Atlanta-Hartsfield-Jackson.Intl.AP.722190_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_GA_Atlanta-Hartsfield-Jackson.Intl.AP.722190_TMY3_BASE.csv",
+  "raw_sha256": "2de5235c48d6f0becd55637b90e5588333960c94cd0a1c2b4063d969d4f5f401",
+  "load_scale": 0.472510101471789,
+  "load_scale_reason": "peak limited to 1.95 kWh",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "35c3cd2ef296e3fe1536534d1454a5bde1b205b55147b0f40eb95b79e4409708"
+  },
+  "state": "GA",
+  "usaf": "722190",
+  "lat": 33.63,
+  "lon": -84.442,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 6161.130871679776,
+  "load_peak_kwh": 1.95,
+  "load_mean_kwh": 0.7033254419725772,
+  "pv_kwh_year": 713.12869,
+  "pv_peak_kwh": 0.462855,
+  "hours_over_cmax": 0
+}

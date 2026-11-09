@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_CA_Salinas.Muni.AP.724917_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_CA_Salinas.Muni.AP.724917_TMY3_BASE.csv",
+  "raw_sha256": "c9515822a82235353b73da334556a68c6c440b524a9873bbb71064dfd4ba1bf7",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "5a3e84119cd672d5e5c3a0fce0bd02caefaa64975e80d9a1b67d4cd19f2b81ee"
+  },
+  "state": "CA",
+  "usaf": "724917",
+  "lat": 36.664,
+  "lon": -121.608,
+  "utc_offset": -8,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 3785.8963766875313,
+  "load_peak_kwh": 0.95847104319,
+  "load_mean_kwh": 0.43217995167665885,
+  "pv_kwh_year": 861.98585,
+  "pv_peak_kwh": 0.444095,
+  "hours_over_cmax": 0
+}

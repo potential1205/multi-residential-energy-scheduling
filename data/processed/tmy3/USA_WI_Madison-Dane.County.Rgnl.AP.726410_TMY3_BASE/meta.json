@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_WI_Madison-Dane.County.Rgnl.AP.726410_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_WI_Madison-Dane.County.Rgnl.AP.726410_TMY3_BASE.csv",
+  "raw_sha256": "17a17b0b3567539af206b1a20454a4d50810de12fc2f2a4f459ff36a7744464e",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "4fa7c4cc9fafca062d9c6b53d06df86f93d04e06558c0283a1f750fa9e1dd160"
+  },
+  "state": "WI",
+  "usaf": "726410",
+  "lat": 43.141,
+  "lon": -89.345,
+  "utc_offset": -6,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4612.899112913241,
+  "load_peak_kwh": 1.26416983959,
+  "load_mean_kwh": 0.5265866567252558,
+  "pv_kwh_year": 670.8236749999999,
+  "pv_peak_kwh": 0.517715,
+  "hours_over_cmax": 0
+}

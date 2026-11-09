@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_ND_Bismarck.Muni.AP.727640_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_ND_Bismarck.Muni.AP.727640_TMY3_BASE.csv",
+  "raw_sha256": "1a95fa3e71e7bc7d73dacd06e1e47672f58c9abcb8931502fb5d1f011d0c85ee",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "038296900b0c2e5fba05bab2cce3f12ecdecf17afcf12ec1fffb7998c9203d61"
+  },
+  "state": "ND",
+  "usaf": "727640",
+  "lat": 46.782,
+  "lon": -100.758,
+  "utc_offset": -6,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4628.842420743571,
+  "load_peak_kwh": 1.31507475675,
+  "load_mean_kwh": 0.5284066690346543,
+  "pv_kwh_year": 742.7747999999999,
+  "pv_peak_kwh": 0.550865,
+  "hours_over_cmax": 0
+}

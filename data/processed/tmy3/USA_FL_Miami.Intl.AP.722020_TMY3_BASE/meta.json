@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_FL_Miami.Intl.AP.722020_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_FL_Miami.Intl.AP.722020_TMY3_BASE.csv",
+  "raw_sha256": "b374def5b331225e97caa1f98ee4cc2c8f92bf2e335a6d4ccdb7086e40bd43e5",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "1c18b04dfc74ee6694d08bff9285159bf8232dbda81efab958b8f06c414efabb"
+  },
+  "state": "FL",
+  "usaf": "722020",
+  "lat": 25.788,
+  "lon": -80.317,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 7344.929926443659,
+  "load_peak_kwh": 1.850423922245,
+  "load_mean_kwh": 0.8384623203702807,
+  "pv_kwh_year": 753.61612,
+  "pv_peak_kwh": 0.42519,
+  "hours_over_cmax": 0
+}

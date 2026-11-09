@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_CA_Santa.Barbara.Muni.AP.723925_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_CA_Santa.Barbara.Muni.AP.723925_TMY3_BASE.csv",
+  "raw_sha256": "c09ebb26dd37d0affdf7cb12c6885ebf4c6addf05a36c9ca4e39b63b5778db5a",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "625397d3662b6f218d31b399ec614779d5bbff3c8a8aeba9b138f1f6f70a8deb"
+  },
+  "state": "CA",
+  "usaf": "723925",
+  "lat": 34.424,
+  "lon": -119.842,
+  "utc_offset": -8,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 3746.8199664555864,
+  "load_peak_kwh": 0.974658871875,
+  "load_mean_kwh": 0.42771917425292083,
+  "pv_kwh_year": 906.172845,
+  "pv_peak_kwh": 0.44357,
+  "hours_over_cmax": 0
+}

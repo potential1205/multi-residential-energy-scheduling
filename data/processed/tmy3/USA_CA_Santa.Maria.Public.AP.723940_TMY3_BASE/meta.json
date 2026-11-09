@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_CA_Santa.Maria.Public.AP.723940_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_CA_Santa.Maria.Public.AP.723940_TMY3_BASE.csv",
+  "raw_sha256": "69754c109687ba671b8ffb4a2db0b2fb3e2f88deafa748e107782d27aff1697d",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "14a898e2872fae0e1d31f4742ac91d991787daec3537bc86335ea961d934a311"
+  },
+  "state": "CA",
+  "usaf": "723940",
+  "lat": 34.894,
+  "lon": -120.452,
+  "utc_offset": -8,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 3783.5427699799548,
+  "load_peak_kwh": 0.95326422927,
+  "load_mean_kwh": 0.431911275111867,
+  "pv_kwh_year": 919.728265,
+  "pv_peak_kwh": 0.451875,
+  "hours_over_cmax": 0
+}

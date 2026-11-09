@@ -1,0 +1,27 @@
+{
+  "collection": "korea",
+  "site": "KOR_Seoul",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "Original repository table1_load.npy (KEPCO Seoul profile, already 0.1 kWh-rounded)",
+  "load_scale": 1.0,
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "radiation_db": "PVGIS-ERA5"
+  },
+  "lat": 37.5665,
+  "lon": 126.978,
+  "utc_offset": 9,
+  "load_kwh_year": 3300.1000000000004,
+  "load_peak_kwh": 1.5,
+  "load_mean_kwh": 0.3767237442922375,
+  "pv_kwh_year": 727.2386200000001,
+  "pv_peak_kwh": 0.460065,
+  "hours_over_cmax": 0
+}

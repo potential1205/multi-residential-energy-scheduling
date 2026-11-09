@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3_BASE.csv",
+  "raw_sha256": "4cdfc8e657c27a9a65053d0d4050b3761fab0e47b58b6821689ebb2f1b6d9cd8",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "ee256a05193a7e99d47851a3ae05b3a1d7c5369efc55dfb2bca38de2b4ac84fa"
+  },
+  "state": "WA",
+  "usaf": "727930",
+  "lat": 47.445,
+  "lon": -122.314,
+  "utc_offset": -8,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 3899.618715491759,
+  "load_peak_kwh": 1.011457733215,
+  "load_mean_kwh": 0.4451619538232601,
+  "pv_kwh_year": 598.3666599999999,
+  "pv_peak_kwh": 0.44451,
+  "hours_over_cmax": 0
+}

@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_OK_Oklahoma.City-Will.Rogers.World.AP.723530_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_OK_Oklahoma.City-Will.Rogers.World.AP.723530_TMY3_BASE.csv",
+  "raw_sha256": "d037a793619dd4f9f428cc4e72c513134e77e969a691fcfb1a776e01f617299f",
+  "load_scale": 0.460543930998489,
+  "load_scale_reason": "peak limited to 1.95 kWh",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "b11f068bef1d561e5438e89f08c156e85ade8e35340711dbe7f3af7a435a429b"
+  },
+  "state": "OK",
+  "usaf": "723530",
+  "lat": 35.388,
+  "lon": -97.6,
+  "utc_offset": -6,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 6218.101046925682,
+  "load_peak_kwh": 1.95,
+  "load_mean_kwh": 0.7098288866353518,
+  "pv_kwh_year": 772.06081,
+  "pv_peak_kwh": 0.46669499999999997,
+  "hours_over_cmax": 0
+}

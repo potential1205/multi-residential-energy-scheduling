@@ -1,0 +1,36 @@
+{
+  "collection": "tmy3",
+  "site": "USA_ME_Caribou.Muni.AP.727120_TMY3_BASE",
+  "units": "kWh per hour",
+  "shape": [
+    365,
+    24
+  ],
+  "time": "local standard time; day 0 = Jan 1; hour h covers [h, h+1)",
+  "source": "NREL Commercial and Residential Hourly Load Profiles for all TMY3 Locations (BASE), OpenEI dataset 961",
+  "source_url": "https://openei.org/datasets/files/961/pub/RESIDENTIAL_LOAD_DATA_E_PLUS_OUTPUT/BASE/USA_ME_Caribou.Muni.AP.727120_TMY3_BASE.csv",
+  "raw_sha256": "c1dc7980c93e60c918c11b2744ee3cea19d22fa53d5512f7d6277ec0099f5b3d",
+  "load_scale": 0.5,
+  "load_scale_reason": "halved",
+  "pv": {
+    "source": "PVGIS v5.3 seriescalc",
+    "year": 2019,
+    "kwp": 0.5,
+    "loss_percent": 14,
+    "angles": "optimal",
+    "radiation_db": "PVGIS-ERA5",
+    "raw_sha256": "58a507533c915e31093304d14c5ef3095170771690afe6196b4c0de82f62613b"
+  },
+  "state": "ME",
+  "usaf": "727120",
+  "lat": 46.87,
+  "lon": -68.017,
+  "utc_offset": -5,
+  "note": "Typical-year (TMY3) load with 2019 PV weather; load and PV are not from the same year.",
+  "load_kwh_year": 4644.554405204521,
+  "load_peak_kwh": 1.27567607329,
+  "load_mean_kwh": 0.5302002745667261,
+  "pv_kwh_year": 669.0705,
+  "pv_peak_kwh": 0.531775,
+  "hours_over_cmax": 0
+}

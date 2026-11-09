@@ -76,13 +76,14 @@ def planned_args(args):
 
 def queued_runs(existing):
     """Runs a suite has planned but not started; started runs are reported from their own folders."""
-    rows=[]
+    rows=[];names={run_id.rsplit('/',1)[-1] for run_id in existing}
     for plan_path in RESULTS.rglob('plan.json'):
         statuses=read_json(plan_path.parent/'status.json',{}) or {}
         for name,entry in statuses.items():
             if not isinstance(entry,dict) or entry.get('status') not in ('queued','running'):continue
             run=(RESULTS/entry['run']) if entry.get('run') else None
             if run is not None and run.relative_to(RESULTS).as_posix() in existing:continue
+            if name in names:continue  # started: its own folder reports the status (suite may record a bare name)
             rows.append(dict(id=f'queued:{name}',queued=True,suite=plan_path.parent.name,config=planned_args(entry.get('args',[])),
                              status=dict(status='queued',queued=entry.get('queued')),latest=None,best_validation=None,
                              modified=entry.get('queued',0)))

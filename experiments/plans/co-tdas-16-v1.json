@@ -1,0 +1,10 @@
+{
+  "name": "co-tdas-16-v1",
+  "purpose": "16 EMSs on 16 TMY3 sites from different US climates (one per state), federated vs independent, 6000 days, 2 seeds. Extends the 4/8-EMS comparison (paper Fig. 7).",
+  "runs": [
+    {"name":"n16-fed-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--sites","tmy3/USA_AK_*,tmy3/USA_AZ_Phoenix*,tmy3/USA_CA_San.Francisco*,tmy3/USA_CO_*,tmy3/USA_FL_Miami*,tmy3/USA_GA_*,tmy3/USA_HI_*,tmy3/USA_IL_*,tmy3/USA_MA_*,tmy3/USA_MN_*,tmy3/USA_NV_*,tmy3/USA_NY_*,tmy3/USA_OR_*,tmy3/USA_TN_*,tmy3/USA_TX_Dallas*,tmy3/USA_WA_*","--lr","0.0001","--eval-every","250","--log-every","250","--device","cpu","--co","1","--seed","0"]},
+    {"name":"n16-fed-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--sites","tmy3/USA_AK_*,tmy3/USA_AZ_Phoenix*,tmy3/USA_CA_San.Francisco*,tmy3/USA_CO_*,tmy3/USA_FL_Miami*,tmy3/USA_GA_*,tmy3/USA_HI_*,tmy3/USA_IL_*,tmy3/USA_MA_*,tmy3/USA_MN_*,tmy3/USA_NV_*,tmy3/USA_NY_*,tmy3/USA_OR_*,tmy3/USA_TN_*,tmy3/USA_TX_Dallas*,tmy3/USA_WA_*","--lr","0.0001","--eval-every","250","--log-every","250","--device","cpu","--co","1","--seed","1"]},
+    {"name":"n16-indep-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--sites","tmy3/USA_AK_*,tmy3/USA_AZ_Phoenix*,tmy3/USA_CA_San.Francisco*,tmy3/USA_CO_*,tmy3/USA_FL_Miami*,tmy3/USA_GA_*,tmy3/USA_HI_*,tmy3/USA_IL_*,tmy3/USA_MA_*,tmy3/USA_MN_*,tmy3/USA_NV_*,tmy3/USA_NY_*,tmy3/USA_OR_*,tmy3/USA_TN_*,tmy3/USA_TX_Dallas*,tmy3/USA_WA_*","--lr","0.0001","--eval-every","250","--log-every","250","--device","cpu","--co","0","--seed","0"]},
+    {"name":"n16-indep-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--sites","tmy3/USA_AK_*,tmy3/USA_AZ_Phoenix*,tmy3/USA_CA_San.Francisco*,tmy3/USA_CO_*,tmy3/USA_FL_Miami*,tmy3/USA_GA_*,tmy3/USA_HI_*,tmy3/USA_IL_*,tmy3/USA_MA_*,tmy3/USA_MN_*,tmy3/USA_NV_*,tmy3/USA_NY_*,tmy3/USA_OR_*,tmy3/USA_TN_*,tmy3/USA_TX_Dallas*,tmy3/USA_WA_*","--lr","0.0001","--eval-every","250","--log-every","250","--device","cpu","--co","0","--seed","1"]}
+  ]
+}

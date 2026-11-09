@@ -51,13 +51,20 @@ class SchedulingTests(unittest.TestCase):
         import copy
         env=dict(copy=copy,np=np,N=4,N_new=6,q_before=[Model(0) for _ in range(6)],
                  q=[Model(1) for _ in range(6)],q_global=Model(0),q_target=[Model(0) for _ in range(6)],
-                 experience_counts=[48]*4+[24]*2)
+                 experience_counts=[48]*4+[24]*2,clusters=None)
         exec(compile(ast.Module(body=nodes,type_ignores=[]),'<federated>', 'exec'),env)
         env['federated_learning']()
         self.assertTrue(all(np.isclose(m.value['w'][0],1) for m in env['q']))
         self.assertTrue(all(np.isclose(m.value['w'][0],1) for m in env['q_target']))
         weighted=env['agg_grad']({'w':np.array([0.])},[{'w':np.array([v])} for v in range(1,7)],[2]*4+[1]*2)
         self.assertAlmostEqual(weighted['w'][0],3.1)
+        # Clustered: each label aggregates only its own members, weighted by experience, from its own central model.
+        env.update(clusters=[0,0,1,1,0,1],q=[Model(v) for v in (1,3,10,20,5,40)],q_before=[Model(0) for _ in range(6)],
+                   cluster_global={0:{'w':np.array([0.])},1:{'w':np.array([100.])}})
+        env['federated_learning']()
+        a=(48*1+48*3+24*5)/120;b=100+(48*10+48*20+24*40)/120
+        self.assertTrue(np.allclose([m.value['w'][0] for m in env['q']],[a,a,b,b,a,b]))
+        self.assertTrue(np.allclose(env['cluster_global'][1]['w'],b))
 
     def test_optimizer_state_survives_training_calls(self):
         tree=ast.parse((ROOT/'Co-TDAS.py').read_text(encoding='utf-8-sig'))
@@ -168,6 +175,24 @@ class SchedulingTests(unittest.TestCase):
         r=evaluate(lambda obs,allowed:int(allowed[0]),load,gen,Config(),3,start=0,stop=40,trace=True)
         self.assertAlmostEqual(sum(d['tou']+d['dc'] for d in r['trace']),r['total'])
         self.assertTrue(all(len(d['actions'])==24 for d in r['trace']))
+
+    def test_validation_window_follows_training_window(self):
+        from .core import validation_window
+        self.assertEqual(validation_window(0,30),(30,60))
+        self.assertEqual(validation_window(181,90),(271,301))
+        self.assertEqual(validation_window(300,65),(270,300))
+
+    def test_processed_sites_load_in_scheduler_units(self):
+        from .datasets import PROCESSED,load_profile
+        sites=sorted(p.parent for p in PROCESSED.glob('*/*/load.npy'))
+        if not sites:self.skipTest('no processed data; run python -m experiments.datasets build')
+        for site in sites[:5]+sites[-5:]:
+            name=site.relative_to(PROCESSED).as_posix();kwh=np.load(site/'load.npy')
+            self.assertEqual(kwh.dtype,np.float32);self.assertEqual(kwh.shape,(365,24))
+            np.testing.assert_allclose(load_profile(name,'load'),kwh*10,rtol=1e-6)
+            self.assertLessEqual(load_profile(name,'load').max(),20+1e-4)  # never above C_max
+            load,gen,_=load_data(3,name);self.assertTrue((gen>=0).all())
+        self.assertEqual(load_profile('table1_load.npy','load').dtype.kind,'i')
 
 if __name__=='__main__':
     unittest.main()

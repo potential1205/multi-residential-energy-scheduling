@@ -21,7 +21,8 @@ import os
 SCENARIO = 4
 epsilon = 0.1
 iteration = 200          # passes over the 30 training days (6000 days); the paper code used 10000
-days = 30
+days = 30                # length of the training window (days replayed in a loop)
+train_start = 0          # first day of the training window (0 = January 1, as in the paper)
 test_days = 365
 
 # fix
@@ -44,6 +45,13 @@ cost_scale = 100          # costs are divided by this before entering the replay
 epsilon_final = epsilon   # epsilon decays linearly from `epsilon` to this value ...
 epsilon_decay_days = 1    # ... over this many training days
 
+# Profiles in 0.1 kWh units. Legacy files ("x.npy") are the original integer data; processed sites
+# ("collection/site", built by experiments/datasets.py) are stored in kWh and converted here.
+def load_profile(name, kind):
+    if name.endswith('.npy'):
+        return np.load(f"data/{kind}/{name}")
+    return np.load(f"data/processed/{name}/{kind}.npy").astype(np.float64) * 10
+
 # train data load
 print("\nSCENARIO : {}".format(SCENARIO))
 if SCENARIO == 1 or SCENARIO == 2:
@@ -55,10 +63,10 @@ else:
     if SCENARIO == 3: n = 0
     elif SCENARIO ==  4: n = 2
     print(load_file_list[n])
-    load_data = (np.load(f"data/load/{load_file_list[n]}")[0:days])
-    test_load_data = (np.load(f"data/load/{load_file_list[n]}")[0:test_days])
-    generation_data = (np.load(f"data/generation/{generation_file_list[0]}")[0:days])
-    test_generation_data = (np.load(f"data/generation/{generation_file_list[0]}")[0:test_days])
+    load_data = load_profile(load_file_list[n], 'load')[train_start:train_start+days]
+    test_load_data = load_profile(load_file_list[n], 'load')[0:test_days]
+    generation_data = load_profile(generation_file_list[0], 'generation')[train_start:train_start+days]
+    test_generation_data = load_profile(generation_file_list[0], 'generation')[0:test_days]
 
 print("")
 print(len(load_data),len(load_data[0]))
@@ -147,12 +155,14 @@ def tariff(day):
     return summer_TOU if 90 <= day < 273 else winter_TOU  # summer tariff from April 1 to September 30
 
 # state layout: [battery, demand charge, one-hot hour (24), TOU prices from now (24), load t..t+Tf, generation t..t+Tf]
-def initialize_state():
+def initialize_state(day=0, loads=None, gens=None):
+    loads = load_data if loads is None else loads
+    gens = generation_data if gens is None else gens
     state = np.zeros(feature)
     state[2:26] = T[0]
-    state[26:50] = tariff(0)
-    state[50:51+Tf] = load_data[0][:Tf+1]
-    state[51+Tf:52+2*Tf] = generation_data[0][:Tf+1]
+    state[26:50] = tariff(day)
+    state[50:51+Tf] = loads[0][:Tf+1]
+    state[51+Tf:52+2*Tf] = gens[0][:Tf+1]
     return state
 
 def next_state(n_epi,time,battery,charge,day_charge,TOU,load_data,generation_data,cycle):
@@ -188,8 +198,8 @@ memory = ReplayBuffer()
 optimizer = optim.Adam(q.parameters(), lr=learning_rate)
 
 # train
-state = initialize_state()
-TOU = tariff(0)  # training always replays the first `days` days with a fixed tariff
+state = initialize_state(train_start)
+TOU = tariff(train_start)  # the training window is replayed with the tariff of its first day
 for n_epi in tqdm(range(epochs)):
     costs, actions = 0, []
     for time in range(24):
@@ -222,7 +232,7 @@ plt.show()
 
 
 # test
-state = initialize_state()
+state = initialize_state(0, test_load_data, test_generation_data)
 state[0] = 15
 for n_epi in tqdm(range(test_days)):
     TOU = tariff(n_epi)

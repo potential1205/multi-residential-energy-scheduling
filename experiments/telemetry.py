@@ -82,12 +82,12 @@ class Observer:
                                             generation=float(before[51+tf]),price=float(before[26]),cost=float(cost)))
 
     def validate(self,day):
-        from .core import Config,evaluate,load_data
+        from .core import Config,evaluate,load_data,validation_window
         torch=self.torch;ns=self.ns;co=self.config['algorithm']=='Co-TDAS'
         models=ns['q'][:ns.get('N_new',1)] if co else [ns['q']]
         if self.validation_cohort!=len(models):
             self.best_validation=math.inf;self.validation_cohort=len(models)
-        rows=[]
+        rows=[];window=validation_window(ns.get('train_start',0),ns['days'])
         with preserve_rng(torch),torch.no_grad():
             for client,model in enumerate(models[:ns.get('N_new',1)]):
                 old_mode=model.training;model.eval()
@@ -104,7 +104,7 @@ class Observer:
                     if co: obs=np.append(obs,dc).astype(np.float32)
                     q=model(torch.from_numpy(obs))
                     return int(allowed[int(q[allowed].argmin().item())])
-                result=evaluate(policy,load,gen,cfg,scenario,start=30,stop=60)
+                result=evaluate(policy,load,gen,cfg,scenario,start=window[0],stop=window[1])
                 model.train(old_mode)
                 rows.append(dict(client=client,**result))
             average=float(np.mean([r['daily'] for r in rows]))
@@ -114,14 +114,14 @@ class Observer:
                     torch.save(model.state_dict(),self.output/'checkpoints'/f'best-validation-{i}.pt')
                 (self.output/'evaluation'/'best-validation.json').write_text(json.dumps(dict(day=day,daily=average,clients=rows)),encoding='utf-8')
         self.emit(dict(type='validation',day=day,daily=average,best_daily=self.best_validation,clients=rows,
-                       interval=[30,60],selection_metric='mean daily validation cost; lower is better'))
+                       interval=list(window),selection_metric='mean daily validation cost; lower is better'))
 
     def day(self,day):
         ns=self.ns;co=self.config['algorithm']=='Co-TDAS';completed=day+1
         if completed==1:
             self.config['resolved']={k:ns[k] for k in ('learning_rate','gamma','epsilon','batch_size','buffer_limit','start_size',
                  'Tf','feature','battery_max','battery_rate','freq','epochs','days','pD','DCs','TOUs','CO','N','NEW',
-                 'updates_per_day','cost_scale','epsilon_final','epsilon_decay_days') if k in ns}
+                 'updates_per_day','cost_scale','epsilon_final','epsilon_decay_days','train_start','frl_days','clusters') if k in ns}
             (self.output/'config.json').write_text(json.dumps(self.config,indent=2),encoding='utf-8')
         clients=[]
         for client,trace in self.transitions.items():

@@ -1,0 +1,22 @@
+{
+  "name": "co-tdas-tuning-v1",
+  "purpose": "Co-TDAS follow-up: learning rate and FRL interval (4 EMSs), 8 EMSs federated vs independent (paper Fig. 7), and 2 EMSs arriving mid-training (paper Fig. 6). 6000 days, 2 seeds.",
+  "runs": [
+    {"name":"cot-lr3e4-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","0","--clients","4","--lr","0.0003"]},
+    {"name":"cot-lr3e4-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","1","--clients","4","--lr","0.0003"]},
+    {"name":"cot-lr1e4-frl7-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","0","--clients","4","--lr","0.0001","--frl-days","7"]},
+    {"name":"cot-lr1e4-frl7-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","1","--clients","4","--lr","0.0001","--frl-days","7"]},
+    {"name":"cot-lr1e4-frl30-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","0","--clients","4","--lr","0.0001","--frl-days","30"]},
+    {"name":"cot-lr1e4-frl30-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","1","--clients","4","--lr","0.0001","--frl-days","30"]},
+    {"name":"cot-lr3e4-u12-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","0","--clients","4","--lr","0.0003","--updates-per-day","12"]},
+    {"name":"cot-lr3e4-u12-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","1","--clients","4","--lr","0.0003","--updates-per-day","12"]},
+    {"name":"cot-n8-fed-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","0","--clients","8","--lr","0.0001","--co","1"]},
+    {"name":"cot-n8-fed-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","1","--clients","8","--lr","0.0001","--co","1"]},
+    {"name":"cot-n8-indep-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","0","--clients","8","--lr","0.0001","--co","0"]},
+    {"name":"cot-n8-indep-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","1","--clients","8","--lr","0.0001","--co","0"]},
+    {"name":"cot-new2-fed-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","0","--clients","4","--new-clients","2","--lr","0.0001","--co","1"]},
+    {"name":"cot-new2-fed-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","1","--clients","4","--new-clients","2","--lr","0.0001","--co","1"]},
+    {"name":"cot-new2-indep-seed0","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","0","--clients","4","--new-clients","2","--lr","0.0001","--co","0"]},
+    {"name":"cot-new2-indep-seed1","args":["--preset","tuned","--algorithm","Co-TDAS","--eval-every","250","--log-every","250","--device","cpu","--seed","1","--clients","4","--new-clients","2","--lr","0.0001","--co","0"]}
+  ]
+}

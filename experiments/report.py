@@ -17,7 +17,7 @@ import os
 from pathlib import Path
 import random
 import numpy as np
-from .core import ROOT, Config, evaluate, load_data, tariff
+from .core import ROOT, Config, evaluate, load_data, tariff, validation_window
 
 USD = 0.001
 MONTH_DAYS = [calendar.monthrange(2017, m)[1] for m in range(1, 13)]
@@ -157,9 +157,11 @@ def analyse(path):
     val = [e['daily'] * USD for e in ev['validation']]
     scenario, load, gen = scenario_data(config)
     cfg = Config(dc=config.get('resolved', {}).get('DCs', [30])[0] if co else 30, forecast=config['forecast'])
-    greedy_val = evaluate(greedy_policy(cfg), load, gen, cfg, scenario, start=30, stop=60)['daily'] * USD
+    window = validation_window(config.get('train_start', 0), config.get('train_days', 30))
+    greedy_val = evaluate(greedy_policy(cfg), load, gen, cfg, scenario, start=window[0], stop=window[1])['daily'] * USD
     reference = TOY_OPTIMUM_DAILY_USD if scenario in (1, 2) and not co else None
     summary = dict(run=path.name, algorithm=config['algorithm'], scenario=config['scenario'], seed=config['seed'],
+                   sites=config.get('sites'),
                    training_days=config['training_episodes'], resolved=config.get('resolved', {}),
                    seconds=json.loads((path/'status.json').read_text()).get('seconds'),
                    updates=[c.get('updates') for c in (ev['train'][-1]['clients'] if ev['train'] else [])],
@@ -237,7 +239,7 @@ def figure(path, config, ev, days, daily, summary):
     a.legend(fontsize=8)
     a = ax[1, 1]
     year = summary.get('year')
-    if year and year['monthly_usd'] and config['scenario'] in PAPER_TABLE_IV:
+    if year and year['monthly_usd'] and config['scenario'] in PAPER_TABLE_IV and not config.get('sites'):
         x = np.arange(12)
         a.bar(x - .3, year['monthly_usd'], .3, label='this run')
         for i, (name, values) in enumerate(PAPER_TABLE_IV[config['scenario']].items()):
@@ -290,7 +292,7 @@ def group(name, paths, out=None):
         ax[0].legend()
     years = [r['year'] for r in rows if r.get('year') and r['year']['monthly_usd']]
     scenario = rows[0]['scenario']
-    if years and scenario in PAPER_TABLE_IV:
+    if years and scenario in PAPER_TABLE_IV and not any(r.get('sites') for r in rows):
         x = np.arange(12)
         m = np.array([y['monthly_usd'] for y in years])
         ax[1].bar(x, m.mean(0), yerr=m.std(0), alpha=.6, label='this config (mean ± std)')
@@ -351,7 +353,8 @@ def compare(groups, out, title='Validation cost by configuration'):
             scenario, load, gen = scenario_data(config)
             co = config['algorithm'] == 'Co-TDAS'
             cfg = Config(dc=config.get('resolved', {}).get('DCs', [30])[0] if co else 30, forecast=config['forecast'])
-            reference = evaluate(greedy_policy(cfg), load, gen, cfg, scenario, start=30, stop=60)['daily'] * USD
+            window = validation_window(config.get('train_start', 0), config.get('train_days', 30))
+            reference = evaluate(greedy_policy(cfg), load, gen, cfg, scenario, start=window[0], stop=window[1])['daily'] * USD
             if scenario in (1, 2) and config['algorithm'] == 'TDAS':
                 ax.axhline(TOY_OPTIMUM_DAILY_USD, color='green', ls=':', label='optimum')
     ax.axhline(reference, color='gray', ls='--', label='Greedy')

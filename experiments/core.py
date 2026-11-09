@@ -54,18 +54,28 @@ def state(battery, peak, hour, day, load, generation, cfg, scenario, co=False):
     return np.concatenate(parts).astype(np.float32)
 
 def load_data(scenario, file=None):
+    """(load, generation, name) in 0.1 kWh units. `file` is a legacy load file ('x.npy', shared PV)
+    or a processed site ('collection/site', with its own PV); see experiments/datasets.py."""
     if scenario in (1, 2):
         return np.full((365,24),4), np.full((365,24),1), 'toy'
     # Explicit names avoid os.listdir-dependent scenario identity.
     if file is None:
         raise ValueError('Pass an explicit load filename; original scenario mapping depends on os.listdir order')
+    from .datasets import load_profile
     name = file
-    load = np.load(ROOT/'data'/'load'/name, allow_pickle=False)
-    generation = np.load(ROOT/'data'/'generation'/'generation.npy', allow_pickle=False)
+    load = load_profile(name, 'load')
+    generation = load_profile('generation.npy' if name.endswith('.npy') else name, 'generation')
     for data in (load, generation):
         if data.shape != (365,24) or not np.isfinite(data).all() or np.any(data < 0):
             raise ValueError('Expected finite nonnegative data with shape (365,24)')
     return load, generation, name
+
+def validation_window(train_start=0, train_days=30, length=30):
+    """The `length` days right after the training window (the days before it if the year ends first)."""
+    start = train_start + train_days
+    if start + length > 365:
+        start = max(0, train_start - length)
+    return start, start + length
 
 def evaluate(policy, load, generation, cfg, scenario, start=60, stop=365, initial=15, trace=False):
     """Greedy rollout. With trace=True, also return per-day TOU/DC costs and hourly actions/battery."""

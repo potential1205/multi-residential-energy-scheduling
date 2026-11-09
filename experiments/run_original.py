@@ -27,10 +27,19 @@ DATA_ORDER=['table1_load.npy','USA_CA_Oakland.Intl.AP.724930_TMY3_BASE.csv.npy',
 
 # Named settings; explicit command-line flags always win. 'paper' reproduces the published code budget.
 PRESETS={
-    'tuned':dict(iterations=200,target_hours=240,updates_per_day=24,cost_scale=100,width=512),
-    'fast':dict(iterations=200,target_hours=240,updates_per_day=12,cost_scale=100,width=256),
-    'paper':dict(iterations=None,target_hours=20,updates_per_day=1,cost_scale=1,width=512),
+    'tuned':dict(episodes=6000,target_hours=240,updates_per_day=24,cost_scale=100,width=512),
+    'fast':dict(episodes=6000,target_hours=240,updates_per_day=12,cost_scale=100,width=256),
+    'paper':dict(episodes=None,target_hours=20,updates_per_day=1,cost_scale=1,width=512),
 }
+
+def resolve_sites(patterns):
+    """Comma-separated processed site names or glob patterns, e.g. 'tmy3/*_TX_*,korea/KOR_Seoul'."""
+    names=[]
+    for pattern in [p.strip() for p in patterns.split(',') if p.strip()]:
+        matches=sorted(p.parent.relative_to(ROOT/'data'/'processed').as_posix() for p in (ROOT/'data'/'processed').glob(pattern+'/load.npy'))
+        if not matches:raise SystemExit(f'No processed site matches {pattern!r}; run python -m experiments.datasets build')
+        names+=[m for m in matches if m not in names]
+    return names
 
 def apply_preset(args):
     """Fill unset options from the preset; scenario-dependent paper values for epsilon and budget."""
@@ -38,12 +47,16 @@ def apply_preset(args):
     args.preset=preset
     toy=args.algorithm=='TDAS' and args.scenario in (1,2)
     for key,value in PRESETS[preset].items():
+        if key=='episodes' and args.iterations is not None:
+            continue  # an explicit --iterations wins over the preset's training-day budget
         if getattr(args,key) is None:
             setattr(args,key,value)
     if args.iterations is None:
-        args.iterations=5000 if toy else 10000
+        args.iterations=max(1,args.episodes//args.train_days) if args.episodes else 5000 if toy else 10000
     if args.epsilon is None:
         args.epsilon=0.01 if toy else 0.1
+    if args.lr is None and preset=='paper' and args.algorithm=='Co-TDAS':
+        args.lr=1e-5  # paper value; the Co-TDAS.py default (1e-4) is the tuned one
     return args
 
 def main():
@@ -53,13 +66,17 @@ def main():
     parser.add_argument('--seed',type=int,default=0)
     parser.add_argument('--scenario',type=int,choices=[1,2,3,4],default=1)
     parser.add_argument('--preset',choices=sorted(PRESETS),help='tuned (default), fast, or paper (default for --source upstream)')
-    parser.add_argument('--iterations',type=int,help='30-day passes; preset default')
-    parser.add_argument('--episodes',type=int,help='Exact number of training days; overrides iterations*30')
+    parser.add_argument('--iterations',type=int,help='Passes over the training window (paper: 5000 toy / 10000)')
+    parser.add_argument('--episodes',type=int,help='Exact number of training days (tuned/fast presets: 6000); overrides iterations')
     parser.add_argument('--epsilon',type=float,help='Default 0.01 for TDAS scenarios 1-2, otherwise 0.1 (paper)')
     parser.add_argument('--lr',type=float)
     parser.add_argument('--gamma',type=float,default=0.98)
     parser.add_argument('--forecast',type=int,choices=range(0,24),default=2)
-    parser.add_argument('--clients',type=int,choices=[1,2,4,8],default=4)
+    parser.add_argument('--clients',type=int,help='EMSs from the start (default 4, or all --sites)')
+    parser.add_argument('--train-start',type=int,default=0,help='First day of the training window (0 = Jan 1)')
+    parser.add_argument('--train-days',type=int,default=30,help='Length of the training window in days (paper: 30)')
+    parser.add_argument('--sites',help='Processed households instead of the original data: comma-separated names or globs '
+                        'under data/processed (e.g. "tmy3/*_TX_*"). TDAS uses the first; Co-TDAS one per EMS')
     parser.add_argument('--co',type=int,choices=[0,1],default=1)
     parser.add_argument('--new-clients',type=int,choices=[0,2],default=0)
     parser.add_argument('--log-every',type=int,default=25)
@@ -70,6 +87,8 @@ def main():
     parser.add_argument('--batch-size',type=int,default=32)
     parser.add_argument('--width',type=int,help='Hidden layer width; preset default')
     parser.add_argument('--loss',choices=['huber','mse'],default='huber')
+    parser.add_argument('--frl-days',type=int,help='Co-TDAS: federated aggregation every this many days (paper: 1)')
+    parser.add_argument('--clusters',help='Co-TDAS: comma-separated cluster label per EMS, e.g. 0,0,1,1; aggregate only within a label (default: all together)')
     parser.add_argument('--updates-per-day',type=int,help='Gradient steps per simulated day (paper: 1)')
     parser.add_argument('--cost-scale',type=float,help='Divide replayed costs by this value (paper: 1)')
     parser.add_argument('--start-size',type=int,help='Replay size before learning starts (paper code: 5000)')
@@ -82,8 +101,21 @@ def main():
         parser.error('Require iterations>0, lr>0, epsilon in [0,1], gamma in [0,1)')
     if (args.episodes is not None and args.episodes<30) or args.log_every<1 or args.eval_every<0 or args.target_hours<1:
         parser.error('episodes>=30, log-every>=1, eval-every>=0 and target-hours>=1 required')
-    if args.clients+args.new_clients>8:
-        parser.error('At most 8 datasets are available')
+    if not(0<=args.train_start and 1<=args.train_days and args.train_start+args.train_days<=365):
+        parser.error('Training window must lie inside the year: 0 <= train-start, train-start + train-days <= 365')
+    sites=resolve_sites(args.sites) if args.sites else None
+    if args.clients is None:
+        args.clients=len(sites)-args.new_clients if sites and args.algorithm=='Co-TDAS' else 4
+    available=len(sites) if sites else 8
+    if args.algorithm=='Co-TDAS' and (args.clients<1 or args.clients+args.new_clients>available):
+        parser.error(f'clients + new-clients must be between 1 and {available} available datasets')
+    if args.clusters is not None:
+        try:args.clusters=[int(x) for x in args.clusters.split(',')]
+        except ValueError:parser.error('--clusters takes comma-separated integer labels')
+        if args.algorithm!='Co-TDAS' or args.co!=1 or len(args.clusters)!=args.clients+args.new_clients:
+            parser.error(f'--clusters needs Co-TDAS with --co 1 and one label per EMS ({args.clients+args.new_clients})')
+    if sites and args.algorithm=='TDAS' and args.scenario not in (3,4):
+        parser.error('--sites needs a real-data scenario (3 or 4); the seasonal tariff of scenarios 3-4 is used')
     if args.threads<1 or args.batch_size<1 or args.batch_size>5000 or args.width<1:
         parser.error('threads/width>=1 and batch-size in [1,5000] required')
     os.environ.setdefault('MPLCONFIGDIR',str(ROOT/'work'/'matplotlib'))
@@ -98,6 +130,7 @@ def main():
         parser.exit(2,f'Missing dependency: {exc}. Install requirements.txt first.\n')
     if args.device=='cuda' and not torch.cuda.is_available():parser.error('CUDA is unavailable in this environment')
     device=torch.device('cuda' if args.device=='auto' and torch.cuda.is_available() else 'cpu' if args.device=='auto' else args.device)
+    from .core import validation_window
     from .artifacts import default_run_path,prepare,manifest,data_manifest
     output=prepare((args.output or default_run_path(ROOT,args.algorithm,args.source,args.scenario,args.seed)).resolve())
     import shutil
@@ -112,17 +145,20 @@ def main():
     source=source.replace('np.Inf','np.inf')
     source=source.replace("'log/' + directory", "str(_artifact_root / 'logs' / 'legacy')")
     overrides=dict(SCENARIO=args.scenario,iteration=args.iterations,epsilon=args.epsilon,
-                   gamma=args.gamma,Tf=args.forecast,days=30,
+                   gamma=args.gamma,Tf=args.forecast,days=args.train_days,train_start=args.train_start,
                    test_days=30 if args.scenario in (1,2) else 365,
                    N=args.clients,N_new=args.clients,NEW=args.new_clients,CO=args.co,
                    freq=args.target_hours,
                    batch_size=args.batch_size,
-                   load_file_list=DATA_ORDER,generation_file_list=['generation.npy'])
+                   load_file_list=sites or DATA_ORDER,generation_file_list=sites or ['generation.npy'])
+    if sites and args.algorithm=='TDAS':
+        # Scenario 3 reads load_file_list[0]; scenarios 3 and 4 share the seasonal tariff calendar.
+        args.scenario=overrides['SCENARIO']=3
     if args.episodes is not None:
-        overrides.update(epochs=args.episodes,iteration=args.episodes//30)
+        overrides.update(epochs=args.episodes,iteration=max(1,args.episodes//args.train_days))
     if args.lr is not None:
         overrides['learning_rate']=args.lr
-    for key in ('updates_per_day','cost_scale','start_size','buffer_limit','epsilon_final','epsilon_decay_days'):
+    for key in ('updates_per_day','cost_scale','start_size','buffer_limit','epsilon_final','epsilon_decay_days','frl_days','clusters'):
         if getattr(args,key) is not None:
             overrides[key]=getattr(args,key)
     class Settings(ast.NodeTransformer):
@@ -195,13 +231,13 @@ def main():
     torch.set_num_threads(args.threads)
     torch.use_deterministic_algorithms(True)
     plt.show=lambda:plt.close('all')
-    config=vars(args).copy();config['output']=str(output)
-    config.update(training_days=30,evaluation_overlap_preserved=True,
+    config=vars(args).copy();config['output']=str(output);config['sites']=sites
+    config.update(training_days=args.train_days,evaluation_overlap_preserved=True,
                   upstream_commit=UPSTREAM_COMMIT,
-                  source_sha256=hashlib.sha256(source.encode()).hexdigest(),load_file_order=DATA_ORDER,
+                  source_sha256=hashlib.sha256(source.encode()).hexdigest(),load_file_order=overrides['load_file_list'],generation_file_order=overrides['generation_file_list'],
                   executed_source_sha256=hashlib.sha256(executed_source.encode()).hexdigest(),
-                  training_episodes=overrides.get('epochs',30*args.iterations),pid=os.getpid(),
-                  validation_interval=[30,60],final_test_interval=[61,365],
+                  training_episodes=overrides.get('epochs',args.train_days*args.iterations),pid=os.getpid(),
+                  validation_interval=list(validation_window(args.train_start,args.train_days)),final_test_interval=[61,365],
                   timing_convention='fixed source: target in hours; upstream source: original days',
                   device=str(device),cuda_runtime=torch.version.cuda,
                   gpu=torch.cuda.get_device_name(0) if device.type=='cuda' else None,

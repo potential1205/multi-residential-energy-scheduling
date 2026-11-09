@@ -25,8 +25,9 @@ CO = 1
 
 epsilon = 0.1
 iteration = 200          # passes over the 30 training days (6000 days); the paper code used 10000
-learning_rate = 0.00001
-days = 30
+learning_rate = 0.0001         # tuned (co-tdas-tuning-v1); paper: 1e-5 (--preset paper)
+days = 30                # length of the training window (days replayed in a loop)
+train_start = 0          # first day of the training window (0 = January 1)
 start_size = 5000
 gamma = 0.98
 buffer_limit = 20000
@@ -41,6 +42,8 @@ battery_rate=20
 # learning schedule. Paper settings: updates_per_day=1, cost_scale=1, freq=20, iteration=10000.
 # The tuned values reach the paper's 300k-day result in ~2-3k days (see README, "Hyperparameter study").
 updates_per_day = 24      # gradient steps after each simulated day
+frl_days = 1              # T_FRL in days: aggregate every this many days (paper: every day)
+clusters = None           # cluster label per EMS: aggregate only within a label (None: all EMSs together, as in the paper)
 cost_scale = 100          # costs are divided by this before entering the replay buffer
 epsilon_final = epsilon   # epsilon decays linearly from `epsilon` to this value ...
 epsilon_decay_days = 1    # ... over this many training days
@@ -51,6 +54,16 @@ s = [5,5,5, 5,5,5, 5,10,10 ,10,10,15, 15,15,15, 15,15,10, 10,5,5,5,5,5]  #여름
 
 TOUs = [s,w,s,w,s,w,s,w]
 DCs = [20,25,30,35,20,25,30,35]
+# More EMSs than listed tariffs: repeat the pattern (no effect for up to 8 EMSs).
+TOUs = (TOUs * (1 + (N + NEW) // len(TOUs)))[:max(len(TOUs), N + NEW)]
+DCs = (DCs * (1 + (N + NEW) // len(DCs)))[:max(len(DCs), N + NEW)]
+
+# Profiles in 0.1 kWh units. Legacy files ("x.npy") are the original integer data; processed sites
+# ("collection/site", built by experiments/datasets.py) are stored in kWh and converted here.
+def load_profile(name, kind):
+    if name.endswith('.npy'):
+        return np.load(f"data/{kind}/{name}")
+    return np.load(f"data/processed/{name}/{kind}.npy").astype(np.float64) * 10
 
 # train data load
 load_datas, generation_datas = [], []
@@ -60,8 +73,8 @@ generation_file_list = ["generation.npy"]
 
 for n in range(N+NEW):
     print(load_file_list[n])
-    load_data = (np.load(f"data/load/{load_file_list[n]}")[0:days])
-    generation_data = (np.load(f"data/generation/{generation_file_list[0]}")[0:days])
+    load_data = load_profile(load_file_list[n], 'load')[train_start:train_start+days]
+    generation_data = load_profile(generation_file_list[n % len(generation_file_list)], 'generation')[train_start:train_start+days]
     load_datas.append(load_data)
     generation_datas.append(generation_data)
 
@@ -173,12 +186,25 @@ def agg_grad(global_q,grads,weights=None):
     return w_avg
 
 def federated_learning():
-    grads = [get_grad(q_before[i].state_dict(), q[i].state_dict()) for i in range(N_new)]
-    agg_model = agg_grad(q_global.state_dict(), grads, experience_counts[:N_new])
-    q_global.load_state_dict(agg_model)
-    for i in range(N_new):
-        q[i].load_state_dict(agg_model)
-        q_target[i].load_state_dict(agg_model)
+    if clusters is None:
+        grads = [get_grad(q_before[i].state_dict(), q[i].state_dict()) for i in range(N_new)]
+        agg_model = agg_grad(q_global.state_dict(), grads, experience_counts[:N_new])
+        q_global.load_state_dict(agg_model)
+        for i in range(N_new):
+            q[i].load_state_dict(agg_model)
+            q_target[i].load_state_dict(agg_model)
+        return
+    for label in dict.fromkeys(clusters[:N_new]):
+        members = [i for i in range(N_new) if clusters[i] == label]
+        grads = [get_grad(q_before[i].state_dict(), q[i].state_dict()) for i in members]
+        agg_model = agg_grad(cluster_global[label], grads, [experience_counts[i] for i in members])
+        cluster_global[label] = agg_model
+        for i in members:
+            q[i].load_state_dict(agg_model)
+            q_target[i].load_state_dict(agg_model)
+
+def central_model(n):
+    return q_global.state_dict() if clusters is None else cluster_global[clusters[n]]
 
 def exploration(n_epi):
     progress = min(n_epi / epsilon_decay_days, 1.0)
@@ -206,6 +232,9 @@ for n in range(N+NEW):
     q[n].load_state_dict(q_global.state_dict())
     q_target[n].load_state_dict(q_global.state_dict())
     q_before.append(Qnet())
+if clusters is not None and len(clusters) != N + NEW:
+    raise ValueError(f"clusters needs one label per EMS ({N + NEW}), got {len(clusters)}")
+cluster_global = {} if clusters is None else {label: copy.deepcopy(q_global.state_dict()) for label in clusters}
 
 
 # train
@@ -215,12 +244,14 @@ for n_epi in tqdm(range(epochs)):
         print("start new EMS")
         N_new += NEW
         for r in range(NEW):
-            q[N+r].load_state_dict(q_global.state_dict())
-            q_target[N+r].load_state_dict(q_global.state_dict())
+            q[N+r].load_state_dict(central_model(N+r))
+            q_target[N+r].load_state_dict(central_model(N+r))
+            q_before[N+r].load_state_dict(central_model(N+r))  # joins mid-round from the central weights
 
     for n in range(N_new):
         costs, actions = 0, []
-        q_before[n].load_state_dict(q[n].state_dict())
+        if n_epi % frl_days == 0:
+            q_before[n].load_state_dict(q[n].state_dict())  # weights at the start of the FRL round
         for time in range(24):
             battery = min(state[n][0] - state[n][50] + state[n][51+Tf],battery_max)
             action = q[n].sample_action(torch.from_numpy(state[n]).float(), exploration(n_epi), battery,battery-state[n][0])
@@ -238,7 +269,7 @@ for n_epi in tqdm(range(epochs)):
         action_history[n].append(actions)
         update(n_epi,n)
 
-    if CO == 1:
+    if CO == 1 and (n_epi + 1) % frl_days == 0:
         federated_learning()
 
 
@@ -261,7 +292,7 @@ def save_data():
     path = 'log/' + directory
     os.makedirs(path + '/models', exist_ok=True)
 
-    info = dict(N=N, Tf=Tf, gamma=gamma, T_target=freq, T_FRL=1, learning_rate=learning_rate,
+    info = dict(N=N, Tf=Tf, gamma=gamma, T_target=freq, T_FRL=frl_days, learning_rate=learning_rate,
                 batch_size=batch_size, start_size=start_size, buffer_limit=buffer_limit, episodes=iteration,
                 number_of_action=21, epsilon=epsilon, NEW=NEW, feature_size=feature, train_days=days,
                 battery_max=battery_max, battery_rate=battery_rate, summer_TOU=s, winter_TOU=w,
@@ -279,6 +310,9 @@ def save_data():
     for n in range(N+NEW):
         torch.save(q[n].state_dict(), path + f'/models/local{n+1}.pt')
     if CO == 1:
-        torch.save(q_global.state_dict(), path + '/models/global.pt')
+        if clusters is None:
+            torch.save(q_global.state_dict(), path + '/models/global.pt')
+        for label, model in cluster_global.items():
+            torch.save(model, path + f'/models/global_cluster{label}.pt')
 
 save_data()

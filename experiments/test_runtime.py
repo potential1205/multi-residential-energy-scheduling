@@ -96,16 +96,25 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(status.effective(status.read(path))['status'],'stopped')
             with self.assertRaises(ValueError):status.write(path,'done')
 
+    def test_clusters_option_is_validated(self):
+        import subprocess,sys
+        for extra in (['--clusters','0,1'],['--clusters','0,0,1,x'],['--clusters','0,0,1,1','--co','0']):
+            result=subprocess.run([sys.executable,'-m','experiments.run_original','--algorithm','Co-TDAS','--clients','4',*extra],
+                                  cwd=ROOT,capture_output=True,text=True)
+            self.assertEqual(result.returncode,2,extra)
+            self.assertIn('--clusters',result.stderr)
+
     def test_dashboard_lists_queued_runs_once(self):
         from . import dashboard_server as server
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);(root/'_suites'/'p').mkdir(parents=True);(root/'_suites'/'p'/'plan.json').write_text('{}')
             (root/'_suites'/'p'/'status.json').write_text(json.dumps({
                 'a':dict(status='queued',run='a',args=['--scenario','3','--episodes','600','--seed','2']),
-                'b':dict(status='running',run='b',args=[]),'c':dict(status='completed',run='c',args=[])}))
+                'b':dict(status='running',run='b',args=[]),'c':dict(status='completed',run='c',args=[]),
+                'd':dict(status='running',run='d',args=[])}))  # suite recorded a bare name; folder is runs/d
             (root/'b').mkdir();(root/'b'/'config.json').write_text('{}')
             old=server.RESULTS;server.RESULTS=root
-            try:rows=server.queued_runs({'b'})
+            try:rows=server.queued_runs({'b','runs/d'})
             finally:server.RESULTS=old
         self.assertEqual([r['id'] for r in rows],['queued:a'])
         self.assertEqual((rows[0]['config']['seed'],rows[0]['config']['training_episodes']),(2,600))

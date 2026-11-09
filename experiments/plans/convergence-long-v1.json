@@ -1,0 +1,12 @@
+{
+  "name": "convergence-long-v1",
+  "purpose": "Does the slow downward drift after 3000 days stop? 18000 days (3x the default) for Co-TDAS federated/independent (4 EMSs, lr 1e-4) and TDAS scenario 3, 2 seeds.",
+  "runs": [
+    {"name":"long-co-fed-seed0","args":["--preset","tuned","--iterations","600","--eval-every","500","--log-every","500","--device","cpu","--algorithm","Co-TDAS","--clients","4","--lr","0.0001","--co","1","--seed","0"]},
+    {"name":"long-co-indep-seed0","args":["--preset","tuned","--iterations","600","--eval-every","500","--log-every","500","--device","cpu","--algorithm","Co-TDAS","--clients","4","--lr","0.0001","--co","0","--seed","0"]},
+    {"name":"long-tdas-s3-seed0","args":["--preset","tuned","--iterations","600","--eval-every","500","--log-every","500","--device","cpu","--scenario","3","--seed","0"]},
+    {"name":"long-co-fed-seed1","args":["--preset","tuned","--iterations","600","--eval-every","500","--log-every","500","--device","cpu","--algorithm","Co-TDAS","--clients","4","--lr","0.0001","--co","1","--seed","1"]},
+    {"name":"long-co-indep-seed1","args":["--preset","tuned","--iterations","600","--eval-every","500","--log-every","500","--device","cpu","--algorithm","Co-TDAS","--clients","4","--lr","0.0001","--co","0","--seed","1"]},
+    {"name":"long-tdas-s3-seed1","args":["--preset","tuned","--iterations","600","--eval-every","500","--log-every","500","--device","cpu","--scenario","3","--seed","1"]}
+  ]
+}
